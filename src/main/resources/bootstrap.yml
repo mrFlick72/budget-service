@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: spent-budget-service
+  cloud:
+    config:
+      discovery:
+        enabled: true
+      fail-fast: true
+
+#logging:
+#  level:
+#    org.springframework.security: DEBUG

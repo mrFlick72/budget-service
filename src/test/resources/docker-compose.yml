@@ -1,0 +1,11 @@
+version: "2"
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: budget_expense
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
