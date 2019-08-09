@@ -84,10 +84,10 @@ public class JdbcBudgetRevenueRepositoryTest {
     public void findByDateRange() {
         List<BudgetRevenue> actualRange = budgetRevenueRepository.findByDateRange("USER", Date.dateFor("01/01/2018"), Date.dateFor("05/05/2018"));
         List<BudgetRevenue> expectedRange =
-                asList(new BudgetRevenue("1", "USER", Date.dateFor("12/02/2018"), Money.moneyFor("10.50"), "Super Market"),
-                        new BudgetRevenue("2", "USER", Date.dateFor("22/02/2018"), Money.moneyFor("17.50"), "Super Market"),
+                asList(new BudgetRevenue("5", "USER", Date.dateFor("06/01/2018"), Money.moneyFor("17.50"), "Lanch"),
+                        new BudgetRevenue("1", "USER", Date.dateFor("12/02/2018"), Money.moneyFor("10.50"), "Super Market"),
                         new BudgetRevenue("3", "USER", Date.dateFor("13/02/2018"), Money.moneyFor("17.50"), "Dinner"),
-                        new BudgetRevenue("5", "USER", Date.dateFor("06/01/2018"), Money.moneyFor("17.50"), "Lanch"));
+                        new BudgetRevenue("2", "USER", Date.dateFor("22/02/2018"), Money.moneyFor("17.50"), "Super Market"));
 
         assertThat(actualRange, is(expectedRange));
     }
