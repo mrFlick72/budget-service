@@ -1,4 +1,4 @@
-package it.valeriovaudi.familybudget.spentbudgetservice.adapters.repository;
+package it.valeriovaudi.familybudget.spentbudgetservice.adapters.repository.attachment;
 
 import lombok.Data;
 import lombok.ToString;

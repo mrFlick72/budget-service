@@ -8,6 +8,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.S3Object;
+import it.valeriovaudi.familybudget.spentbudgetservice.adapters.repository.attachment.S3AttachmentPathProvider;
+import it.valeriovaudi.familybudget.spentbudgetservice.adapters.repository.attachment.S3AttachmentRepository;
 import it.valeriovaudi.familybudget.spentbudgetservice.domain.model.attachment.Attachment;
 import it.valeriovaudi.familybudget.spentbudgetservice.domain.model.attachment.AttachmentFileName;
 import it.valeriovaudi.familybudget.spentbudgetservice.domain.model.budget.BudgetExpense;
@@ -76,7 +78,7 @@ public class S3AttachmentRepositoryIT {
                 ONE, "A_NOTE", "A_TAG");
         s3AttachmentRepository.save(budgetExpense, attachment);
 
-        S3AttachmentRepository.S3AttachmentPathProvider s3AttachmentPathProvider = new S3AttachmentRepository.S3AttachmentPathProvider(CONTENT_KEY_PREFIX);
+        S3AttachmentPathProvider s3AttachmentPathProvider = new S3AttachmentPathProvider(CONTENT_KEY_PREFIX);
         S3Object object = s3client.getObject(BUCKET_NAME, s3AttachmentPathProvider.provide(budgetExpense, attachment.getName()));
         assertNotNull(object);
 
@@ -162,7 +164,7 @@ public class S3AttachmentRepositoryIT {
         s3AttachmentRepository.save(budgetExpense, attachment);
 
 
-        S3AttachmentRepository.S3AttachmentPathProvider s3AttachmentPathProvider = new S3AttachmentRepository.S3AttachmentPathProvider(CONTENT_KEY_PREFIX);
+        S3AttachmentPathProvider s3AttachmentPathProvider = new S3AttachmentPathProvider(CONTENT_KEY_PREFIX);
         S3Object object = s3client.getObject(BUCKET_NAME, s3AttachmentPathProvider.provide(budgetExpense, attachment.getName()));
         assertNotNull(object);
 

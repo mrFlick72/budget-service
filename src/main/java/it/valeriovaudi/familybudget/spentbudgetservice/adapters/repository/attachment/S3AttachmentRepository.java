@@ -1,4 +1,4 @@
-package it.valeriovaudi.familybudget.spentbudgetservice.adapters.repository;
+package it.valeriovaudi.familybudget.spentbudgetservice.adapters.repository.attachment;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectListing;
@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -119,23 +118,4 @@ public class S3AttachmentRepository implements AttachmentRepository {
         return split[split.length - 1];
     }
 
-    static class S3AttachmentPathProvider {
-        private final String bucketAttachmentPrefixKey;
-
-        S3AttachmentPathProvider(String bucketAttachmentPrefixKey) {
-            this.bucketAttachmentPrefixKey = bucketAttachmentPrefixKey;
-        }
-
-        String provide(BudgetExpense budgetExpense, AttachmentFileName attachment) {
-            return join("/", bucketAttachmentPrefixKey, attachmentDatePath(budgetExpense),
-                    budgetExpense.getId().getContent(), attachment.getFileName());
-        }
-
-        String attachmentDatePath(BudgetExpense budgetExpense) {
-            LocalDate localDate = budgetExpense.getDate().getLocalDate();
-            return join("/", String.valueOf(localDate.getYear()),
-                    String.valueOf(localDate.getMonth().getValue()),
-                    String.valueOf(localDate.getDayOfMonth()));
-        }
-    }
 }

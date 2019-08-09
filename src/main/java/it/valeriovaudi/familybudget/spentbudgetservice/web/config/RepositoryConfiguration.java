@@ -7,6 +7,8 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import it.valeriovaudi.familybudget.spentbudgetservice.adapters.repository.*;
+import it.valeriovaudi.familybudget.spentbudgetservice.adapters.repository.attachment.AttachmentRepositoryConfigurationProperties;
+import it.valeriovaudi.familybudget.spentbudgetservice.adapters.repository.attachment.S3AttachmentRepository;
 import it.valeriovaudi.familybudget.spentbudgetservice.domain.repository.BudgetExpenseRepository;
 import it.valeriovaudi.familybudget.spentbudgetservice.domain.repository.BudgetRevenueRepository;
 import it.valeriovaudi.familybudget.spentbudgetservice.domain.repository.UserRepository;
