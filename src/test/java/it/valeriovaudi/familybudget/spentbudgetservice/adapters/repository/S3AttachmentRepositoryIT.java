@@ -56,7 +56,7 @@ public class S3AttachmentRepositoryIT {
     @Before
     public void setUp() {
         AWSCredentials credentials =
-                new BasicAWSCredentials("", "");
+                new BasicAWSCredentials("your access key", "your secret key");
 
         s3client = AmazonS3ClientBuilder
                 .standard()
