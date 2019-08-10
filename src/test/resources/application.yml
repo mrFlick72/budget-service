@@ -1,7 +1,7 @@
 attachment:
   repository:
-    access-key: AKIAJCEEWREE5IYFRQQQ
-    secret-key: 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
+    access-key:
+    secret-key:
     bucket-name: family-budget-data/dev
     bucket-prefix: /dev
     region: eu-central-1
