@@ -1,7 +1,7 @@
 FROM openjdk:11
 
-ADD spent-budget-service.jar /usr/local/spent-budget-service/
+ADD budget-service.jar /usr/local/budget-service/
 
-WORKDIR /usr/local/spent-budget-service/
+WORKDIR /usr/local/budget-service/
 
-CMD ["java", "-Xms512m", "-Xmx1g", "-jar", "spent-budget-service.jar"]
+CMD ["java", "-Xms512m", "-Xmx1g", "-jar", "budget-service.jar"]

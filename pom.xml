@@ -5,7 +5,7 @@
 
     <groupId>it.valeriovaudi.familybudget</groupId>
     <artifactId>spent-budget-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>spent-budget-service</name>
@@ -183,7 +183,7 @@
     </dependencyManagement>
 
     <build>
-        <finalName>spent-budget-service</finalName>
+        <finalName>budget-service</finalName>
 
         <plugins>
             <plugin>
@@ -194,9 +194,13 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>1.0.0</version>
+                <version>1.2.0</version>
                 <configuration>
-                    <imageName>family-budget/${project.build.finalName}:lastest</imageName>
+                    <imageName>mrflick72/${project.build.finalName}:latest</imageName>
+                    <imageTags>
+                        <imageTag>1.0.0</imageTag>
+                        <imageTag>latest</imageTag>
+                    </imageTags>
                     <dockerDirectory>src/main/docker</dockerDirectory>
                     <resources>
                         <resource>
