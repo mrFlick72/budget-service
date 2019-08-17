@@ -1,6 +1,6 @@
 spring:
   application:
-    name: spent-budget-service
+    name: budget-service
   cloud:
     config:
       discovery:
