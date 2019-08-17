@@ -6,7 +6,3 @@ spring:
       discovery:
         enabled: true
       fail-fast: true
-
-#logging:
-#  level:
-#    org.springframework.security: DEBUG
