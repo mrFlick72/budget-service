@@ -17,10 +17,10 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(SearchTagEndPoint.class)
@@ -49,5 +49,30 @@ public class SearchTagEndPointTest {
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().string(expected));
+    }
+
+    @Test
+    @WithMockUser
+    public void newSearchTag() throws Exception {
+        SearchTag searchTag = new SearchTag("key", "value");
+        String content = objectMapper.writeValueAsString(searchTag);
+
+        mockMvc.perform(put("/budget-expense/search-tag")
+                .content(content)
+                .contentType("application/json")
+                .with(csrf()))
+                .andExpect(status().isNoContent());
+
+        verify(searchTagRepository).save(searchTag);
+    }
+
+    @Test
+    @WithMockUser
+    public void deleteSearchTag() throws Exception {
+        mockMvc.perform(delete("/budget-expense/search-tag/key")
+                .with(csrf()))
+                .andExpect(status().isNoContent());
+
+        verify(searchTagRepository).delete("key");
     }
 }
