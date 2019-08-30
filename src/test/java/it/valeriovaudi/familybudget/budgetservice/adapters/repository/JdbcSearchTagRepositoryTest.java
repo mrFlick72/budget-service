@@ -58,36 +58,28 @@ public class JdbcSearchTagRepositoryTest {
 
     @Test
     @Sql("classpath:/search_tag/findAll.sql")
-    public void findAll(){
+    public void findAll() {
         assertThat(jdbcBudgetExpenseRepository.findAllSearchTag().size(), is(24));
     }
 
     @Test
     @Sql("classpath:/search_tag/findAll.sql")
-    public void findSearchTagBy(){
+    public void findSearchTagBy() {
         assertThat(jdbcBudgetExpenseRepository.findSearchTagBy("super-market"), is(new SearchTag("super-market", "Spesa")));
     }
 
     @Test(expected = EmptyResultDataAccessException.class)
     @Sql("classpath:/search_tag/findAll.sql")
-    public void delete(){
+    public void delete() {
         jdbcBudgetExpenseRepository.delete("super-market");
         jdbcBudgetExpenseRepository.findSearchTagBy("super-market");
     }
 
     @Test
     @Sql("classpath:/search_tag/findAll.sql")
-    public void save(){
+    public void save() {
         jdbcBudgetExpenseRepository.save(new SearchTag("test", "Test"));
         SearchTag actual = jdbcBudgetExpenseRepository.findSearchTagBy("test");
         assertThat(actual, is(new SearchTag("test", "Test")));
-    }
-
-    @Test
-    @Sql("classpath:/search_tag/findAll.sql")
-    public void update(){
-        jdbcBudgetExpenseRepository.update(new SearchTag("super-market", "Super Market"));
-        SearchTag actual = jdbcBudgetExpenseRepository.findSearchTagBy("super-market");
-        assertThat(actual, is(new SearchTag("super-market", "Super Market")));
     }
 }

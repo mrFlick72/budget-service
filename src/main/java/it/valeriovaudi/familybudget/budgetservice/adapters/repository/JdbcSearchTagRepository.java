@@ -19,7 +19,7 @@ public class JdbcSearchTagRepository implements SearchTagRepository {
 
     @Override
     public SearchTag findSearchTagBy(String key) {
-        return jdbcTemplate.queryForObject("SELECT * FROM SEARCH_TAG WHERE KEY=?",new Object[] {key},
+        return jdbcTemplate.queryForObject("SELECT * FROM SEARCH_TAG WHERE KEY=?", new Object[]{key},
                 (rs, rowNum) -> new SearchTag(rs.getString("KEY"), rs.getString("VALUE")));
     }
 
@@ -30,14 +30,8 @@ public class JdbcSearchTagRepository implements SearchTagRepository {
 
     @Override
     public void save(SearchTag searchTag) {
-        jdbcTemplate.update("INSERT INTO SEARCH_TAG(KEY, VALUE) VALUES (?, ?)", searchTag.getKey(), searchTag.getValue());
+        jdbcTemplate.update("INSERT INTO SEARCH_TAG(KEY, VALUE) VALUES (?, ?) ON CONFLICT (KEY) DO UPDATE SET VALUE=?", searchTag.getKey(), searchTag.getValue(), searchTag.getValue());
     }
-
-    @Override
-    public void update(SearchTag searchTag) {
-        jdbcTemplate.update("UPDATE SEARCH_TAG SET VALUE=? WHERE KEY=?", searchTag.getValue(), searchTag.getKey());
-    }
-
 
     @Override
     public void delete(String key) {
