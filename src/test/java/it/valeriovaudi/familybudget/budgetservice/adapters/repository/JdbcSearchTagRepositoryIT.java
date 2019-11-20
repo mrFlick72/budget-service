@@ -28,8 +28,8 @@ import static org.junit.Assert.assertThat;
 @JdbcTest
 @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ContextConfiguration(initializers = JdbcSearchTagRepositoryTest.Initializer.class)
-public class JdbcSearchTagRepositoryTest {
+@ContextConfiguration(initializers = JdbcSearchTagRepositoryIT.Initializer.class)
+public class JdbcSearchTagRepositoryIT {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

@@ -36,8 +36,8 @@ import static org.junit.Assert.assertThat;
 @JdbcTest
 @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ContextConfiguration(initializers = JdbcBudgetExpenseRepositoryTest.Initializer.class)
-public class JdbcBudgetExpenseRepositoryTest {
+@ContextConfiguration(initializers = JdbcBudgetExpenseRepositoryIT.Initializer.class)
+public class JdbcBudgetExpenseRepositoryIT {
 
     private static final String DATE_STRING = "12/02/2018";
     private static final Date DATE = Date.dateFor("12/02/2018");
