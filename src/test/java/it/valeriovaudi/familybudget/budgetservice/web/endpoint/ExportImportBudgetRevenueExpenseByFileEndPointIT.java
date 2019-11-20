@@ -42,8 +42,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ContextConfiguration(initializers = ExportImportBudgetRevenueExpenseByFileEndPointTest.Initializer.class)
-public class ExportImportBudgetRevenueExpenseByFileEndPointTest {
+@ContextConfiguration(initializers = ExportImportBudgetRevenueExpenseByFileEndPointIT.Initializer.class)
+public class ExportImportBudgetRevenueExpenseByFileEndPointIT {
 
     private static final String FILE_PATH = "budget-expense/importSample.csv";
 
