@@ -14,3 +14,8 @@ spring:
       config:
         sources:
           - name: ${spring.application.name}
+management:
+  metrics:
+    export:
+      graphite:
+        tags-as-prefix:
