@@ -3,14 +3,14 @@ package it.valeriovaudi.familybudget.budgetservice.web.endpoint;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Month;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Year;
 import it.valeriovaudi.familybudget.budgetservice.domain.usecase.ExportSpentBudget;
-import it.valeriovaudi.familybudget.budgetservice.domain.usecase.LoadSpentBudget;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,27 +22,15 @@ import java.util.Optional;
 @RequestMapping("/budget-expense")
 public class ExportImportBudgetExpenseByFileEndPoint {
 
-    private final ExportSpentBudget csvSpentBudgetExporter;
     private final ExportSpentBudget pdfSpentBudgetExporter;
     private final ExportSpentBudget xslxDataExporter;
-    private final LoadSpentBudget loadSpentBudget;
 
-    public ExportImportBudgetExpenseByFileEndPoint(ExportSpentBudget csvSpentBudgetExporter,
-                                                   ExportSpentBudget pdfSpentBudgetExporter,
-                                                   ExportSpentBudget xslxDataExporter,
-                                                   LoadSpentBudget loadSpentBudget) {
-        this.csvSpentBudgetExporter = csvSpentBudgetExporter;
+    public ExportImportBudgetExpenseByFileEndPoint(ExportSpentBudget pdfSpentBudgetExporter,
+                                                   ExportSpentBudget xslxDataExporter) {
         this.pdfSpentBudgetExporter = pdfSpentBudgetExporter;
         this.xslxDataExporter = xslxDataExporter;
-        this.loadSpentBudget = loadSpentBudget;
     }
 
-    @GetMapping(produces = "application/csv")
-    public ResponseEntity<byte[]> getAsCsv(@RequestParam("month") Integer month,
-                                           @RequestParam(value = "year", required = false) String year) throws IOException {
-        log.info("year" + year);
-        return getFile(month, getYear(year), csvSpentBudgetExporter, "csv");
-    }
 
     @GetMapping(produces = "application/xlsx")
     public ResponseEntity<byte[]> getAsXslx(@RequestParam("month") Integer month,
@@ -56,12 +44,6 @@ public class ExportImportBudgetExpenseByFileEndPoint {
                                            @RequestParam(value = "year", required = false) String year) throws IOException {
         log.info("year" + year);
         return getFile(month, getYear(year), pdfSpentBudgetExporter, "pdf");
-    }
-
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity loadByCsv(@RequestPart("file") MultipartFile multipartFile) throws IOException {
-        loadSpentBudget.importFrom(multipartFile.getInputStream());
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     private Year getYear(String year) {

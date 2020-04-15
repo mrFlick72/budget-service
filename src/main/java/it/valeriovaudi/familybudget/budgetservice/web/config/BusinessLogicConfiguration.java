@@ -1,7 +1,5 @@
 package it.valeriovaudi.familybudget.budgetservice.web.config;
 
-import it.valeriovaudi.familybudget.budgetservice.adapters.processor.csv.CsvDataExporter;
-import it.valeriovaudi.familybudget.budgetservice.adapters.processor.csv.CsvDataImporter;
 import it.valeriovaudi.familybudget.budgetservice.adapters.processor.excel.XslxDataExporter;
 import it.valeriovaudi.familybudget.budgetservice.adapters.processor.excel.builder.RowBuilder;
 import it.valeriovaudi.familybudget.budgetservice.adapters.processor.excel.factory.CellStyleFactory;
@@ -54,16 +52,6 @@ public class BusinessLogicConfiguration {
                                            SearchTagRepository searchTagRepository,
                                            BudgetExpenseRepository budgetExpenseRepository) {
         return new FindSpentBudget(userRepository, budgetExpenseRepository, searchTagRepository);
-    }
-
-    @Bean
-    public LoadSpentBudget loadSpentBudget(BudgetExpenseRepository budgetExpenseRepository) {
-        return new LoadSpentBudget(budgetExpenseRepository, new CsvDataImporter(SEPARATOR));
-    }
-
-    @Bean
-    public ExportSpentBudget csvSpentBudgetExporter(FindSpentBudget findSpentBudget) {
-        return new ExportSpentBudget(findSpentBudget, new CsvDataExporter(SEPARATOR));
     }
 
     @Bean
