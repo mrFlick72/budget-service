@@ -4,7 +4,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
@@ -30,11 +29,11 @@ public final class Month {
 
     private final Integer monthValue;
 
-    Month(@NotNull Integer monthValue) {
+    Month(Integer monthValue) {
         this.monthValue = monthValue;
     }
 
-    public static Month of(@NotNull Integer monthValue) {
+    public static Month of(Integer monthValue) {
         return new Month(monthValue);
     }
 
