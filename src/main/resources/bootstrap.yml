@@ -1,3 +1,7 @@
 spring:
   application:
     name: budget-service
+
+logging:
+  level:
+    org.springframework.security.*: debug

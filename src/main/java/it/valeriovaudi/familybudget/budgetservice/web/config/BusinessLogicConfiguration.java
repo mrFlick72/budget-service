@@ -16,8 +16,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BusinessLogicConfiguration {
 
-    private static final String SEPARATOR = ";";
-
     @Bean
     public DeleteBudgetExpense deleteBudgetExpense(BudgetExpenseRepository budgetExpenseRepository,
                                                    AttachmentRepository attachmentRepository) {
