@@ -6,7 +6,14 @@ attachment:
     bucket-prefix: /dev
     region: eu-central-1
 
+granted-role:
+  budget-service: USER
+
 spring:
+  datasource:
+    url: jdbc:postgresql://localhost:35432/budget_expense
+    username: root
+    password: root
   security:
     oauth2:
       resourceserver:

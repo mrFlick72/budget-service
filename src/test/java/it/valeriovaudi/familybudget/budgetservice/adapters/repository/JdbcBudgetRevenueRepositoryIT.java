@@ -5,27 +5,19 @@ import it.valeriovaudi.familybudget.budgetservice.domain.model.budget.BudgetReve
 import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Date;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.testcontainers.containers.DockerComposeContainer;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -35,31 +27,14 @@ import static org.junit.Assert.assertThat;
 @JdbcTest
 @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ContextConfiguration(initializers = JdbcBudgetRevenueRepositoryIT.Initializer.class)
 public class JdbcBudgetRevenueRepositoryIT {
 
     private static final Date DATE = Date.dateFor("12/02/2018");
-    private static final String DATE_STRING = "12/02/2018";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     private JdbcBudgetRevenueRepository budgetRevenueRepository;
-
-    @ClassRule
-    public static DockerComposeContainer postgres = new DockerComposeContainer(new File("src/test/resources/docker-compose.yml"))
-            .withExposedService("postgres_1", 5432);
-
-    public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-        @Override
-        public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-            String serviceHost = postgres.getServiceHost("postgres_1", 5432);
-            Integer servicePort = postgres.getServicePort("postgres_1", 5432);
-            TestPropertyValues.of(format("spring.datasource.url=jdbc:postgresql://%s:%s/budget_expense", serviceHost, servicePort)).applyTo(configurableApplicationContext);
-            TestPropertyValues.of("spring.datasource.username=root").applyTo(configurableApplicationContext);
-            TestPropertyValues.of("spring.datasource.password=root").applyTo(configurableApplicationContext);
-        }
-    }
 
 
     @Before

@@ -3,6 +3,8 @@ version: "2"
 services:
   postgres:
     image: postgres
+    ports:
+      - 35432:5432
     environment:
       POSTGRES_DB: budget_expense
       POSTGRES_USER: root
