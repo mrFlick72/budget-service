@@ -52,7 +52,7 @@ public class SecurityOAuth2ResourceServerConfig extends WebSecurityConfigurerAda
         http.csrf().disable()
                 .authorizeRequests().mvcMatchers("/actuator/**").permitAll().and()
                 .authorizeRequests().anyRequest().hasAnyRole(grantedRole).and()
-                .oauth2ResourceServer().jwt()
+                .oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter())
                 .and().bearerTokenResolver(bearerTokenResolver());
     }
 
