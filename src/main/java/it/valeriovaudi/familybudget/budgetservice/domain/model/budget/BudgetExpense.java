@@ -55,6 +55,7 @@ public final class BudgetExpense {
         LocalDate localDate = date.getLocalDate();
         return join("/", String.valueOf(localDate.getYear()),
                 String.valueOf(localDate.getMonth().getValue()),
-                String.valueOf(localDate.getDayOfMonth()));
+                String.valueOf(localDate.getDayOfMonth()),
+                id.getContent());
     }
 }
