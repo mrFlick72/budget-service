@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
+import static org.springframework.http.HttpMethod.*;
 
 @Slf4j
 public class RestAttachmentRepository implements AttachmentRepository {
@@ -50,7 +51,7 @@ public class RestAttachmentRepository implements AttachmentRepository {
     @Override
     public void save(BudgetExpense budgetExpense, Attachment attachment) {
         try {
-            restTemplate.exchange(uri, HttpMethod.PUT, saveAttachmentEntity(budgetExpense, attachment), Void.class);
+            restTemplate.exchange(uri, PUT, saveAttachmentEntity(budgetExpense, attachment), Void.class);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             throw new AttachmentUploadException(e.getMessage(), e);
@@ -58,18 +59,24 @@ public class RestAttachmentRepository implements AttachmentRepository {
     }
 
     public HttpEntity saveAttachmentEntity(BudgetExpense budgetExpense, Attachment attachment) throws IOException {
+        return new HttpEntity(saveAttachmentBodyFor(budgetExpense, attachment), saveAttachmentHeader());
+    }
+
+    private LinkedMultiValueMap<String, String> saveAttachmentHeader() {
         LinkedMultiValueMap<String, String> header = new LinkedMultiValueMap<>();
         header.put(HttpHeaders.CONTENT_TYPE, List.of(MediaType.MULTIPART_FORM_DATA_VALUE));
+        return header;
+    }
 
+    private LinkedMultiValueMap<String, Object> saveAttachmentBodyFor(BudgetExpense budgetExpense, Attachment attachment) throws IOException {
         LinkedMultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", fileSystemResourceFor(attachment));
         body.add("path", budgetExpense.attachmentDatePath());
         body.add("metadata", objectMapper.writeValueAsBytes(metadataFor(budgetExpense)));
-
-        return new HttpEntity(body, header);
+        return body;
     }
 
-    private HttpEntity fileSystemResourceFor(Attachment attachment) throws IOException {
+    private HttpEntity fileSystemResourceFor(Attachment attachment) {
         byte[] bytes = attachment.getContent();
         MultiValueMap<String, String> fileMetadata = new LinkedMultiValueMap<>();
         ContentDisposition contentDisposition = ContentDisposition
@@ -119,7 +126,7 @@ public class RestAttachmentRepository implements AttachmentRepository {
 
     private Optional<ResponseEntity<byte[]>> tryToGetAttachmentFor(String findAttachmentUri) {
         try {
-            return Optional.of(restTemplate.exchange(findAttachmentUri, HttpMethod.GET, HttpEntity.EMPTY, byte[].class));
+            return Optional.of(restTemplate.exchange(findAttachmentUri, GET, HttpEntity.EMPTY, byte[].class));
         } catch (Exception e) {
             return Optional.empty();
         }
