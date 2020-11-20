@@ -66,8 +66,7 @@ public class RestAttachmentRepository implements AttachmentRepository {
         body.add("path", budgetExpense.attachmentDatePath());
         body.add("metadata", objectMapper.writeValueAsBytes(metadataFor(budgetExpense)));
 
-        HttpEntity httpEntity = new HttpEntity(body, header);
-        return httpEntity;
+        return new HttpEntity(body, header);
     }
 
     private HttpEntity fileSystemResourceFor(Attachment attachment) throws IOException {
