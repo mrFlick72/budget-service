@@ -2,8 +2,6 @@ package it.valeriovaudi.familybudget.budgetservice.adapters.repository.attachmen
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.attachment.Attachment;
@@ -113,26 +111,28 @@ public class RestAttachmentRepository implements AttachmentRepository {
 
     @Override
     public Optional<Attachment> findAttachmentFor(BudgetExpense budgetExpense, AttachmentFileName attachmentFileName) {
-        try {
-            String findAttachmentUri = UriComponentsBuilder.fromUriString(uri)
-                    .queryParam("path", budgetExpense.attachmentDatePath())
-                    .queryParam("fileName", FilenameUtils.getBaseName(attachmentFileName.getFileName()))
-                    .queryParam("fileExt", FilenameUtils.getExtension(attachmentFileName.getFileName()))
-                    .build().toUriString();
+        String findAttachmentUri = attachmentUriFor(budgetExpense, attachmentFileName);
+        return tryToGetAttachmentFor(findAttachmentUri)
+                .map(response -> new Attachment(attachmentFileName,
+                        response.getHeaders().getContentType().toString(),
+                        response.getBody()));
+    }
 
-            ResponseEntity<byte[]> response = restTemplate.exchange(findAttachmentUri, HttpMethod.GET, HttpEntity.EMPTY, byte[].class);
-            if (response.getStatusCode() == HttpStatus.OK) {
-                return Optional.of(
-                        new Attachment(attachmentFileName,
-                                response.getHeaders().getContentType().toString(),
-                                response.getBody())
-                );
-            } else {
-                return Optional.empty();
-            }
+    private Optional<ResponseEntity<byte[]>> tryToGetAttachmentFor(String findAttachmentUri) {
+        try {
+            return Optional.of(restTemplate.exchange(findAttachmentUri, HttpMethod.GET, HttpEntity.EMPTY, byte[].class));
         } catch (Exception e) {
             return Optional.empty();
         }
+    }
+
+    private String attachmentUriFor(BudgetExpense budgetExpense, AttachmentFileName attachmentFileName) {
+        String findAttachmentUri = UriComponentsBuilder.fromUriString(uri)
+                .queryParam("path", budgetExpense.attachmentDatePath())
+                .queryParam("fileName", FilenameUtils.getBaseName(attachmentFileName.getFileName()))
+                .queryParam("fileExt", FilenameUtils.getExtension(attachmentFileName.getFileName()))
+                .build().toUriString();
+        return findAttachmentUri;
     }
 
     @Override
