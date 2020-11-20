@@ -5,52 +5,92 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.attachment.Attachment;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.attachment.AttachmentFileName;
+import it.valeriovaudi.familybudget.budgetservice.domain.model.attachment.AttachmentUploadException;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.budget.BudgetExpense;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.AttachmentRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
-public class S3AttachmentRepository implements AttachmentRepository {
+public class RestAttachmentRepository implements AttachmentRepository {
 
     private static final String BUDGET_EXPENSE_ID = "budget-expense-id";
     private static final String BUDGET_EXPENSE_DATE = "budget-expense-date";
     private static final String BUDGET_EXPENSE_SEARCH_TAG = "budget-expense-search-tag";
 
-    private final S3AttachmentPathProvider s3AttachmentPathProvider;
-    private final AmazonS3 s3client;
-    private final String bucketName;
+    AmazonS3 s3client;
+    S3AttachmentPathProvider s3AttachmentPathProvider;
+    String bucketName;
 
+    private final String uri;
+    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
-    public S3AttachmentRepository(AmazonS3 s3client,
-                                  String bucketName,
-                                  String bucketAttachmentPrefixKey) {
-
-        this.s3AttachmentPathProvider = new S3AttachmentPathProvider(bucketAttachmentPrefixKey);
-        this.s3client = s3client;
-        this.bucketName = bucketName;
+    public RestAttachmentRepository(String baseUri,
+                                    RestTemplate restTemplate,
+                                    ObjectMapper objectMapper) {
+        this.uri = baseUri;
+        this.restTemplate = restTemplate;
+        this.objectMapper = objectMapper;
     }
 
     @Override
     public void save(BudgetExpense budgetExpense, Attachment attachment) {
-        try (ByteArrayInputStream input = new ByteArrayInputStream(attachment.getContent())) {
-            ObjectMetadata objectMetadata = getObjectMetadataFor(budgetExpense, attachment);
-            s3client.putObject(bucketName, objectKeyFor(budgetExpense, attachment.getName()), input, objectMetadata);
+        try {
+            restTemplate.exchange(uri, HttpMethod.PUT, saveAttachmentEntity(budgetExpense, attachment), Void.class);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
+            throw new AttachmentUploadException(e.getMessage(), e);
         }
     }
 
-    private String objectKeyFor(BudgetExpense budgetExpense, AttachmentFileName attachment) {
-        return s3AttachmentPathProvider.provide(budgetExpense, attachment);
+    public HttpEntity saveAttachmentEntity(BudgetExpense budgetExpense, Attachment attachment) throws IOException {
+        LinkedMultiValueMap<String, String> header = new LinkedMultiValueMap<>();
+        header.put(HttpHeaders.CONTENT_TYPE, List.of(MediaType.MULTIPART_FORM_DATA_VALUE));
+
+        LinkedMultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("file", fileSystemResourceFor(attachment));
+        body.add("path", budgetExpense.attachmentDatePath());
+        body.add("metadata", objectMapper.writeValueAsBytes(metadataFor(budgetExpense)));
+
+        HttpEntity httpEntity = new HttpEntity(body, header);
+        return httpEntity;
+    }
+
+    private HttpEntity fileSystemResourceFor(Attachment attachment) throws IOException {
+        byte[] bytes = attachment.getContent();
+        MultiValueMap<String, String> fileMetadata = new LinkedMultiValueMap<>();
+        ContentDisposition contentDisposition = ContentDisposition
+                .builder("form-data")
+                .name("file")
+                .filename(attachment.getName().getFileName())
+                .build();
+        fileMetadata.add(HttpHeaders.CONTENT_TYPE, attachment.getContentType());
+        fileMetadata.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(attachment.getContent().length));
+        fileMetadata.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
+        return new HttpEntity<>(bytes, fileMetadata);
+    }
+
+
+    private Map<String, String> metadataFor(BudgetExpense budgetExpense) {
+        return Map.of(
+                BUDGET_EXPENSE_ID, budgetExpense.getId().getContent(),
+                BUDGET_EXPENSE_DATE, budgetExpense.getDate().formattedDate(),
+                BUDGET_EXPENSE_SEARCH_TAG, budgetExpense.getTag()
+        );
     }
 
     private ObjectMetadata getObjectMetadataFor(BudgetExpense budgetExpense, Attachment attachment) {
@@ -62,6 +102,11 @@ public class S3AttachmentRepository implements AttachmentRepository {
         objectMetadata.setContentType(attachment.getContentType());
         objectMetadata.setContentLength(attachment.getContent().length);
         return objectMetadata;
+    }
+
+
+    private String objectKeyFor(BudgetExpense budgetExpense, AttachmentFileName attachment) {
+        return s3AttachmentPathProvider.provide(budgetExpense, attachment);
     }
 
     @Override

@@ -1,21 +1,24 @@
 package it.valeriovaudi.familybudget.budgetservice.web.config;
 
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import it.valeriovaudi.familybudget.budgetservice.adapters.repository.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import it.valeriovaudi.familybudget.budgetservice.adapters.repository.JdbcBudgetExpenseRepository;
+import it.valeriovaudi.familybudget.budgetservice.adapters.repository.JdbcBudgetRevenueRepository;
+import it.valeriovaudi.familybudget.budgetservice.adapters.repository.JdbcSearchTagRepository;
+import it.valeriovaudi.familybudget.budgetservice.adapters.repository.SpringSecurityUserRepository;
 import it.valeriovaudi.familybudget.budgetservice.adapters.repository.attachment.AttachmentRepositoryConfigurationProperties;
-import it.valeriovaudi.familybudget.budgetservice.adapters.repository.attachment.S3AttachmentRepository;
+import it.valeriovaudi.familybudget.budgetservice.adapters.repository.attachment.RestAttachmentRepository;
+import it.valeriovaudi.familybudget.budgetservice.domain.repository.AttachmentRepository;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.BudgetExpenseRepository;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.BudgetRevenueRepository;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Configuration
 @EnableConfigurationProperties({AttachmentRepositoryConfigurationProperties.class})
@@ -42,15 +45,12 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public S3AttachmentRepository s3AttachmentRepository(AttachmentRepositoryConfigurationProperties config) {
-        AWSCredentials credentials = new BasicAWSCredentials(config.getAccessKey(), config.getSecretKey());
-
-        AmazonS3 s3client = AmazonS3ClientBuilder
-                .standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion(config.getRegion())
-                .build();
-
-        return new S3AttachmentRepository(s3client, config.getBucketName(), config.getBucketPrefix());
+    public AttachmentRepository attachmentRepository(@Value("${spring.application.name}") String applicationName,
+                                                     @Value("${repository-service.uri}") String repositoryServiceBaseUrl,
+                                                     ObjectMapper objectMapper) {
+        String url = UriComponentsBuilder.fromHttpUrl(repositoryServiceBaseUrl)
+                .pathSegment("documents", applicationName)
+                .toUriString();
+        return new RestAttachmentRepository(url, new RestTemplate(), objectMapper);
     }
 }

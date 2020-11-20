@@ -8,8 +8,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.String.join;
 
 @Getter
 @ToString
@@ -46,5 +49,12 @@ public final class BudgetExpense {
         this.tag = tag;
 
         this.attachmentFileNames = attachmentFileNames;
+    }
+
+    public String attachmentDatePath(){
+        LocalDate localDate = date.getLocalDate();
+        return join("/", String.valueOf(localDate.getYear()),
+                String.valueOf(localDate.getMonth().getValue()),
+                String.valueOf(localDate.getDayOfMonth()));
     }
 }
