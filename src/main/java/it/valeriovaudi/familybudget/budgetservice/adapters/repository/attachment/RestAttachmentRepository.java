@@ -12,10 +12,12 @@ import it.valeriovaudi.familybudget.budgetservice.domain.model.attachment.Attach
 import it.valeriovaudi.familybudget.budgetservice.domain.model.budget.BudgetExpense;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.AttachmentRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.List;
@@ -93,17 +95,6 @@ public class RestAttachmentRepository implements AttachmentRepository {
         );
     }
 
-    private ObjectMetadata getObjectMetadataFor(BudgetExpense budgetExpense, Attachment attachment) {
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-
-        objectMetadata.addUserMetadata(BUDGET_EXPENSE_ID, budgetExpense.getId().getContent());
-        objectMetadata.addUserMetadata(BUDGET_EXPENSE_DATE, budgetExpense.getDate().formattedDate());
-        objectMetadata.addUserMetadata(BUDGET_EXPENSE_SEARCH_TAG, budgetExpense.getTag());
-        objectMetadata.setContentType(attachment.getContentType());
-        objectMetadata.setContentLength(attachment.getContent().length);
-        return objectMetadata;
-    }
-
 
     private String objectKeyFor(BudgetExpense budgetExpense, AttachmentFileName attachment) {
         return s3AttachmentPathProvider.provide(budgetExpense, attachment);
@@ -122,9 +113,26 @@ public class RestAttachmentRepository implements AttachmentRepository {
 
     @Override
     public Optional<Attachment> findAttachmentFor(BudgetExpense budgetExpense, AttachmentFileName attachmentFileName) {
-        String attachmentDatePath = objectKeyFor(budgetExpense, attachmentFileName);
-        return Optional.ofNullable(getAttachmentFileOnS3For(attachmentDatePath))
-                .map(s3Object -> new Attachment(attachmentFileName, s3Object.getObjectMetadata().getContentType(), getContent(s3Object)));
+        try {
+            String findAttachmentUri = UriComponentsBuilder.fromUriString(uri)
+                    .queryParam("path", budgetExpense.attachmentDatePath())
+                    .queryParam("fileName", FilenameUtils.getBaseName(attachmentFileName.getFileName()))
+                    .queryParam("fileExt", FilenameUtils.getExtension(attachmentFileName.getFileName()))
+                    .build().toUriString();
+
+            ResponseEntity<byte[]> response = restTemplate.exchange(findAttachmentUri, HttpMethod.GET, HttpEntity.EMPTY, byte[].class);
+            if (response.getStatusCode() == HttpStatus.OK) {
+                return Optional.of(
+                        new Attachment(attachmentFileName,
+                                response.getHeaders().getContentType().toString(),
+                                response.getBody())
+                );
+            } else {
+                return Optional.empty();
+            }
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -136,25 +144,6 @@ public class RestAttachmentRepository implements AttachmentRepository {
             log.error(e.getMessage(), e);
         }
 
-    }
-
-    private S3Object getAttachmentFileOnS3For(String attachmentDatePath) {
-        S3Object object = null;
-        try {
-            object = s3client.getObject(bucketName, attachmentDatePath);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return object;
-    }
-
-    private byte[] getContent(S3Object s3Object) {
-        try {
-            return s3Object.getObjectContent().readAllBytes();
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        }
-        return new byte[0];
     }
 
     private String getAttachmentFileNameFor(String s3Key) {
