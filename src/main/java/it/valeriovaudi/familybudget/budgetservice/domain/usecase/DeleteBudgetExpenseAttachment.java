@@ -32,7 +32,6 @@ public class DeleteBudgetExpenseAttachment {
                                             .filter(attachmentName -> !Objects.equals(attachmentName, attachmentFileName))
                                             .collect(toList());
 
-                            System.out.println(filtredAttachmentFileNames);
                             BudgetExpense newBudgetExpense = new BudgetExpense(budgetExpense.getId(),
                                     budgetExpense.getUserName(),
                                     budgetExpense.getDate(),
@@ -40,8 +39,8 @@ public class DeleteBudgetExpenseAttachment {
                                     budgetExpense.getNote(),
                                     budgetExpense.getTag(),
                                     filtredAttachmentFileNames);
-                            budgetExpenseRepository.save(newBudgetExpense);
                             attachmentRepository.delete(newBudgetExpense, attachmentFileName);
+                            budgetExpenseRepository.save(newBudgetExpense);
                         },
                         () -> {
                             throw new BudgetExpenseNotFoundException();
