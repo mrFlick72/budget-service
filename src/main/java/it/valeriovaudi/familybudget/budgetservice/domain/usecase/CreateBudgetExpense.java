@@ -49,7 +49,6 @@ public class CreateBudgetExpense {
                 .orElse(DEFAULT_TAG);
     }
 
-    // fixme understand how throw an error in case that I am puttin a new attacment for a budget expense that I cant do
     public void newBudgetExpenseAttachment(BudgetExpenseId budgetExpenseId, Attachment attachment) {
         budgetExpenseRepository.findFor(budgetExpenseId)
                 .ifPresent(budgetExpense -> {
@@ -62,8 +61,8 @@ public class CreateBudgetExpense {
                             budgetExpense.getNote(),
                             budgetExpense.getTag(),
                             attachmentFileNames);
-                    budgetExpenseRepository.save(budgetExpenseWithAttachments);
                     attachmentRepository.save(budgetExpenseWithAttachments, attachment);
+                    budgetExpenseRepository.save(budgetExpenseWithAttachments);
                 });
     }
 }
