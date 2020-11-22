@@ -10,8 +10,6 @@ import java.util.Optional;
 public interface AttachmentRepository {
     void save(BudgetExpense budgetExpense, Attachment attachment);
 
-    List<AttachmentFileName> findFor(BudgetExpense budgetExpense);
-
     Optional<Attachment> findAttachmentFor(BudgetExpense budgetExpense, AttachmentFileName attachmentFileName);
 
     void delete(BudgetExpense budgetExpense, AttachmentFileName attachmentFileName);

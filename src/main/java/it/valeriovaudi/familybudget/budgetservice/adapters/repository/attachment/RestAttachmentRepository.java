@@ -1,8 +1,5 @@
 package it.valeriovaudi.familybudget.budgetservice.adapters.repository.attachment;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.attachment.Attachment;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.attachment.AttachmentFileName;
@@ -22,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpMethod.*;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.PUT;
 
 @Slf4j
 public class RestAttachmentRepository implements AttachmentRepository {
@@ -32,18 +29,14 @@ public class RestAttachmentRepository implements AttachmentRepository {
     private static final String BUDGET_EXPENSE_DATE = "budget-expense-date";
     private static final String BUDGET_EXPENSE_SEARCH_TAG = "budget-expense-search-tag";
 
-    AmazonS3 s3client;
-    S3AttachmentPathProvider s3AttachmentPathProvider;
-    String bucketName;
-
-    private final String uri;
+    private final String baseUri;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
     public RestAttachmentRepository(String baseUri,
                                     RestTemplate restTemplate,
                                     ObjectMapper objectMapper) {
-        this.uri = baseUri;
+        this.baseUri = baseUri;
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
     }
@@ -51,7 +44,7 @@ public class RestAttachmentRepository implements AttachmentRepository {
     @Override
     public void save(BudgetExpense budgetExpense, Attachment attachment) {
         try {
-            restTemplate.exchange(uri, PUT, saveAttachmentEntity(budgetExpense, attachment), Void.class);
+            restTemplate.exchange(baseUri, PUT, saveAttachmentEntity(budgetExpense, attachment), Void.class);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             throw new AttachmentUploadException(e.getMessage(), e);
@@ -100,21 +93,6 @@ public class RestAttachmentRepository implements AttachmentRepository {
     }
 
 
-    private String objectKeyFor(BudgetExpense budgetExpense, AttachmentFileName attachment) {
-        return s3AttachmentPathProvider.provide(budgetExpense, attachment);
-    }
-
-    @Override
-    public List<AttachmentFileName> findFor(BudgetExpense budgetExpense) {
-        String attachmentDatePath = objectKeyFor(budgetExpense, AttachmentFileName.emptyFileName());
-        ObjectListing objectListing = s3client.listObjects(bucketName, attachmentDatePath);
-        return objectListing.getObjectSummaries().stream()
-                .map(S3ObjectSummary::getKey)
-                .map(this::getAttachmentFileNameFor)
-                .map(AttachmentFileName::new)
-                .collect(toList());
-    }
-
     @Override
     public Optional<Attachment> findAttachmentFor(BudgetExpense budgetExpense, AttachmentFileName attachmentFileName) {
         String findAttachmentUri = attachmentUriFor(budgetExpense, attachmentFileName);
@@ -133,28 +111,16 @@ public class RestAttachmentRepository implements AttachmentRepository {
     }
 
     private String attachmentUriFor(BudgetExpense budgetExpense, AttachmentFileName attachmentFileName) {
-        String findAttachmentUri = UriComponentsBuilder.fromUriString(uri)
+        return UriComponentsBuilder.fromUriString(baseUri)
                 .queryParam("path", budgetExpense.attachmentDatePath())
                 .queryParam("fileName", FilenameUtils.getBaseName(attachmentFileName.getFileName()))
                 .queryParam("fileExt", FilenameUtils.getExtension(attachmentFileName.getFileName()))
                 .build().toUriString();
-        return findAttachmentUri;
     }
 
     @Override
     public void delete(BudgetExpense budgetExpense, AttachmentFileName attachmentFileName) {
-        String attachmentDatePath = objectKeyFor(budgetExpense, attachmentFileName);
-        try {
-            s3client.deleteObject(bucketName, attachmentDatePath);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-
-    }
-
-    private String getAttachmentFileNameFor(String s3Key) {
-        String[] split = s3Key.split("/");
-        return split[split.length - 1];
+        restTemplate.delete(attachmentUriFor(budgetExpense, attachmentFileName));
     }
 
 }
