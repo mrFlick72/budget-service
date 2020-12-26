@@ -1,6 +1,6 @@
 FROM openjdk:11
 
-ADD budget-service.jar /usr/local/budget-service/
+ADD target/budget-service.jar /usr/local/budget-service/
 
 VOLUME /var/log/onlyone-portal
 
