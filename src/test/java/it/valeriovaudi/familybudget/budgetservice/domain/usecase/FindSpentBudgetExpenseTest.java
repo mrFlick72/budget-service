@@ -22,6 +22,7 @@ import java.util.Map;
 import static it.valeriovaudi.familybudget.budgetservice.domain.model.budget.BudgetExpenseId.emptyBudgetExpenseId;
 import static java.util.Arrays.asList;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,19 +42,19 @@ public class FindSpentBudgetExpenseTest {
         given(userRepository.currentLoggedUserName())
                 .willReturn(new UserName("USER"));
 
+        lenient().when(searchTagRepository.findSearchTagBy("super-market")).thenReturn(new SearchTag("super-market", "super-market"));
+        given(searchTagRepository.findSearchTagBy("dinner")).willReturn(new SearchTag("dinner", "dinner"));
+
         given(budgetExpenseRepository.findByDateRange(new UserName("USER"), Date.firstDateOfMonth(Month.FEBRUARY, Year.of(2018)),
                 Date.lastDateOfMonth(Month.FEBRUARY, Year.of(2018)), "dinner", "super-market"))
 
                 .willReturn(asList(new BudgetExpense(emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("15/02/2018"), Money.moneyFor("10"), "dinner", "dinner"),
-                        new BudgetExpense(emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("01/02/2018"), Money.moneyFor("12.50"), "super market", "super-market"),
-                        new BudgetExpense(emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("05/02/2018"), Money.moneyFor("12.50"), "super market", "super-market"),
+                        new BudgetExpense(emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("01/02/2018"), Money.moneyFor("12.50"), "super-market", "super-market"),
+                        new BudgetExpense(emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("05/02/2018"), Money.moneyFor("12.50"), "super-market", "super-market"),
                         new BudgetExpense(emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("04/02/2018"), Money.moneyFor("20"), "dinner", "dinner"),
-                        new BudgetExpense(emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("03/02/2018"), Money.moneyFor("12.50"), "super market", "super-market"),
-                        new BudgetExpense(emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("02/02/2018"), Money.moneyFor("12.50"), "super market", "super-market"),
+                        new BudgetExpense(emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("03/02/2018"), Money.moneyFor("12.50"), "super-market", "super-market"),
+                        new BudgetExpense(emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("02/02/2018"), Money.moneyFor("12.50"), "super-market", "super-market"),
                         new BudgetExpense(emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("01/02/2018"), Money.moneyFor("15"), "dinner", "dinner")));
-
-        given(searchTagRepository.findSearchTagBy("dinner")).willReturn(new SearchTag("dinner", "dinner"));
-        given(searchTagRepository.findSearchTagBy("super-market")).willReturn(new SearchTag("super-market", "super-market"));
 
         SpentBudget actual = new FindSpentBudget(userRepository, budgetExpenseRepository, searchTagRepository)
                 .findBy(Month.FEBRUARY, Year.of(2018), asList("dinner", "super-market"));
@@ -90,8 +91,8 @@ public class FindSpentBudgetExpenseTest {
                         new BudgetExpense(emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("02/02/2018"), Money.moneyFor("12.50"), "super market", "super-market"),
                         new BudgetExpense(emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("01/02/2018"), Money.moneyFor("15"), "dinner", "dinner")));
 
+        lenient().when(searchTagRepository.findSearchTagBy("super-market")).thenReturn(new SearchTag("super-market", "super-market"));
         given(searchTagRepository.findSearchTagBy("dinner")).willReturn(new SearchTag("dinner", "dinner"));
-        given(searchTagRepository.findSearchTagBy("super-market")).willReturn(new SearchTag("super-market", "super-market"));
 
         SpentBudget actual = new FindSpentBudget(userRepository, budgetExpenseRepository, searchTagRepository)
                 .findBy(Month.FEBRUARY, Year.of(2018), asList());
