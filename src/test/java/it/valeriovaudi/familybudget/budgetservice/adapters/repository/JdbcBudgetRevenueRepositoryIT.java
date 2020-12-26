@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.nullValue;
 
 
 @JdbcTest
@@ -77,14 +77,13 @@ public class JdbcBudgetRevenueRepositoryIT {
         Assertions.assertEquals(actual, expected);
     }
 
+    @Test
     @Sql("classpath:budget_revenue/find-by-date-range-data-set.sql")
-//    @Test(expected = EmptyResultDataAccessException.class)
     public void deleteBudgetExpense() {
         budgetRevenueRepository.delete("1");
 
-        BudgetRevenue actual = getBudgetRevenue("1");
+        Assertions.assertThrows(EmptyResultDataAccessException.class ,() -> getBudgetRevenue("1"));
 
-        Assertions.assertEquals(actual, nullValue());
     }
 
     private BudgetRevenue getBudgetRevenue(String id) {

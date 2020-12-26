@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -40,11 +41,12 @@ public class JdbcSearchTagRepositoryIT {
         Assertions.assertEquals(jdbcBudgetExpenseRepository.findSearchTagBy("super-market"), new SearchTag("super-market", "Spesa"));
     }
 
-//    @Test(expected = EmptyResultDataAccessException.class)
+    @Test
     @Sql("classpath:/search_tag/findAll.sql")
     public void delete() {
         jdbcBudgetExpenseRepository.delete("super-market");
-        jdbcBudgetExpenseRepository.findSearchTagBy("super-market");
+        Assertions.assertThrows(EmptyResultDataAccessException.class,
+                () -> jdbcBudgetExpenseRepository.findSearchTagBy("super-market"));
     }
 
     @Test

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -21,7 +22,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.nullValue;
 
 @JdbcTest
 @ExtendWith(SpringExtension.class)
@@ -69,13 +69,13 @@ public class JdbcBudgetExpenseRepositoryIT {
     public void saveOrUpdateABudgetExpenseWithAttachments() {
         BudgetExpenseId id = new BudgetExpenseId(UUID.randomUUID().toString());
 
-        BudgetExpense budgetExpense = new BudgetExpense(id, new UserName("USER"),DATE, Money.moneyFor("10.50"), "NOTE", "TAG",
+        BudgetExpense budgetExpense = new BudgetExpense(id, new UserName("USER"), DATE, Money.moneyFor("10.50"), "NOTE", "TAG",
                 asList(new AttachmentFileName("A_FILE1"),
                         new AttachmentFileName("ANOTHER_FILE"),
                         new AttachmentFileName("ANOTHER_FILE_AGAIN")));
         jdbcBudgetExpenseRepository.save(budgetExpense);
 
-        BudgetExpense expected = new BudgetExpense(id,new UserName("USER"), DATE, Money.moneyFor("10.50"), "NOTE", "TAG",
+        BudgetExpense expected = new BudgetExpense(id, new UserName("USER"), DATE, Money.moneyFor("10.50"), "NOTE", "TAG",
                 asList(new AttachmentFileName("A_FILE1"),
                         new AttachmentFileName("A_FILE_AGAIN"),
                         new AttachmentFileName("ANOTHER_FILE_NAME")));
@@ -87,11 +87,18 @@ public class JdbcBudgetExpenseRepositoryIT {
         Assertions.assertEquals(actual, expected);
     }
 
+    @Test
+    @Sql("classpath:budget-expense/find-by-date-range-data-set.sql")
+    public void deleteBudgetExpense() {
+        jdbcBudgetExpenseRepository.delete(new BudgetExpenseId("1"));
+        Assertions.assertThrows(EmptyResultDataAccessException.class,
+                () -> getBudgetExpense("USER", DATE_STRING, "10.50", "Super Market", "super-market"));
+    }
 
     @Test
     public void findABudgetExpenseByReference() {
         BudgetExpenseId id = new BudgetExpenseId(UUID.randomUUID().toString());
-        BudgetExpense expected = new BudgetExpense(id,new UserName("USER"), DATE, Money.moneyFor("10.50"), "NOTE", "TAG", asList(new AttachmentFileName("A_FILE")));
+        BudgetExpense expected = new BudgetExpense(id, new UserName("USER"), DATE, Money.moneyFor("10.50"), "NOTE", "TAG", asList(new AttachmentFileName("A_FILE")));
         jdbcBudgetExpenseRepository.save(expected);
 
         Assertions.assertEquals(jdbcBudgetExpenseRepository.findFor(id).get(), expected);
@@ -123,24 +130,12 @@ public class JdbcBudgetExpenseRepositoryIT {
         Assertions.assertEquals(actualRange, expectedRange);
     }
 
+    @Test
     @Sql("classpath:budget-expense/find-by-date-range-data-set.sql")
-//    @Test(expected = EmptyResultDataAccessException.class)
-    public void deleteBudgetExpense() {
-        jdbcBudgetExpenseRepository.delete(new BudgetExpenseId("1"));
-
-        BudgetExpense actual = getBudgetExpense("USER", DATE_STRING, "10.50", "Super Market", "super-market");
-    }
-
-    @Sql("classpath:budget-expense/find-by-date-range-data-set.sql")
-//    @Test(expected = EmptyResultDataAccessException.class)
     public void deleteBudgetExpenseWithAttachment() {
         jdbcBudgetExpenseRepository.delete(new BudgetExpenseId("13"));
 
-        BudgetExpense actual = getBudgetExpenseFor(new BudgetExpenseId("13"));
-        List<AttachmentFileName> budgetExpenseAttachment = getBudgetExpenseAttachmentFor(new BudgetExpenseId("13"));
-
-        Assertions.assertEquals(actual,nullValue());
-        Assertions.assertEquals(budgetExpenseAttachment.size(), 0);
+        Assertions.assertThrows(EmptyResultDataAccessException.class, () -> getBudgetExpenseFor(new BudgetExpenseId("13")));
     }
 
 
@@ -157,7 +152,7 @@ public class JdbcBudgetExpenseRepositoryIT {
         BudgetExpense budgetExpense = jdbcTemplate.queryForObject("SELECT * FROM BUDGET_EXPENSE WHERE DATE=? AND AMOUNT=? AND NOTE=? AND TAG=?",
                 jdbcBudgetExpenseRepository.budgetExpenseRowMapper, Date.dateFor(date).getLocalDate(),
                 Money.moneyFor(amount).getAmount(), note, tag);
-        return new BudgetExpense(budgetExpense.getId(),new UserName("USER"), budgetExpense.getDate(), budgetExpense.getAmount(), budgetExpense.getNote(), budgetExpense.getTag(), attachmentFileNames);
+        return new BudgetExpense(budgetExpense.getId(), new UserName("USER"), budgetExpense.getDate(), budgetExpense.getAmount(), budgetExpense.getNote(), budgetExpense.getTag(), attachmentFileNames);
     }
 
     private BudgetExpense getBudgetExpenseFor(BudgetExpenseId id) {
@@ -166,7 +161,7 @@ public class JdbcBudgetExpenseRepositoryIT {
 
         BudgetExpense budgetExpense = jdbcTemplate.queryForObject("SELECT * FROM BUDGET_EXPENSE WHERE ID=?",
                 jdbcBudgetExpenseRepository.budgetExpenseRowMapper, id.getContent());
-        return new BudgetExpense(budgetExpense.getId(),new UserName("USER"), budgetExpense.getDate(), budgetExpense.getAmount(), budgetExpense.getNote(), budgetExpense.getTag(), attachmentFileNames);
+        return new BudgetExpense(budgetExpense.getId(), new UserName("USER"), budgetExpense.getDate(), budgetExpense.getAmount(), budgetExpense.getNote(), budgetExpense.getTag(), attachmentFileNames);
     }
 
     private List<AttachmentFileName> getBudgetExpenseAttachmentFor(BudgetExpenseId id) {
