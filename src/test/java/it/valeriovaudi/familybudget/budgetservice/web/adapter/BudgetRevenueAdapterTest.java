@@ -6,18 +6,17 @@ import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.user.UserName;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.UserRepository;
 import it.valeriovaudi.familybudget.budgetservice.web.model.BudgetRevenueRepresentation;
-import org.hamcrest.core.Is;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class BudgetRevenueAdapterTest {
 
     @Mock
@@ -25,7 +24,7 @@ public class BudgetRevenueAdapterTest {
 
     private BudgetRevenueAdapter budgetRevenueAdapter;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         budgetRevenueAdapter = new BudgetRevenueAdapter(userRepository);
 
@@ -38,7 +37,7 @@ public class BudgetRevenueAdapterTest {
 
         BudgetRevenue actual = budgetRevenueAdapter.fromRepresentationToModel(new BudgetRevenueRepresentation("AN_ID", "01/01/2018", "1.00", "A_NOTE"));
         BudgetRevenue expected = new BudgetRevenue("AN_ID", "USER", Date.dateFor("01/01/2018"), Money.ONE, "A_NOTE");
-        Assert.assertThat(actual, Is.is(expected));
+        Assertions.assertEquals(actual, expected);
 
         verify(userRepository).currentLoggedUserName();
     }
@@ -47,6 +46,6 @@ public class BudgetRevenueAdapterTest {
     public void fromDomainToRepresentationHappyPath() {
         BudgetRevenueRepresentation actual = budgetRevenueAdapter.fromDomainToRepresentation(new BudgetRevenue("AN_ID", "USER", Date.dateFor("01/01/2018"), Money.ONE, "A_NOTE"));
         BudgetRevenueRepresentation expected = new BudgetRevenueRepresentation("AN_ID", "01/01/2018", "1.00", "A_NOTE");
-        Assert.assertThat(actual, Is.is(expected));
+        Assertions.assertEquals(actual, expected);
     }
 }

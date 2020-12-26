@@ -1,12 +1,11 @@
 package it.valeriovaudi.familybudget.budgetservice.domain.model;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 
 public class MoneyTest {
 
@@ -15,7 +14,7 @@ public class MoneyTest {
         Money money = Money.moneyFor("12.506");
         BigDecimal expectedValue = new BigDecimal(12.51).setScale(2, RoundingMode.HALF_DOWN);
         BigDecimal actualValue = money.getAmount();
-        assertThat(actualValue, is(expectedValue));
+        Assertions.assertEquals(actualValue, expectedValue);
     }
 
     @Test
@@ -25,7 +24,7 @@ public class MoneyTest {
 
         Money expectedValue = Money.moneyFor("22.72");
 
-        assertThat(firstAddendum.plus(secondAddendum), is(expectedValue));
+        Assertions.assertEquals(firstAddendum.plus(secondAddendum), expectedValue);
 
     }
 }

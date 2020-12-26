@@ -6,15 +6,15 @@ import it.valeriovaudi.familybudget.budgetservice.domain.model.budget.BudgetExpe
 import it.valeriovaudi.familybudget.budgetservice.domain.usecase.CreateBudgetExpense;
 import it.valeriovaudi.familybudget.budgetservice.domain.usecase.DeleteBudgetExpenseAttachment;
 import it.valeriovaudi.familybudget.budgetservice.domain.usecase.GetBudgetExpenseAttachment;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
@@ -27,7 +27,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(BudgetExpenseAttachmentEndPoint.class)
 public class BudgetExpenseAttachmentEndPointTest {
 

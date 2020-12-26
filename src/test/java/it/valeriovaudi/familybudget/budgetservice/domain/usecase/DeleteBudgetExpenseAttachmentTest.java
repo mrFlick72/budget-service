@@ -9,13 +9,12 @@ import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.user.UserName;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.AttachmentRepository;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.BudgetExpenseRepository;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
@@ -23,11 +22,8 @@ import static java.util.Arrays.asList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DeleteBudgetExpenseAttachmentTest {
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     @Mock
     private AttachmentRepository attachmentRepository;
@@ -38,7 +34,7 @@ public class DeleteBudgetExpenseAttachmentTest {
     private DeleteBudgetExpenseAttachment deleteBudgetExpenseAttachment;
     private static final BudgetExpenseId A_BUDGET_EXPENSE_ID = new BudgetExpenseId("A_BUDGET_EXPENSE_ID");
 
-    @Before
+    @BeforeEach
     public void setUp() {
         deleteBudgetExpenseAttachment = new DeleteBudgetExpenseAttachment(budgetExpenseRepository, attachmentRepository);
     }
@@ -76,11 +72,12 @@ public class DeleteBudgetExpenseAttachmentTest {
         DeleteBudgetExpenseAttachment deleteBudgetExpenseAttachment = this.deleteBudgetExpenseAttachment;
         AttachmentFileName attachmentFileName = new AttachmentFileName("AN_ATTACHMENT_FILE_NAME");
 
-        exception.expect(BudgetExpenseNotFoundException.class);
         given(budgetExpenseRepository.findFor(A_BUDGET_EXPENSE_ID))
                 .willReturn(Optional.empty());
 
-        deleteBudgetExpenseAttachment.deleteAttachmentFor(A_BUDGET_EXPENSE_ID, attachmentFileName);
+        Assertions.assertThrows(BudgetExpenseNotFoundException.class, () -> {
+            deleteBudgetExpenseAttachment.deleteAttachmentFor(A_BUDGET_EXPENSE_ID, attachmentFileName);
+        });
 
         verify(budgetExpenseRepository).findFor(A_BUDGET_EXPENSE_ID);
     }

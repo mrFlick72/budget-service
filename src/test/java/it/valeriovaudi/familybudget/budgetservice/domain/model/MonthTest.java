@@ -1,22 +1,20 @@
 package it.valeriovaudi.familybudget.budgetservice.domain.model;
 
 import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Month;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
-
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 public class MonthTest {
 
 
     @Test
-    public void getMonthName(){
+    public void getMonthName() {
         String actual = Month.FEBRUARY.localizedMonthName(Locale.ENGLISH);
         String expected = "February";
 
-        assertThat(actual, is(expected));
+        Assertions.assertEquals(actual, expected);
     }
 
 }

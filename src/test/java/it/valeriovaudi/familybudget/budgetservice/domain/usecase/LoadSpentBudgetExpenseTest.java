@@ -6,11 +6,12 @@ import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.user.UserName;
 import it.valeriovaudi.familybudget.budgetservice.domain.processor.DataImporter;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.BudgetExpenseRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,12 +19,11 @@ import java.util.List;
 
 import static it.valeriovaudi.familybudget.budgetservice.domain.model.budget.BudgetExpenseId.emptyBudgetExpenseId;
 import static java.util.Arrays.asList;
-import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class LoadSpentBudgetExpenseTest {
 
     @Mock
@@ -50,7 +50,7 @@ public class LoadSpentBudgetExpenseTest {
 
             verify(budgetExpenseRepository, times(3)).save(Mockito.any(BudgetExpense.class));
         } catch (IOException e) {
-            fail();
+            Assertions.fail();
         }
     }
 }

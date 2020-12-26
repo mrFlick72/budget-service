@@ -12,17 +12,16 @@ import it.valeriovaudi.familybudget.budgetservice.web.model.BudgetExpenseReprese
 import it.valeriovaudi.familybudget.budgetservice.web.model.DailyBudgetExpenseRepresentation;
 import it.valeriovaudi.familybudget.budgetservice.web.model.SpentBudgetRepresentation;
 import it.valeriovaudi.familybudget.budgetservice.web.model.TotalBySearchTagDetail;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SpentBudgetAdapterTest {
 
     private static final String DATE_12_02_2018 = "12/02/2018";
@@ -36,7 +35,7 @@ public class SpentBudgetAdapterTest {
         SpentBudgetRepresentation expected = getExpectation();
         given(searchTagRepository.findSearchTagBy("super-market")).willReturn(new SearchTag("super-market", "super-market"));
 
-        SpentBudgetRepresentation acutual = new SpentBudgetAdapter(new BudgetExpenseAdapter(searchTagRepository, null))
+        SpentBudgetRepresentation actual = new SpentBudgetAdapter(new BudgetExpenseAdapter(searchTagRepository, null))
                 .domainToRepresentationModel(new SpentBudget(asList(
                         new BudgetExpense(new BudgetExpenseId("1"), new UserName("USER"), Date.dateFor("12/02/2018"), Money.moneyFor("12.50"), "", "super-market"),
                         new BudgetExpense(new BudgetExpenseId("2"), new UserName("USER"), Date.dateFor("12/02/2018"), Money.moneyFor("15.50"), "", "super-market"),
@@ -44,7 +43,7 @@ public class SpentBudgetAdapterTest {
                         asList(new SearchTag("super-market", "super-market"))));
 
 
-        assertThat(acutual, is(expected));
+        Assertions.assertEquals(actual, expected);
     }
 
     private SpentBudgetRepresentation getExpectation() {

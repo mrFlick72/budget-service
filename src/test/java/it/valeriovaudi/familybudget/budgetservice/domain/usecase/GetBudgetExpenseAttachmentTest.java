@@ -9,21 +9,20 @@ import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.user.UserName;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.AttachmentRepository;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.BudgetExpenseRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class GetBudgetExpenseAttachmentTest {
 
     private static final Date DATE = Date.dateFor("22/02/2018");
@@ -40,7 +39,7 @@ public class GetBudgetExpenseAttachmentTest {
     private BudgetExpenseRepository budgetExpenseRepository;
     private GetBudgetExpenseAttachment getBudgetExpenseAttachment;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         getBudgetExpenseAttachment = new GetBudgetExpenseAttachment(attachmentRepository, budgetExpenseRepository);
     }
@@ -59,7 +58,7 @@ public class GetBudgetExpenseAttachmentTest {
 
         Attachment actual = getBudgetExpenseAttachment.findAttachmentFor(BUDGET_EXPENSE_ID, attachmentFileName).get();
 
-        assertThat(actual, is(new Attachment(attachmentFileName, "CONTENT_TYPE", "CONTENT".getBytes())));
+        Assertions.assertEquals(actual, new Attachment(attachmentFileName, "CONTENT_TYPE", "CONTENT".getBytes()));
 
         Mockito.verify(budgetExpenseRepository).findFor(BUDGET_EXPENSE_ID);
         Mockito.verify(attachmentRepository).findAttachmentFor(budgetExpense, attachmentFileName);
@@ -77,7 +76,7 @@ public class GetBudgetExpenseAttachmentTest {
 
         Optional<Attachment> actual = getBudgetExpenseAttachment.findAttachmentFor(BUDGET_EXPENSE_ID, attachmentFileName);
 
-        assertThat(actual, is(Optional.empty()));
+        Assertions.assertEquals(actual, Optional.empty());
 
         Mockito.verify(budgetExpenseRepository).findFor(BUDGET_EXPENSE_ID);
         Mockito.verify(attachmentRepository).findAttachmentFor(budgetExpense, attachmentFileName);
@@ -92,7 +91,7 @@ public class GetBudgetExpenseAttachmentTest {
 
         Optional<Attachment> actual = getBudgetExpenseAttachment.findAttachmentFor(BUDGET_EXPENSE_ID, attachmentFileName);
 
-        assertThat(actual, is(Optional.empty()));
+        Assertions.assertEquals(actual, Optional.empty());
 
         Mockito.verify(budgetExpenseRepository).findFor(BUDGET_EXPENSE_ID);
     }

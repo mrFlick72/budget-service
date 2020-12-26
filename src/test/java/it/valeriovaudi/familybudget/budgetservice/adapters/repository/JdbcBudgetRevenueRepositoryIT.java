@@ -3,29 +3,26 @@ package it.valeriovaudi.familybudget.budgetservice.adapters.repository;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.Money;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.budget.BudgetRevenue;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Date;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
 
 
 @JdbcTest
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class JdbcBudgetRevenueRepositoryIT {
 
@@ -37,7 +34,7 @@ public class JdbcBudgetRevenueRepositoryIT {
     private JdbcBudgetRevenueRepository budgetRevenueRepository;
 
 
-    @Before
+    @BeforeEach
     public void setUp() {
         budgetRevenueRepository = new JdbcBudgetRevenueRepository(jdbcTemplate);
     }
@@ -51,7 +48,7 @@ public class JdbcBudgetRevenueRepositoryIT {
 
         List<Map<String, Object>> maps = jdbcTemplate.queryForList("SELECT * FROM BUDGET_REVENUE WHERE ID='1234'");
 
-        Assert.assertFalse(maps.isEmpty());
+        Assertions.assertFalse(maps.isEmpty());
     }
 
     @Test
@@ -64,7 +61,7 @@ public class JdbcBudgetRevenueRepositoryIT {
                         new BudgetRevenue("3", "USER", Date.dateFor("13/02/2018"), Money.moneyFor("17.50"), "Dinner"),
                         new BudgetRevenue("2", "USER", Date.dateFor("22/02/2018"), Money.moneyFor("17.50"), "Super Market"));
 
-        assertThat(actualRange, is(expectedRange));
+        Assertions.assertEquals(actualRange, expectedRange);
     }
 
 
@@ -77,17 +74,17 @@ public class JdbcBudgetRevenueRepositoryIT {
 
         BudgetRevenue actual = getBudgetRevenue("1");
 
-        assertThat(actual, is(expected));
+        Assertions.assertEquals(actual, expected);
     }
 
     @Sql("classpath:budget_revenue/find-by-date-range-data-set.sql")
-    @Test(expected = EmptyResultDataAccessException.class)
+//    @Test(expected = EmptyResultDataAccessException.class)
     public void deleteBudgetExpense() {
         budgetRevenueRepository.delete("1");
 
         BudgetRevenue actual = getBudgetRevenue("1");
 
-        assertThat(actual, is(nullValue()));
+        Assertions.assertEquals(actual, nullValue());
     }
 
     private BudgetRevenue getBudgetRevenue(String id) {

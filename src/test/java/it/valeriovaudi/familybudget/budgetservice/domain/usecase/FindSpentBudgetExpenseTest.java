@@ -11,21 +11,20 @@ import it.valeriovaudi.familybudget.budgetservice.domain.model.user.UserName;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.BudgetExpenseRepository;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.SearchTagRepository;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.UserRepository;
-import org.hamcrest.core.Is;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Map;
 
 import static it.valeriovaudi.familybudget.budgetservice.domain.model.budget.BudgetExpenseId.emptyBudgetExpenseId;
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class FindSpentBudgetExpenseTest {
 
     @Mock
@@ -69,9 +68,8 @@ public class FindSpentBudgetExpenseTest {
                 .findByDateRange(new UserName("USER"), Date.firstDateOfMonth(Month.FEBRUARY, Year.of(2018)),
                         Date.lastDateOfMonth(Month.FEBRUARY, Year.of(2018)), "dinner", "super-market");
 
-        System.out.println(actual);
-        assertThat(actual.totalForSearchTags(), Is.is(expected));
-        assertThat(actual.total(), Is.is(Money.moneyFor("95.00")));
+        Assertions.assertEquals(actual.totalForSearchTags(), expected);
+        Assertions.assertEquals(actual.total(), Money.moneyFor("95.00"));
     }
 
 
@@ -109,8 +107,7 @@ public class FindSpentBudgetExpenseTest {
                         Date.firstDateOfMonth(Month.FEBRUARY, Year.of(2018)),
                         Date.lastDateOfMonth(Month.FEBRUARY, Year.of(2018)));
 
-        System.out.println(actual);
-        assertThat(actual.totalForSearchTags(), Is.is(expected));
-        assertThat(actual.total(), Is.is(Money.moneyFor("95.00")));
+        Assertions.assertEquals(actual.totalForSearchTags(), expected);
+        Assertions.assertEquals(actual.total(), Money.moneyFor("95.00"));
     }
 }

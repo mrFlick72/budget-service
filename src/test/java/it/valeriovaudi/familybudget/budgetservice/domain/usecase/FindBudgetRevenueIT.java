@@ -4,24 +4,23 @@ import it.valeriovaudi.familybudget.budgetservice.domain.model.Money;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.budget.BudgetRevenue;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Year;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.core.Is.is;
 
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class FindBudgetRevenueIT {
 
     @Autowired
@@ -48,6 +47,6 @@ public class FindBudgetRevenueIT {
 
         System.out.println(yearlyBudgetRevenueList);
         System.out.println(expectedBudgetRevenueList);
-        Assert.assertThat(yearlyBudgetRevenueList, is(expectedBudgetRevenueList));
+        Assertions.assertEquals(yearlyBudgetRevenueList, expectedBudgetRevenueList);
     }
 }

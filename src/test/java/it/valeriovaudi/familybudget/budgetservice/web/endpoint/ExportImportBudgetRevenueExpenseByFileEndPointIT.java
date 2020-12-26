@@ -5,16 +5,17 @@ import it.valeriovaudi.familybudget.budgetservice.domain.model.budget.BudgetExpe
 import it.valeriovaudi.familybudget.budgetservice.domain.model.budget.BudgetExpenseId;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.user.UserName;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -26,13 +27,11 @@ import java.util.List;
 
 import static it.valeriovaudi.familybudget.budgetservice.domain.model.budget.BudgetExpenseId.randomBudgetExpenseId;
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ExportImportBudgetRevenueExpenseByFileEndPointIT {
 
@@ -48,7 +47,7 @@ public class ExportImportBudgetRevenueExpenseByFileEndPointIT {
 
     private JdbcTemplate jdbcTemplate;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(dataSource);
         mockMvc = MockMvcBuilders.webAppContextSetup(applicationContext).build();
@@ -69,7 +68,7 @@ public class ExportImportBudgetRevenueExpenseByFileEndPointIT {
                     .andExpect(status().isCreated());
         }
 
-        assertThat(jdbcTemplate.query("SELECT * FROM BUDGET_EXPENSE", budgetExpenseRowMapper), is(expected));
+        Assertions.assertEquals(jdbcTemplate.query("SELECT * FROM BUDGET_EXPENSE", budgetExpenseRowMapper), expected);
     }
 
     RowMapper<BudgetExpense> budgetExpenseRowMapper =

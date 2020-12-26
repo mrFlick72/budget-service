@@ -6,10 +6,10 @@ import it.valeriovaudi.familybudget.budgetservice.domain.model.budget.BudgetExpe
 import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.user.UserName;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.SearchTagRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +22,7 @@ import static it.valeriovaudi.familybudget.budgetservice.domain.model.budget.Bud
 import static java.util.Arrays.asList;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PdfDataExporterTest {
 
     @Mock
