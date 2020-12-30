@@ -17,9 +17,9 @@ import it.valeriovaudi.familybudget.budgetservice.domain.usecase.FindSpentBudget
 import it.valeriovaudi.familybudget.budgetservice.domain.usecase.UpdateBudgetExpenseDetails;
 import it.valeriovaudi.familybudget.budgetservice.web.adapter.BudgetExpenseAdapter;
 import it.valeriovaudi.familybudget.budgetservice.web.adapter.SpentBudgetAdapter;
-import it.valeriovaudi.familybudget.budgetservice.web.model.BudgetExpenseRepresentation;
-import it.valeriovaudi.familybudget.budgetservice.web.model.DailyBudgetExpenseRepresentation;
-import it.valeriovaudi.familybudget.budgetservice.web.model.SpentBudgetRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.BudgetExpenseRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.DailyBudgetExpenseRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.SpentBudgetRepresentation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

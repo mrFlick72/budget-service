@@ -10,7 +10,7 @@ import it.valeriovaudi.familybudget.budgetservice.domain.repository.BudgetRevenu
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.UserRepository;
 import it.valeriovaudi.familybudget.budgetservice.domain.usecase.FindBudgetRevenue;
 import it.valeriovaudi.familybudget.budgetservice.web.adapter.BudgetRevenueAdapter;
-import it.valeriovaudi.familybudget.budgetservice.web.model.BudgetRevenueRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.BudgetRevenueRepresentation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package it.valeriovaudi.familybudget.budgetservice.web.converter;
 
-import it.valeriovaudi.familybudget.budgetservice.web.model.BudgetSearchCriteriaRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.BudgetSearchCriteriaRepresentation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

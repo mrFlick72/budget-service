@@ -1,4 +1,4 @@
-package it.valeriovaudi.familybudget.budgetservice.web.model;
+package it.valeriovaudi.familybudget.budgetservice.web.representation;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

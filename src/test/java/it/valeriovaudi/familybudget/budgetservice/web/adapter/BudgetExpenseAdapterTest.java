@@ -8,7 +8,7 @@ import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.user.UserName;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.SearchTagRepository;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.UserRepository;
-import it.valeriovaudi.familybudget.budgetservice.web.model.BudgetExpenseRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.BudgetExpenseRepresentation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

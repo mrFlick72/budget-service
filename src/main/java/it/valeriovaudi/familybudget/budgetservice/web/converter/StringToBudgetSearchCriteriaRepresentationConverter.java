@@ -1,6 +1,6 @@
 package it.valeriovaudi.familybudget.budgetservice.web.converter;
 
-import it.valeriovaudi.familybudget.budgetservice.web.model.BudgetSearchCriteriaRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.BudgetSearchCriteriaRepresentation;
 import org.springframework.core.convert.converter.Converter;
 
 import java.util.Arrays;

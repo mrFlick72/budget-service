@@ -2,10 +2,10 @@ package it.valeriovaudi.familybudget.budgetservice.web.adapter;
 
 import it.valeriovaudi.familybudget.budgetservice.domain.model.budget.DailyBudgetExpense;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.budget.SpentBudget;
-import it.valeriovaudi.familybudget.budgetservice.web.model.BudgetExpenseRepresentation;
-import it.valeriovaudi.familybudget.budgetservice.web.model.DailyBudgetExpenseRepresentation;
-import it.valeriovaudi.familybudget.budgetservice.web.model.SpentBudgetRepresentation;
-import it.valeriovaudi.familybudget.budgetservice.web.model.TotalBySearchTagDetail;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.BudgetExpenseRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.DailyBudgetExpenseRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.SpentBudgetRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.TotalBySearchTagDetail;
 
 import java.util.List;
 

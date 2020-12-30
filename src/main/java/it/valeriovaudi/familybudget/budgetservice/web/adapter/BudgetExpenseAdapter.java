@@ -9,7 +9,7 @@ import it.valeriovaudi.familybudget.budgetservice.domain.model.budget.NewBudgetE
 import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.SearchTagRepository;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.UserRepository;
-import it.valeriovaudi.familybudget.budgetservice.web.model.BudgetExpenseRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.BudgetExpenseRepresentation;
 
 import java.util.List;
 import java.util.Optional;

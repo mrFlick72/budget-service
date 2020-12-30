@@ -8,10 +8,10 @@ import it.valeriovaudi.familybudget.budgetservice.domain.model.budget.SpentBudge
 import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.user.UserName;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.SearchTagRepository;
-import it.valeriovaudi.familybudget.budgetservice.web.model.BudgetExpenseRepresentation;
-import it.valeriovaudi.familybudget.budgetservice.web.model.DailyBudgetExpenseRepresentation;
-import it.valeriovaudi.familybudget.budgetservice.web.model.SpentBudgetRepresentation;
-import it.valeriovaudi.familybudget.budgetservice.web.model.TotalBySearchTagDetail;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.BudgetExpenseRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.DailyBudgetExpenseRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.SpentBudgetRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.TotalBySearchTagDetail;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

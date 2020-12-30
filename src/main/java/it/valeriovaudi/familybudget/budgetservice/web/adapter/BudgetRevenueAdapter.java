@@ -4,7 +4,7 @@ import it.valeriovaudi.familybudget.budgetservice.domain.model.Money;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.budget.BudgetRevenue;
 import it.valeriovaudi.familybudget.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.UserRepository;
-import it.valeriovaudi.familybudget.budgetservice.web.model.BudgetRevenueRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.BudgetRevenueRepresentation;
 
 
 public class BudgetRevenueAdapter {

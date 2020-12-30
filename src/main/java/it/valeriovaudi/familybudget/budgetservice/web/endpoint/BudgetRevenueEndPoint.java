@@ -9,8 +9,8 @@ import it.valeriovaudi.familybudget.budgetservice.domain.repository.BudgetRevenu
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.UserRepository;
 import it.valeriovaudi.familybudget.budgetservice.domain.usecase.FindBudgetRevenue;
 import it.valeriovaudi.familybudget.budgetservice.web.adapter.BudgetRevenueAdapter;
-import it.valeriovaudi.familybudget.budgetservice.web.model.BudgetRevenueRepresentation;
-import it.valeriovaudi.familybudget.budgetservice.web.model.BudgetSearchCriteriaRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.BudgetRevenueRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.BudgetSearchCriteriaRepresentation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

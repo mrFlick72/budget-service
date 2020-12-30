@@ -12,8 +12,8 @@ import it.valeriovaudi.familybudget.budgetservice.domain.usecase.FindSpentBudget
 import it.valeriovaudi.familybudget.budgetservice.domain.usecase.UpdateBudgetExpenseDetails;
 import it.valeriovaudi.familybudget.budgetservice.web.adapter.BudgetExpenseAdapter;
 import it.valeriovaudi.familybudget.budgetservice.web.adapter.SpentBudgetAdapter;
-import it.valeriovaudi.familybudget.budgetservice.web.model.BudgetExpenseRepresentation;
-import it.valeriovaudi.familybudget.budgetservice.web.model.BudgetSearchCriteriaRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.BudgetExpenseRepresentation;
+import it.valeriovaudi.familybudget.budgetservice.web.representation.BudgetSearchCriteriaRepresentation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
