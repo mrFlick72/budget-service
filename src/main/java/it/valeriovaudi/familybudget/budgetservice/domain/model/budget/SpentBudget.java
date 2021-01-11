@@ -68,16 +68,19 @@ public final class SpentBudget {
     }
 
     private Map adaptSearchTag(List<SearchTag> searchTags) {
-        return searchTags.stream()
-                .map(search -> {
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put(search.getKey(), search.getValue());
-                    return map;
-                })
-                .reduce(new HashMap<>(), (m1, m2) -> {
-                    m1.putAll(m2);
-                    return m1;
-                });
+        return Optional.ofNullable(searchTags)
+                .map(tags ->
+                        tags.stream()
+                                .map(search -> {
+                                    HashMap<String, String> map = new HashMap<>();
+                                    map.put(search.getKey(), search.getValue());
+                                    return map;
+                                })
+                                .reduce(new HashMap<>(), (m1, m2) -> {
+                                    m1.putAll(m2);
+                                    return m1;
+                                })
+                ).orElse(new HashMap<>());
     }
 
 }
