@@ -8,10 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -22,12 +19,12 @@ import static java.util.stream.Collectors.toList;
 public final class SpentBudget {
 
     private final List<BudgetExpense> budgetExpenseList;
-    private final List<SearchTag> searchTags;
+    private final Map<String, String> searchTags;
 
     public SpentBudget(List<BudgetExpense> budgetExpenseList,
                        List<SearchTag> searchTags) {
         this.budgetExpenseList = budgetExpenseList;
-        this.searchTags = searchTags;
+        this.searchTags = adaptSearchTag(searchTags);
     }
 
     public InputStream printBudgetExpenseList(DataExporter strategy) {
@@ -65,11 +62,18 @@ public final class SpentBudget {
 
 
     private SearchTag findSearchTagFor(String searchTag) {
-        return searchTags.stream()
-                .filter(search -> search.getKey().equals(searchTag))
-                .findFirst()
+        return Optional.ofNullable(searchTags.get(searchTag))
+                .map(searchTagValue -> new SearchTag(searchTag, searchTagValue))
                 .orElse(null);
     }
 
+    private Map adaptSearchTag(List<SearchTag> searchTags) {
+        return searchTags.stream()
+                .map(search -> Map.of(search.getKey(), search.getValue()))
+                .reduce(new HashMap<>(), (m1, m2) -> {
+                    m1.putAll(m2);
+                    return m2;
+                });
+    }
 
 }
