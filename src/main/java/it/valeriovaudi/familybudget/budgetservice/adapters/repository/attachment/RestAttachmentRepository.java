@@ -65,7 +65,7 @@ public class RestAttachmentRepository implements AttachmentRepository {
         LinkedMultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", fileSystemResourceFor(attachment));
         body.add("path", budgetExpense.attachmentDatePath());
-        body.add("meFindSpentBudgetExpenseTest.tadata", objectMapper.writeValueAsBytes(metadataFor(budgetExpense)));
+        body.add("metadata", objectMapper.writeValueAsBytes(metadataFor(budgetExpense)));
         return body;
     }
 
