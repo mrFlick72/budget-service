@@ -51,6 +51,11 @@ public class RepositoryConfiguration {
         String url = UriComponentsBuilder.fromHttpUrl(repositoryServiceBaseUrl)
                 .pathSegment("documents", applicationName)
                 .toUriString();
-        return new RestAttachmentRepository(url, new RestTemplate(), objectMapper);
+        return new RestAttachmentRepository(url, repositoryServiceRestTemplate(), objectMapper);
+    }
+
+    @Bean
+    public  RestTemplate repositoryServiceRestTemplate() {
+        return new RestTemplate();
     }
 }
