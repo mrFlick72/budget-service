@@ -14,6 +14,8 @@ import it.valeriovaudi.familybudget.budgetservice.domain.repository.BudgetRevenu
 import it.valeriovaudi.familybudget.budgetservice.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.sleuth.instrument.web.mvc.TracingClientHttpRequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -47,15 +49,18 @@ public class RepositoryConfiguration {
     @Bean
     public AttachmentRepository attachmentRepository(@Value("${spring.application.name}") String applicationName,
                                                      @Value("${repository-service.uri}") String repositoryServiceBaseUrl,
-                                                     ObjectMapper objectMapper) {
+                                                     ObjectMapper objectMapper,
+                                                     RestTemplate repositoryServiceRestTemplate) {
         String url = UriComponentsBuilder.fromHttpUrl(repositoryServiceBaseUrl)
                 .pathSegment("documents", applicationName)
                 .toUriString();
-        return new RestAttachmentRepository(url, repositoryServiceRestTemplate(), objectMapper);
+        return new RestAttachmentRepository(url, repositoryServiceRestTemplate, objectMapper);
     }
 
     @Bean
-    public  RestTemplate repositoryServiceRestTemplate() {
-        return new RestTemplate();
+    public RestTemplate repositoryServiceRestTemplate(TracingClientHttpRequestInterceptor tracingClientHttpRequestInterceptor) {
+        return new RestTemplateBuilder()
+                .additionalInterceptors(tracingClientHttpRequestInterceptor)
+                .build();
     }
 }
