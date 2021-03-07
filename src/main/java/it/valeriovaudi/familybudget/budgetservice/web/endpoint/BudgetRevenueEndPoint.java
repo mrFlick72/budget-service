@@ -25,7 +25,7 @@ public class BudgetRevenueEndPoint {
 
     private final BudgetRevenueRepository budgetRevenueRepository;
     private final FindBudgetRevenue findBudgetRevenue;
-    ;
+
     private final BudgetRevenueAdapter budgetRevenueAdapter;
     private final IdProvider idProvider;
     private final UserRepository userRepository;
