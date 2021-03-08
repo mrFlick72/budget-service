@@ -15,7 +15,6 @@ import it.valeriovaudi.familybudget.budgetservice.domain.repository.UserReposito
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.cloud.sleuth.instrument.web.mvc.TracingClientHttpRequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -58,9 +57,7 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public RestTemplate repositoryServiceRestTemplate(TracingClientHttpRequestInterceptor tracingClientHttpRequestInterceptor) {
-        return new RestTemplateBuilder()
-                .additionalInterceptors(tracingClientHttpRequestInterceptor)
-                .build();
+    public RestTemplate repositoryServiceRestTemplate() {
+        return new RestTemplateBuilder().build();
     }
 }
