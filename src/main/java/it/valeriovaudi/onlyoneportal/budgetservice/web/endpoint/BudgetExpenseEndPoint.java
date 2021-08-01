@@ -19,14 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.Arrays.asList;
-
 @Slf4j
 @RestController
 @RequestMapping("/budget/expense")
@@ -60,29 +52,6 @@ public class BudgetExpenseEndPoint {
                 Year.of(budgetExpenseRequest.getYear()), budgetExpenseRequest.getSearchTagList());
 
         return ResponseEntity.ok(spentBudgetAdapter.domainToRepresentationModel(findSpentBudgetBy));
-    }
-
-    // todo endpoint temporaneo
-    @GetMapping("/year/{year}")
-    public ResponseEntity getYearlyBudgetExpenseList(@PathVariable("year") Integer year) {
-        Year domainYear = Year.of(year);
-
-        List<HashMap> aggregate =
-                Stream.of(Month.JANUARY, Month.FEBRUARY, Month.MARCH,
-                        Month.APRIL, Month.MAY, Month.JUNE,
-                        Month.JULY, Month.AUGUST, Month.SEPTEMBER,
-                        Month.OCTOBER, Month.NOVEMBER, Month.DECEMBER)
-                        .map(month -> asList(month, findSpentBudget.findBy(month, domainYear, new ArrayList<>())))
-                        .map(spentBudget -> {
-                            HashMap hashMap = new HashMap();
-                            hashMap.put("x", ((Month) spentBudget.get(0)).monthValue());
-                            hashMap.put("y", ((SpentBudget) spentBudget.get(1)).total().stringifyAmount());
-                            return hashMap;
-                        })
-                        .collect(Collectors.toList());
-
-
-        return ResponseEntity.ok(aggregate);
     }
 
     @PutMapping("/{id}")
