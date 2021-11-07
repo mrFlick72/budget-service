@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM openjdk:17
 
 ADD target/budget-service.jar /usr/local/budget-service/
 
