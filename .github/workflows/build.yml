@@ -20,7 +20,7 @@ jobs:
 
       - name: Build
         run: |
-          mvn clean install
+          mvn clean install -q
 
       - name: docker push
         run: |
