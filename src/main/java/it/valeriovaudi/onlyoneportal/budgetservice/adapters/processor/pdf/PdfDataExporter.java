@@ -58,8 +58,8 @@ public class PdfDataExporter implements DataExporter {
 
                 List<DailyBudgetExpense> dailyBudgetExpenses = spentBudget.dailyBudgetExpenseList();
                 Paragraph header = new Paragraph(String.format("BudgetRevenue Expense List from %s to %s",
-                        dailyBudgetExpenses.get(0).getDate().formattedDate(),
-                        dailyBudgetExpenses.get(dailyBudgetExpenses.size() - 1).getDate().formattedDate()));
+                        dailyBudgetExpenses.get(0).date().formattedDate(),
+                        dailyBudgetExpenses.get(dailyBudgetExpenses.size() - 1).date().formattedDate()));
                 header.setHorizontalAlignment(HorizontalAlignment.CENTER).setBold();
                 document.add(header);
 
@@ -76,14 +76,14 @@ public class PdfDataExporter implements DataExporter {
 
 
                 for (DailyBudgetExpense dailyBudgetExpense : spentBudget.dailyBudgetExpenseList()) {
-                    table.addCell(newCell(dailyBudgetExpense.getDate().formattedDate(), ROW_COLOR))
+                    table.addCell(newCell(dailyBudgetExpense.date().formattedDate(), ROW_COLOR))
                             .addCell(newCell("", ROW_COLOR))
                             .addCell(newCell("", ROW_COLOR))
                             .addCell(newCell("", ROW_COLOR))
-                            .addCell(newCell(dailyBudgetExpense.getTotal().stringifyAmount(), ROW_COLOR))
+                            .addCell(newCell(dailyBudgetExpense.total().stringifyAmount(), ROW_COLOR))
                             .startNewRow();
 
-                    for (BudgetExpense budgetExpense : dailyBudgetExpense.getBudgetExpenseList()) {
+                    for (BudgetExpense budgetExpense : dailyBudgetExpense.budgetExpenseList()) {
                         table.addCell(newCell("", ROW_COLOR))
                                 .addCell(newCell(budgetExpense.getAmount().stringifyAmount(), ROW_COLOR))
                                 .addCell(newCell(ofNullable(budgetExpense.getNote()).orElse(""), ROW_COLOR))

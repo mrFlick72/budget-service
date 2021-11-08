@@ -24,8 +24,8 @@ public class SpentBudgetAdapter {
                 spentBudget.dailyBudgetExpenseList().stream()
                         .map(dailyBudgetExpense ->
                                 new DailyBudgetExpenseRepresentation(budgetExpenseRepresentationList(dailyBudgetExpense),
-                                        dailyBudgetExpense.getDate().formattedDate(),
-                                        dailyBudgetExpense.getTotal().stringifyAmount())).collect(toList()),
+                                        dailyBudgetExpense.date().formattedDate(),
+                                        dailyBudgetExpense.total().stringifyAmount())).collect(toList()),
                 spentBudget.totalForSearchTags().entrySet().stream()
                         .map(total -> new TotalBySearchTagDetail(total.getKey().getKey(),
                                 total.getKey().getValue(),
@@ -34,7 +34,7 @@ public class SpentBudgetAdapter {
     }
 
     private List<BudgetExpenseRepresentation> budgetExpenseRepresentationList(DailyBudgetExpense dailyBudgetExpense) {
-        return dailyBudgetExpense.getBudgetExpenseList().stream()
+        return dailyBudgetExpense.budgetExpenseList().stream()
                 .map(budgetExpenseAdapter::domainToRepresentationModel)
                 .collect(toList());
     }

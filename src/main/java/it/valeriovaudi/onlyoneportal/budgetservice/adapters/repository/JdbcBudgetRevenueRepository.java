@@ -33,16 +33,16 @@ public class JdbcBudgetRevenueRepository implements BudgetRevenueRepository {
 
     @Override
     public void save(BudgetRevenue budgetRevenue) {
-        jdbcTemplate.update(INSERT_BUDGET_REVENUE_QUERY, budgetRevenue.getId(), budgetRevenue.getUserName(),
-                budgetRevenue.getRegistrationDate().getLocalDate(), budgetRevenue.getAmount().getAmount(),
-                budgetRevenue.getNote());
+        jdbcTemplate.update(INSERT_BUDGET_REVENUE_QUERY, budgetRevenue.id(), budgetRevenue.userName(),
+                budgetRevenue.registrationDate().getLocalDate(), budgetRevenue.amount().getAmount(),
+                budgetRevenue.note());
     }
 
     @Override
     public void update(BudgetRevenue budgetRevenue) {
-        jdbcTemplate.update(UPDATE_QUERY, budgetRevenue.getUserName(),
-                budgetRevenue.getRegistrationDate().getLocalDate(), budgetRevenue.getAmount().getAmount(),
-                budgetRevenue.getNote(), budgetRevenue.getId());
+        jdbcTemplate.update(UPDATE_QUERY, budgetRevenue.userName(),
+                budgetRevenue.registrationDate().getLocalDate(), budgetRevenue.amount().getAmount(),
+                budgetRevenue.note(), budgetRevenue.id());
     }
 
     @Override
