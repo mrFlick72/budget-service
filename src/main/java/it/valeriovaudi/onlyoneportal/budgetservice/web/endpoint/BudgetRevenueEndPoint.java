@@ -43,9 +43,9 @@ public class BudgetRevenueEndPoint {
     @PostMapping
     public ResponseEntity newBudgetRevenue(@RequestBody BudgetRevenueRepresentation budgetRevenueRepresentation) {
         budgetRevenueRepository.save(new BudgetRevenue(idProvider.id(), userRepository.currentLoggedUserName().getContent(),
-                Date.dateFor(budgetRevenueRepresentation.getDate()),
-                Money.moneyFor(budgetRevenueRepresentation.getAmount()),
-                budgetRevenueRepresentation.getNote()));
+                Date.dateFor(budgetRevenueRepresentation.date()),
+                Money.moneyFor(budgetRevenueRepresentation.amount()),
+                budgetRevenueRepresentation.note()));
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -53,7 +53,13 @@ public class BudgetRevenueEndPoint {
     @PutMapping("/{id}")
     public ResponseEntity updateBudgetRevenue(@PathVariable("id") String id,
                                               @RequestBody BudgetRevenueRepresentation budgetRevenueRepresentation) {
-        budgetRevenueRepresentation.setId(id);
+
+        budgetRevenueRepresentation = new BudgetRevenueRepresentation(
+                id,
+                budgetRevenueRepresentation.date(),
+                budgetRevenueRepresentation.amount(),
+                budgetRevenueRepresentation.note()
+        );
         BudgetRevenue budgetRevenue = budgetRevenueAdapter.fromRepresentationToModel(budgetRevenueRepresentation);
         budgetRevenueRepository.update(budgetRevenue);
 
