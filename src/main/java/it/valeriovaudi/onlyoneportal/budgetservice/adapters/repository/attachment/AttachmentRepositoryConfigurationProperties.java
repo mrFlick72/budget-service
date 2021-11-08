@@ -1,14 +1,17 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository.attachment;
 
+import lombok.Data;
+import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConstructorBinding;
 
-@ConstructorBinding
+@Data
+@ToString
 @ConfigurationProperties("attachment.repository")
-public record AttachmentRepositoryConfigurationProperties(String accessKey,
-                                                   String secretKey,
-                                                   String region,
-                                                   String bucketName,
-                                                   String bucketPrefix
-) {
+public class AttachmentRepositoryConfigurationProperties {
+    private String accessKey;
+    private String secretKey;
+    private String region;
+    private String bucketName;
+    private String bucketPrefix;
+
 }

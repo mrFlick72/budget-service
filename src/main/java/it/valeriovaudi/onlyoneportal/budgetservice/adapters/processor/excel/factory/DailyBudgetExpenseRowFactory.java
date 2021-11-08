@@ -21,14 +21,14 @@ public class DailyBudgetExpenseRowFactory {
 
     public void createDailyRow(Sheet sheet, CellStyle cellStyle, DailyBudgetExpense dailyBudgetExpense) {
         rowBuilder.newRow(sheet)
-                .withCell(dailyBudgetExpense.date().formattedDate(), cellStyle)
+                .withCell(dailyBudgetExpense.getDate().formattedDate(), cellStyle)
                 .withCell("", cellStyle)
                 .withCell("", cellStyle)
                 .withCell("", cellStyle)
-                .withCell(dailyBudgetExpense.total().stringifyAmount(), cellStyle)
+                .withCell(dailyBudgetExpense.getTotal().stringifyAmount(), cellStyle)
                 .build();
 
-        dailyBudgetExpense.budgetExpenseList().forEach(budgetExpense -> {
+        dailyBudgetExpense.getBudgetExpenseList().forEach(budgetExpense -> {
             int columnNewLineCounter = StringUtils.countOccurrencesOf(budgetExpense.getNote(), "\n");
             rowBuilder.newRow(sheet, sheet.getDefaultRowHeightInPoints() * columnNewLineCounter)
                     .withCell("", cellStyle)

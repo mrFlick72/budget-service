@@ -24,9 +24,9 @@ public class BudgetRevenueAdapter {
     }
 
     public BudgetRevenueRepresentation fromDomainToRepresentation(BudgetRevenue budgetRevenue) {
-        return new BudgetRevenueRepresentation(budgetRevenue.id(),
-                budgetRevenue.registrationDate().formattedDate(),
-                budgetRevenue.amount().stringifyAmount(),
-                budgetRevenue.note());
+        return new BudgetRevenueRepresentation(budgetRevenue.getId(),
+                budgetRevenue.getRegistrationDate().formattedDate(),
+                budgetRevenue.getAmount().stringifyAmount(),
+                budgetRevenue.getNote());
     }
 }
