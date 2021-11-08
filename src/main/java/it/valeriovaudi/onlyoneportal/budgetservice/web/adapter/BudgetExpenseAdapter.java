@@ -35,17 +35,17 @@ public class BudgetExpenseAdapter {
     }
 
     public BudgetExpense representationModelToDomainModel(BudgetExpenseRepresentation budgetExpenseRepresentation) {
-        return new BudgetExpense(new BudgetExpenseId(budgetExpenseRepresentation.id()),
+        return new BudgetExpense(new BudgetExpenseId(budgetExpenseRepresentation.getId()),
                 userRepository.currentLoggedUserName(),
-                Date.dateFor(budgetExpenseRepresentation.date()),
-                Money.moneyFor(budgetExpenseRepresentation.amount()),
-                budgetExpenseRepresentation.note(), budgetExpenseRepresentation.tagKey());
+                Date.dateFor(budgetExpenseRepresentation.getDate()),
+                Money.moneyFor(budgetExpenseRepresentation.getAmount()),
+                budgetExpenseRepresentation.getNote(), budgetExpenseRepresentation.getTagKey());
     }
 
     public NewBudgetExpenseRequest newBudgetExpenseRequestFromRepresentation(BudgetExpenseRepresentation budgetExpenseRepresentation) {
-        return new NewBudgetExpenseRequest(Date.dateFor(budgetExpenseRepresentation.date()),
-                Money.moneyFor(budgetExpenseRepresentation.amount()),
-                budgetExpenseRepresentation.note(), budgetExpenseRepresentation.tagKey());
+        return new NewBudgetExpenseRequest(Date.dateFor(budgetExpenseRepresentation.getDate()),
+                Money.moneyFor(budgetExpenseRepresentation.getAmount()),
+                budgetExpenseRepresentation.getNote(), budgetExpenseRepresentation.getTagKey());
     }
 
 

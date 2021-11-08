@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 
 public class StringToBudgetSearchCriteriaRepresentationConverter implements Converter<String, BudgetSearchCriteriaRepresentation> {
 
@@ -34,11 +33,11 @@ public class StringToBudgetSearchCriteriaRepresentationConverter implements Conv
                                 Optional.ofNullable(hashMap.get("searchTag"))
                                         .map(tag -> asList(tag.split(",")))
                                         .orElse(asList())))
-                        .orElse(new BudgetSearchCriteriaRepresentation(null, null, emptyList()));
+                        .orElse(new BudgetSearchCriteriaRepresentation());
 
 
         return Optional.ofNullable(representation)
                 .map(converter)
-                .orElse(new BudgetSearchCriteriaRepresentation(null, null, emptyList()));
+                .orElse(new BudgetSearchCriteriaRepresentation());
     }
 }

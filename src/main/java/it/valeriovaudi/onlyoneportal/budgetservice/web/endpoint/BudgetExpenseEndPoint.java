@@ -48,16 +48,15 @@ public class BudgetExpenseEndPoint {
 
     @GetMapping
     public ResponseEntity getBudgetExpenseList(@RequestParam("q") BudgetSearchCriteriaRepresentation budgetExpenseRequest) {
-        final SpentBudget findSpentBudgetBy = findSpentBudget.findBy(Month.of(budgetExpenseRequest.month()),
-                Year.of(budgetExpenseRequest.year()), budgetExpenseRequest.searchTagList());
+        final SpentBudget findSpentBudgetBy = findSpentBudget.findBy(Month.of(budgetExpenseRequest.getMonth()),
+                Year.of(budgetExpenseRequest.getYear()), budgetExpenseRequest.getSearchTagList());
 
         return ResponseEntity.ok(spentBudgetAdapter.domainToRepresentationModel(findSpentBudgetBy));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity updateBudgetExpense(@PathVariable("id") String id, @RequestBody BudgetExpenseRepresentation request) {
-        request = new BudgetExpenseRepresentation(id, request.date(), request.amount(), request.note(),
-                request.tagKey(), request.tagValue(), request.attachments());
+        request.setId(id);
         updateBudgetExpenseDetails.updateWithoutAttachment(budgetExpenseAdapter.representationModelToDomainModel(request));
         return ResponseEntity.noContent().build();
     }

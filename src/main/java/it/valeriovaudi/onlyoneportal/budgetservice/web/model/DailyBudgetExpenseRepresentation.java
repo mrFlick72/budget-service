@@ -1,8 +1,26 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.web.model;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import java.util.List;
 
-public record DailyBudgetExpenseRepresentation(List<BudgetExpenseRepresentation> budgetExpenseRepresentationList,
-                                               String date,
-                                               String total) {
+@Data
+@ToString
+@EqualsAndHashCode
+public class DailyBudgetExpenseRepresentation {
+
+    private List<BudgetExpenseRepresentation> budgetExpenseRepresentationList;
+    private String date;
+    private String total;
+
+    public DailyBudgetExpenseRepresentation() { }
+
+    public DailyBudgetExpenseRepresentation(List<BudgetExpenseRepresentation> budgetExpenseRepresentationList,
+                                            String date, String total) {
+        this.budgetExpenseRepresentationList = budgetExpenseRepresentationList;
+        this.date = date;
+        this.total = total;
+    }
 }
