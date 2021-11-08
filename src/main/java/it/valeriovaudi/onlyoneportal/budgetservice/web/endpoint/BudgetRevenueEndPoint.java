@@ -75,7 +75,7 @@ public class BudgetRevenueEndPoint {
 
     @GetMapping
     public ResponseEntity findAllBudgetRevenue(@RequestParam("q") BudgetSearchCriteriaRepresentation searchCriteria) {
-        Year year = Year.of(searchCriteria.getYear());
+        Year year = Year.of(searchCriteria.year());
 
         return ResponseEntity.ok(findBudgetRevenue.findBy(year)
                 .stream().map(budgetRevenueAdapter::fromDomainToRepresentation)
