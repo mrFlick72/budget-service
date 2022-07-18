@@ -51,7 +51,7 @@ public class BudgetExpenseEndPointTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final SpentBudgetRepresentation spentBudgetRepresentation =
-            new SpentBudgetRepresentation("21.00", asList(new DailyBudgetExpenseRepresentation(asList(new BudgetExpenseRepresentation("1", "20/01/2018", "10.50", "", "super-market", "Super Market", asList())), "20/01/2018", "10.50")), asList());
+            new SpentBudgetRepresentation("21.00", asList(new DailyBudgetExpenseRepresentation(asList(new BudgetExpenseRepresentation("1", "20/01/2018", "10.50", "", "super-market", "Super Market")), "20/01/2018", "10.50")), asList());
 
     @MockBean
     private JwtDecoder decoder;
@@ -115,7 +115,7 @@ public class BudgetExpenseEndPointTest {
     @WithMockUser
     public void insertBudgetExpense() throws Exception {
         BudgetExpenseRepresentation budgetExpenseRepresentation =
-                new BudgetExpenseRepresentation(null, "20/01/2018", "10.50", "", "super-market", null, asList());
+                new BudgetExpenseRepresentation(null, "20/01/2018", "10.50", "", "super-market", null);
 
         String budgetExpenseRepresentationAsJsonString =
                 objectMapper.writeValueAsString(budgetExpenseRepresentation);
@@ -141,9 +141,9 @@ public class BudgetExpenseEndPointTest {
     @WithMockUser
     public void updateBudgetExpense() throws Exception {
         BudgetExpenseRepresentation budgetExpenseRepresentation =
-                new BudgetExpenseRepresentation("ID", "20/01/2018", "10.50", "", "super-market", null, asList());
+                new BudgetExpenseRepresentation("ID", "20/01/2018", "10.50", "", "super-market", null);
 
-        String budgetExpenseRepresentationAsJsonString = objectMapper.writeValueAsString(new BudgetExpenseRepresentation("ID123", "20/01/2018", "10.50", "", "super-market", null, asList()));
+        String budgetExpenseRepresentationAsJsonString = objectMapper.writeValueAsString(new BudgetExpenseRepresentation("ID123", "20/01/2018", "10.50", "", "super-market", null));
 
         BudgetExpense newBudgetExpenseRequest = new BudgetExpense(new BudgetExpenseId("ID"), new UserName("USER"), Date.dateFor("20/01/2018"), Money.moneyFor("10.50"), "", "super-market");
         given(budgetExpenseAdapter.representationModelToDomainModel(budgetExpenseRepresentation))

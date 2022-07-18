@@ -2,7 +2,6 @@ package it.valeriovaudi.onlyoneportal.budgetservice.web.adapter;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.attachment.AttachmentFileName;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpense;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpenseId;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.NewBudgetExpenseRequest;
@@ -11,10 +10,7 @@ import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRe
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.web.model.BudgetExpenseRepresentation;
 
-import java.util.List;
 import java.util.Optional;
-
-import static java.util.stream.Collectors.toList;
 
 public class BudgetExpenseAdapter {
 
@@ -30,8 +26,7 @@ public class BudgetExpenseAdapter {
         String searchTag = Optional.ofNullable(searchTagRepository.findSearchTagBy(budgetExpense.getTag()))
                 .map(SearchTag::getValue).orElse("");
         return new BudgetExpenseRepresentation(budgetExpense.getId().getContent(), budgetExpense.getDate().formattedDate(),
-                budgetExpense.getAmount().stringifyAmount(), budgetExpense.getNote(), budgetExpense.getTag(), searchTag,
-                attachments(budgetExpense.getAttachmentFileNames()));
+                budgetExpense.getAmount().stringifyAmount(), budgetExpense.getNote(), budgetExpense.getTag(), searchTag);
     }
 
     public BudgetExpense representationModelToDomainModel(BudgetExpenseRepresentation budgetExpenseRepresentation) {
@@ -47,11 +42,5 @@ public class BudgetExpenseAdapter {
                 Money.moneyFor(budgetExpenseRepresentation.getAmount()),
                 budgetExpenseRepresentation.getNote(), budgetExpenseRepresentation.getTagKey());
     }
-
-
-    private List<String> attachments(List<AttachmentFileName> attachments) {
-        return attachments.stream().map(AttachmentFileName::getFileName).collect(toList());
-    }
-
 
 }

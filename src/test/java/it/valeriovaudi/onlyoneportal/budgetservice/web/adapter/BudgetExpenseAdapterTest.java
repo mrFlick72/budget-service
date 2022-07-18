@@ -15,7 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static java.util.Arrays.asList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -37,7 +36,7 @@ public class BudgetExpenseAdapterTest {
     @Test
     public void convertWebRepresentationToDomainModel() {
         BudgetExpenseId id = BudgetExpenseId.randomBudgetExpenseId();
-        BudgetExpenseRepresentation budgetExpenseRepresentation = new BudgetExpenseRepresentation(id.getContent(), DATE, AMOUNT, "super-market", "super-market", "Super Market", asList());
+        BudgetExpenseRepresentation budgetExpenseRepresentation = new BudgetExpenseRepresentation(id.getContent(), DATE, AMOUNT, "super-market", "super-market", "Super Market");
         BudgetExpenseAdapter budgetExpenseAdapter = new BudgetExpenseAdapter(searchTagRepository, userRepository);
 
         given(userRepository.currentLoggedUserName())
@@ -64,7 +63,7 @@ public class BudgetExpenseAdapterTest {
 
         verify(searchTagRepository).findSearchTagBy("super-market");
 
-        Assertions.assertEquals(actualBudgetExpenseRepresentation, new BudgetExpenseRepresentation(id.getContent(), DATE, AMOUNT, "Super Market", "super-market", "Super Market", asList()));
+        Assertions.assertEquals(actualBudgetExpenseRepresentation, new BudgetExpenseRepresentation(id.getContent(), DATE, AMOUNT, "Super Market", "super-market", "Super Market"));
     }
 
 }

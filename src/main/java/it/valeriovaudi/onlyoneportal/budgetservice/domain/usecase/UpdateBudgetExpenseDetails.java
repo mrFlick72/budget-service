@@ -18,7 +18,8 @@ public class UpdateBudgetExpenseDetails {
                             budgetExpense.getUserName(),
                             budgetExpense.getDate(),
                             budgetExpense.getAmount(), budgetExpense.getNote(),
-                            budgetExpense.getTag(), foundBudgetExpense.getAttachmentFileNames());
+                            budgetExpense.getTag()
+                    );
 
                     budgetExpenseRepository.save(updatedBudgetExpense);
                 });
