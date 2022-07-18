@@ -1,7 +1,6 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.attachment.AttachmentFileName;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpense;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpenseId;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
@@ -41,48 +40,14 @@ public class JdbcBudgetExpenseRepositoryIT {
         jdbcBudgetExpenseRepository = new JdbcBudgetExpenseRepository(jdbcTemplate);
     }
 
-
     @Test
-    public void saveAnewBudgetExpenseWithoutAttachments() {
+    public void saveAnewBudgetExpense() {
         BudgetExpenseId id = new BudgetExpenseId(UUID.randomUUID().toString());
         BudgetExpense expected = new BudgetExpense(id, new UserName("USER"), DATE, Money.moneyFor("10.50"), "NOTE", "TAG");
 
         jdbcBudgetExpenseRepository.save(expected);
 
         BudgetExpense actual = getBudgetExpense("USER", DATE_STRING, "10.50", "NOTE", "TAG");
-
-        Assertions.assertEquals(actual, expected);
-    }
-
-    @Test
-    public void saveAnewBudgetExpenseWithAttachments() {
-        BudgetExpenseId id = new BudgetExpenseId(UUID.randomUUID().toString());
-        BudgetExpense expected = new BudgetExpense(id, new UserName("USER"), DATE, Money.moneyFor("10.50"), "NOTE", "TAG", asList(new AttachmentFileName("A_FILE")));
-        jdbcBudgetExpenseRepository.save(expected);
-
-        BudgetExpense actual = getBudgetExpenseWithAttachments(id, DATE_STRING, "10.50", "NOTE", "TAG");
-
-        Assertions.assertEquals(actual, expected);
-    }
-
-    @Test
-    public void saveOrUpdateABudgetExpenseWithAttachments() {
-        BudgetExpenseId id = new BudgetExpenseId(UUID.randomUUID().toString());
-
-        BudgetExpense budgetExpense = new BudgetExpense(id, new UserName("USER"), DATE, Money.moneyFor("10.50"), "NOTE", "TAG",
-                asList(new AttachmentFileName("A_FILE1"),
-                        new AttachmentFileName("ANOTHER_FILE"),
-                        new AttachmentFileName("ANOTHER_FILE_AGAIN")));
-        jdbcBudgetExpenseRepository.save(budgetExpense);
-
-        BudgetExpense expected = new BudgetExpense(id, new UserName("USER"), DATE, Money.moneyFor("10.50"), "NOTE", "TAG",
-                asList(new AttachmentFileName("A_FILE1"),
-                        new AttachmentFileName("A_FILE_AGAIN"),
-                        new AttachmentFileName("ANOTHER_FILE_NAME")));
-
-        jdbcBudgetExpenseRepository.save(expected);
-
-        BudgetExpense actual = getBudgetExpenseWithAttachments(id, DATE_STRING, "10.50", "NOTE", "TAG");
 
         Assertions.assertEquals(actual, expected);
     }
@@ -98,7 +63,7 @@ public class JdbcBudgetExpenseRepositoryIT {
     @Test
     public void findABudgetExpenseByReference() {
         BudgetExpenseId id = new BudgetExpenseId(UUID.randomUUID().toString());
-        BudgetExpense expected = new BudgetExpense(id, new UserName("USER"), DATE, Money.moneyFor("10.50"), "NOTE", "TAG", asList(new AttachmentFileName("A_FILE")));
+        BudgetExpense expected = new BudgetExpense(id, new UserName("USER"), DATE, Money.moneyFor("10.50"), "NOTE", "TAG");
         jdbcBudgetExpenseRepository.save(expected);
 
         Assertions.assertEquals(jdbcBudgetExpenseRepository.findFor(id).get(), expected);
@@ -145,28 +110,12 @@ public class JdbcBudgetExpenseRepositoryIT {
                 Money.moneyFor(amount).getAmount(), note, tag);
     }
 
-    private BudgetExpense getBudgetExpenseWithAttachments(BudgetExpenseId id, String date, String amount, String note, String tag) {
-        List<AttachmentFileName> attachmentFileNames = jdbcTemplate.query("SELECT * FROM BUDGET_EXPENSE_ATTACHMENTS WHERE BUDGET_EXPENSE_ID=?",
-                new Object[]{id.getContent()}, jdbcBudgetExpenseRepository.budgetExpenseAttachmentRowMapper);
 
-        BudgetExpense budgetExpense = jdbcTemplate.queryForObject("SELECT * FROM BUDGET_EXPENSE WHERE DATE=? AND AMOUNT=? AND NOTE=? AND TAG=?",
-                jdbcBudgetExpenseRepository.budgetExpenseRowMapper, Date.dateFor(date).getLocalDate(),
-                Money.moneyFor(amount).getAmount(), note, tag);
-        return new BudgetExpense(budgetExpense.getId(), new UserName("USER"), budgetExpense.getDate(), budgetExpense.getAmount(), budgetExpense.getNote(), budgetExpense.getTag(), attachmentFileNames);
-    }
 
     private BudgetExpense getBudgetExpenseFor(BudgetExpenseId id) {
-        List<AttachmentFileName> attachmentFileNames = jdbcTemplate.query("SELECT * FROM BUDGET_EXPENSE_ATTACHMENTS WHERE BUDGET_EXPENSE_ID=?",
-                new Object[]{id.getContent()}, jdbcBudgetExpenseRepository.budgetExpenseAttachmentRowMapper);
-
         BudgetExpense budgetExpense = jdbcTemplate.queryForObject("SELECT * FROM BUDGET_EXPENSE WHERE ID=?",
                 jdbcBudgetExpenseRepository.budgetExpenseRowMapper, id.getContent());
-        return new BudgetExpense(budgetExpense.getId(), new UserName("USER"), budgetExpense.getDate(), budgetExpense.getAmount(), budgetExpense.getNote(), budgetExpense.getTag(), attachmentFileNames);
+        return new BudgetExpense(budgetExpense.getId(), new UserName("USER"), budgetExpense.getDate(), budgetExpense.getAmount(), budgetExpense.getNote(), budgetExpense.getTag());
     }
 
-    private List<AttachmentFileName> getBudgetExpenseAttachmentFor(BudgetExpenseId id) {
-        return jdbcTemplate.query("SELECT * FROM BUDGET_EXPENSE_ATTACHMENTS WHERE BUDGET_EXPENSE_ID=?",
-                new Object[]{id.getContent()}, jdbcBudgetExpenseRepository.budgetExpenseAttachmentRowMapper);
-
-    }
 }

@@ -8,7 +8,10 @@ import it.valeriovaudi.onlyoneportal.budgetservice.adapters.processor.excel.fact
 import it.valeriovaudi.onlyoneportal.budgetservice.adapters.processor.excel.factory.HeaderFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.adapters.processor.pdf.PdfDataExporter;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.IdProvider;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.*;
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetExpenseRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetRevenueRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.usecase.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,9 +20,8 @@ import org.springframework.context.annotation.Configuration;
 public class BusinessLogicConfiguration {
 
     @Bean
-    public DeleteBudgetExpense deleteBudgetExpense(BudgetExpenseRepository budgetExpenseRepository,
-                                                   AttachmentRepository attachmentRepository) {
-        return new DeleteBudgetExpense(budgetExpenseRepository, attachmentRepository);
+    public DeleteBudgetExpense deleteBudgetExpense(BudgetExpenseRepository budgetExpenseRepository) {
+        return new DeleteBudgetExpense(budgetExpenseRepository);
     }
 
     @Bean
@@ -27,17 +29,6 @@ public class BusinessLogicConfiguration {
         return new UpdateBudgetExpenseDetails(budgetExpenseRepository);
     }
 
-    @Bean
-    public DeleteBudgetExpenseAttachment deleteBudgetExpenseAttachment(AttachmentRepository attachmentRepository,
-                                                                       BudgetExpenseRepository budgetExpenseRepository) {
-        return new DeleteBudgetExpenseAttachment(budgetExpenseRepository, attachmentRepository);
-    }
-
-    @Bean
-    public GetBudgetExpenseAttachment getBudgetExpenseAttachment(AttachmentRepository attachmentRepository,
-                                                                 BudgetExpenseRepository budgetExpenseRepository) {
-        return new GetBudgetExpenseAttachment(attachmentRepository, budgetExpenseRepository);
-    }
 
     @Bean
     public FindBudgetRevenue findBudgetRevenue(UserRepository userRepository,
@@ -61,9 +52,8 @@ public class BusinessLogicConfiguration {
     @Bean
     public CreateBudgetExpense createBudgetExpense(UserRepository userRepository,
                                                    BudgetExpenseRepository budgetExpenseRepository,
-                                                   AttachmentRepository attachmentRepository,
                                                    IdProvider idProvider) {
-        return new CreateBudgetExpense(budgetExpenseRepository, attachmentRepository, userRepository, idProvider);
+        return new CreateBudgetExpense(budgetExpenseRepository, userRepository, idProvider);
     }
 
     @Bean
