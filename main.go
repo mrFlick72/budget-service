@@ -1,4 +1,4 @@
-package budget_service
+package main
 
 func main() {
 
