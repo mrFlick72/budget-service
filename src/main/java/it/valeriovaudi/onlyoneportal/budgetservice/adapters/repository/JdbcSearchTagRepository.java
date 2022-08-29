@@ -2,7 +2,6 @@ package it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository;
 
 
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user.UserName;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,12 +23,12 @@ public class JdbcSearchTagRepository implements SearchTagRepository {
     @Override
     public SearchTag findSearchTagBy(String key) {
         return jdbcTemplate.queryForObject("SELECT * FROM SEARCH_TAG WHERE KEY=? AND USER_NAME=?", new Object[]{key, userRepository.currentLoggedUserName()},
-                (rs, rowNum) -> new SearchTag(new UserName(rs.getString("USER_NAME")), rs.getString("KEY"), rs.getString("VALUE")));
+                (rs, rowNum) -> new SearchTag(rs.getString("KEY"), rs.getString("VALUE")));
     }
 
     @Override
     public List<SearchTag> findAllSearchTag() {
-        return jdbcTemplate.query("SELECT * FROM SEARCH_TAG WHERE USER_NAME=?", (rs, rowNum) -> new SearchTag(new UserName(rs.getString("USER_NAME")), rs.getString("KEY"), rs.getString("VALUE")));
+        return jdbcTemplate.query("SELECT * FROM SEARCH_TAG WHERE USER_NAME=?", (rs, rowNum) -> new SearchTag(rs.getString("KEY"), rs.getString("VALUE")));
     }
 
     @Override

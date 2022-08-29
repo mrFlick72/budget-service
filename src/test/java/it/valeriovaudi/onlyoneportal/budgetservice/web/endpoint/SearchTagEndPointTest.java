@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static it.valeriovaudi.onlyoneportal.budgetservice.UserTestFixture.A_USER_NAME;
 import static java.util.Arrays.asList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -43,7 +42,7 @@ public class SearchTagEndPointTest {
     @WithMockUser
     public void getAllSearchTag() throws Exception {
 
-        List<SearchTag> expectedValue = asList(new SearchTag(A_USER_NAME,"key", "value"), new SearchTag(A_USER_NAME,"key", "value"), new SearchTag(A_USER_NAME,"key", "value"));
+        List<SearchTag> expectedValue = asList(new SearchTag("key", "value"), new SearchTag("key", "value"), new SearchTag("key", "value"));
         given(searchTagRepository.findAllSearchTag())
                 .willReturn(expectedValue);
         String expected = objectMapper.writeValueAsString(expectedValue);
@@ -56,7 +55,7 @@ public class SearchTagEndPointTest {
     @Test
     @WithMockUser
     public void newSearchTag() throws Exception {
-        SearchTag searchTag = new SearchTag(A_USER_NAME,"key", "value");
+        SearchTag searchTag = new SearchTag("key", "value");
         String content = objectMapper.writeValueAsString(searchTag);
 
         mockMvc.perform(put("/budget-expense/search-tag")

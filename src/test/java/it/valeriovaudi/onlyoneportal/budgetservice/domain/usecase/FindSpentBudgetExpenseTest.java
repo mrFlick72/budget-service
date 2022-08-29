@@ -42,8 +42,8 @@ public class FindSpentBudgetExpenseTest {
         given(userRepository.currentLoggedUserName())
                 .willReturn(A_USER_NAME);
 
-        lenient().when(searchTagRepository.findSearchTagBy("super-market")).thenReturn(new SearchTag(A_USER_NAME,"super-market", "super-market"));
-        given(searchTagRepository.findSearchTagBy("dinner")).willReturn(new SearchTag(A_USER_NAME,"dinner", "dinner"));
+        lenient().when(searchTagRepository.findSearchTagBy("super-market")).thenReturn(new SearchTag("super-market", "super-market"));
+        given(searchTagRepository.findSearchTagBy("dinner")).willReturn(new SearchTag("dinner", "dinner"));
 
         given(budgetExpenseRepository.findByDateRange(A_USER_NAME, Date.firstDateOfMonth(Month.FEBRUARY, Year.of(2018)),
                 Date.lastDateOfMonth(Month.FEBRUARY, Year.of(2018)), "dinner", "super-market"))
@@ -59,8 +59,8 @@ public class FindSpentBudgetExpenseTest {
         SpentBudget actual = new FindSpentBudget(userRepository, budgetExpenseRepository, searchTagRepository)
                 .findBy(Month.FEBRUARY, Year.of(2018), asList("dinner", "super-market"));
 
-        Map<SearchTag, Money> expected = Map.of(new SearchTag(A_USER_NAME,"super-market", "super-market"), Money.moneyFor("50.00"),
-                new SearchTag(A_USER_NAME,"dinner", "dinner"), Money.moneyFor("45.00"));
+        Map<SearchTag, Money> expected = Map.of(new SearchTag("super-market", "super-market"), Money.moneyFor("50.00"),
+                new SearchTag("dinner", "dinner"), Money.moneyFor("45.00"));
 
         verify(userRepository).currentLoggedUserName();
         verify(searchTagRepository).findSearchTagBy("dinner");
@@ -91,14 +91,14 @@ public class FindSpentBudgetExpenseTest {
                         new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("02/02/2018"), Money.moneyFor("12.50"), "super market", "super-market"),
                         new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("01/02/2018"), Money.moneyFor("15"), "dinner", "dinner")));
 
-        lenient().when(searchTagRepository.findSearchTagBy("super-market")).thenReturn(new SearchTag(A_USER_NAME,"super-market", "super-market"));
-        given(searchTagRepository.findSearchTagBy("dinner")).willReturn(new SearchTag(A_USER_NAME,"dinner", "dinner"));
+        lenient().when(searchTagRepository.findSearchTagBy("super-market")).thenReturn(new SearchTag("super-market", "super-market"));
+        given(searchTagRepository.findSearchTagBy("dinner")).willReturn(new SearchTag("dinner", "dinner"));
 
         SpentBudget actual = new FindSpentBudget(userRepository, budgetExpenseRepository, searchTagRepository)
                 .findBy(Month.FEBRUARY, Year.of(2018), asList());
 
-        Map<SearchTag, Money> expected = Map.of(new SearchTag(A_USER_NAME,"super-market", "super-market"), Money.moneyFor("50.00"),
-                new SearchTag(A_USER_NAME,"dinner", "dinner"), Money.moneyFor("45.00"));
+        Map<SearchTag, Money> expected = Map.of(new SearchTag("super-market", "super-market"), Money.moneyFor("50.00"),
+                new SearchTag("dinner", "dinner"), Money.moneyFor("45.00"));
 
         verify(userRepository).currentLoggedUserName();
         verify(searchTagRepository).findSearchTagBy("dinner");

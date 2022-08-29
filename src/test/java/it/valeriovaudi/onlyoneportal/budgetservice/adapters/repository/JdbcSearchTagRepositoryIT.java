@@ -16,7 +16,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static it.valeriovaudi.onlyoneportal.budgetservice.UserTestFixture.A_USER_NAME;
 import static org.mockito.BDDMockito.given;
 
 
@@ -50,7 +49,7 @@ public class JdbcSearchTagRepositoryIT {
     @Test
     @Sql("classpath:/search_tag/findAll.sql")
     public void findSearchTagBy() {
-        Assertions.assertEquals(jdbcBudgetExpenseRepository.findSearchTagBy("super-market"), new SearchTag(A_USER_NAME,"super-market", "Spesa"));
+        Assertions.assertEquals(jdbcBudgetExpenseRepository.findSearchTagBy("super-market"), new SearchTag("super-market", "Spesa"));
     }
 
     @Test
@@ -64,8 +63,8 @@ public class JdbcSearchTagRepositoryIT {
     @Test
     @Sql("classpath:/search_tag/findAll.sql")
     public void save() {
-        jdbcBudgetExpenseRepository.save(new SearchTag(A_USER_NAME,"test", "Test"));
+        jdbcBudgetExpenseRepository.save(new SearchTag("test", "Test"));
         SearchTag actual = jdbcBudgetExpenseRepository.findSearchTagBy("test");
-        Assertions.assertEquals(actual, new SearchTag(A_USER_NAME,"test", "Test"));
+        Assertions.assertEquals(actual, new SearchTag("test", "Test"));
     }
 }

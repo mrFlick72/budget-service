@@ -58,7 +58,7 @@ public final class SpentBudget {
 
     private SearchTag findSearchTagFor(UserName userName, String searchTag) {
         return Optional.ofNullable(this.searchTags.get(searchTag))
-                .map(searchTagValue -> new SearchTag(userName, searchTag, searchTagValue))
+                .map(searchTagValue -> new SearchTag(searchTag, searchTagValue))
                 .orElse(null);
     }
 
