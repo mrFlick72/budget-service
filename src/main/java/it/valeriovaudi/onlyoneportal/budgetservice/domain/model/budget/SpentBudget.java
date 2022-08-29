@@ -3,11 +3,9 @@ package it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.processor.DataExporter;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,10 +23,6 @@ public final class SpentBudget {
                        List<SearchTag> searchTags) {
         this.budgetExpenseList = budgetExpenseList;
         this.searchTags = adaptSearchTag(searchTags);
-    }
-
-    public InputStream printBudgetExpenseList(DataExporter strategy) {
-        return strategy.exportData(budgetExpenseList);
     }
 
     public Money total() {
