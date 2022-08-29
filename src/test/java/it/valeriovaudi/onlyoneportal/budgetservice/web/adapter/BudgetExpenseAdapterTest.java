@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static it.valeriovaudi.onlyoneportal.budgetservice.UserTestFixture.A_USER_NAME;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -56,7 +57,7 @@ public class BudgetExpenseAdapterTest {
         BudgetExpenseAdapter budgetExpenseAdapter = new BudgetExpenseAdapter(searchTagRepository, userRepository);
 
         given(searchTagRepository.findSearchTagBy("super-market"))
-                .willReturn(new SearchTag("super-market", "Super Market"));
+                .willReturn(new SearchTag(A_USER_NAME,"super-market", "Super Market"));
 
         BudgetExpenseRepresentation actualBudgetExpenseRepresentation =
                 budgetExpenseAdapter.domainToRepresentationModel(budgetExpense);

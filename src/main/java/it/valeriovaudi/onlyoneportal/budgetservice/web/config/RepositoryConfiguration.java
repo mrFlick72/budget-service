@@ -33,8 +33,8 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public JdbcSearchTagRepository jdbcSearchTagRepository(JdbcTemplate jdbcTemplate) {
-        return new JdbcSearchTagRepository(jdbcTemplate);
+    public JdbcSearchTagRepository jdbcSearchTagRepository(UserRepository userRepository, JdbcTemplate jdbcTemplate) {
+        return new JdbcSearchTagRepository(userRepository, jdbcTemplate);
     }
 
     @Bean
