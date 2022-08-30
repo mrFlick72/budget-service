@@ -27,6 +27,6 @@ public abstract class AbstractSearchTagRepositoryIT {
     public void save(SearchTagRepository jdbcBudgetExpenseRepository) {
         jdbcBudgetExpenseRepository.save(new SearchTag("test", "Test"));
         SearchTag actual = jdbcBudgetExpenseRepository.findSearchTagBy("test");
-        Assertions.assertEquals(actual, new SearchTag("test", "Test"));
+        Assertions.assertEquals(new SearchTag("test", "Test"), actual);
     }
 }
