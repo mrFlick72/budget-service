@@ -1,18 +1,18 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.web.config;
 
 
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository.JdbcBudgetExpenseRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository.JdbcBudgetRevenueRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository.JdbcSearchTagRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository.SpringSecurityUserRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository.*;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetExpenseRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetRevenueRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.client.RestTemplate;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 @Configuration
 public class RepositoryConfiguration {
@@ -33,8 +33,12 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public JdbcSearchTagRepository jdbcSearchTagRepository(UserRepository userRepository, JdbcTemplate jdbcTemplate) {
-        return new JdbcSearchTagRepository(userRepository, jdbcTemplate);
+    public SearchTagRepository jdbcSearchTagRepository(DynamoDbClient dynamoDbClient,
+                                                       @Value("${budget-service.dynamo-db.search-tags.table-name}") String searchTagsDynamoDbTableName,
+                                                       UserRepository userRepository, JdbcTemplate jdbcTemplate) {
+        JdbcSearchTagRepository jdbcSearchTagRepository = new JdbcSearchTagRepository(userRepository, jdbcTemplate);
+        DynamoDBSearchTagRepository dynamoDBSearchTagRepository = new DynamoDBSearchTagRepository(searchTagsDynamoDbTableName, userRepository, dynamoDbClient);
+        return new CompositeSearchTagRepository(jdbcSearchTagRepository, dynamoDBSearchTagRepository);
     }
 
     @Bean
