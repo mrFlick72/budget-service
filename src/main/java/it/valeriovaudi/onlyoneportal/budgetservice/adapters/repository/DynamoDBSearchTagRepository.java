@@ -12,6 +12,7 @@ import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DynamoDBSearchTagRepository implements SearchTagRepository {
     private final String tableName;
@@ -44,7 +45,16 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
 
     @Override
     public List<SearchTag> findAllSearchTag() {
-        return null;
+        QueryResponse query = client.query(
+                QueryRequest.builder()
+                        .tableName(tableName)
+                        .keyConditionExpression("USER_NAME =:SEARCH_TAG_USER_NAME")
+                        .expressionAttributeValues(findAllItemKeyCondition())
+                        .build()
+        );
+        return query.items().stream()
+                .map(this::fromDynamoDbToModel)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -66,6 +76,12 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
         itemKeyCondition.put(":SEARCH_TAG_USER_NAME", dynamoDbStringAttributeFor(userRepository.currentLoggedUserName().getContent()));
         itemKeyCondition.put(":SEARCH_TAG_KEY", dynamoDbStringAttributeFor(key));
+        return itemKeyCondition;
+    }
+
+    private HashMap<String, AttributeValue> findAllItemKeyCondition() {
+        HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
+        itemKeyCondition.put(":SEARCH_TAG_USER_NAME", dynamoDbStringAttributeFor(userRepository.currentLoggedUserName().getContent()));
         return itemKeyCondition;
     }
 
