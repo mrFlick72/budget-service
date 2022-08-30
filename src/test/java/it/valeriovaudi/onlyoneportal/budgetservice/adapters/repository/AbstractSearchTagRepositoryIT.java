@@ -3,7 +3,6 @@ package it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
 import org.junit.jupiter.api.Assertions;
-import org.springframework.dao.EmptyResultDataAccessException;
 
 
 public abstract class AbstractSearchTagRepositoryIT {
@@ -18,9 +17,9 @@ public abstract class AbstractSearchTagRepositoryIT {
     }
 
     public void delete(SearchTagRepository jdbcBudgetExpenseRepository) {
-        jdbcBudgetExpenseRepository.delete("super-market");
-        Assertions.assertThrows(EmptyResultDataAccessException.class,
-                () -> jdbcBudgetExpenseRepository.findSearchTagBy("super-market"));
+        jdbcBudgetExpenseRepository.delete("loan");
+        SearchTag actual = jdbcBudgetExpenseRepository.findSearchTagBy("loan");
+        Assertions.assertNull(actual);
     }
 
 

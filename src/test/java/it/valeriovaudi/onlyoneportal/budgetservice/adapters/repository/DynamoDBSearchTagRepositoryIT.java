@@ -30,15 +30,16 @@ class DynamoDBSearchTagRepositoryIT extends AbstractSearchTagRepositoryIT {
 
         given(userRepository.currentLoggedUserName())
                 .willReturn(A_USER_NAME);
+
+        loadSearchTags().forEach(budgetExpenseRepository::save);
     }
 
 
     @Test
     public void findAll() {
-        loadSearchTags().forEach(budgetExpenseRepository::save);
         super.findAll(budgetExpenseRepository);
     }
-/*
+
     @Test
     public void findSearchTagBy() {
         super.findSearchTagBy(budgetExpenseRepository);
@@ -48,7 +49,6 @@ class DynamoDBSearchTagRepositoryIT extends AbstractSearchTagRepositoryIT {
     public void delete() {
         super.delete(budgetExpenseRepository);
     }
-*/
 
     @Test
     public void save() {

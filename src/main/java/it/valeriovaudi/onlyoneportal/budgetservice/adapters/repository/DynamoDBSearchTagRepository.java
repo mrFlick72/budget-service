@@ -4,10 +4,7 @@ import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
-import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
+import software.amazon.awssdk.services.dynamodb.model.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +29,7 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
                 .query(
                         QueryRequest.builder()
                                 .tableName(this.tableName)
-                                .keyConditionExpression("USER_NAME =:SEARCH_TAG_USER_NAME AND SEARCH_TAG_KEY =:SEARCH_TAG_KEY")
+                                .keyConditionExpression("USER_NAME =:USER_NAME AND SEARCH_TAG_KEY =:SEARCH_TAG_KEY")
                                 .expressionAttributeValues(itemKeyCondition)
                                 .build()
                 );
@@ -48,7 +45,7 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
         QueryResponse query = client.query(
                 QueryRequest.builder()
                         .tableName(tableName)
-                        .keyConditionExpression("USER_NAME =:SEARCH_TAG_USER_NAME")
+                        .keyConditionExpression("USER_NAME =:USER_NAME")
                         .expressionAttributeValues(findAllItemKeyCondition())
                         .build()
         );
@@ -69,19 +66,31 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
 
     @Override
     public void delete(String key) {
-
+        HashMap<String, AttributeValue> itemKeyCondition = itemKeysFor(key);
+        client.deleteItem(
+                DeleteItemRequest.builder()
+                        .tableName(tableName)
+                        .key(itemKeyCondition)
+                        .build()
+        );
     }
 
     private HashMap<String, AttributeValue> itemKeyConditionFor(String key) {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
-        itemKeyCondition.put(":SEARCH_TAG_USER_NAME", dynamoDbStringAttributeFor(userRepository.currentLoggedUserName().getContent()));
+        itemKeyCondition.put(":USER_NAME", dynamoDbStringAttributeFor(userRepository.currentLoggedUserName().getContent()));
         itemKeyCondition.put(":SEARCH_TAG_KEY", dynamoDbStringAttributeFor(key));
+        return itemKeyCondition;
+    }
+    private HashMap<String, AttributeValue> itemKeysFor(String key) {
+        HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
+        itemKeyCondition.put("USER_NAME", dynamoDbStringAttributeFor(userRepository.currentLoggedUserName().getContent()));
+        itemKeyCondition.put("SEARCH_TAG_KEY", dynamoDbStringAttributeFor(key));
         return itemKeyCondition;
     }
 
     private HashMap<String, AttributeValue> findAllItemKeyCondition() {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
-        itemKeyCondition.put(":SEARCH_TAG_USER_NAME", dynamoDbStringAttributeFor(userRepository.currentLoggedUserName().getContent()));
+        itemKeyCondition.put(":USER_NAME", dynamoDbStringAttributeFor(userRepository.currentLoggedUserName().getContent()));
         return itemKeyCondition;
     }
 
