@@ -28,16 +28,16 @@ public class JdbcSearchTagRepository implements SearchTagRepository {
 
     @Override
     public List<SearchTag> findAllSearchTag() {
-        return jdbcTemplate.query("SELECT * FROM SEARCH_TAG WHERE USER_NAME=?", (rs, rowNum) -> new SearchTag(rs.getString("KEY"), rs.getString("VALUE")));
+        return jdbcTemplate.query("SELECT * FROM SEARCH_TAG WHERE USER_NAME=?", new Object[]{userRepository.currentLoggedUserName()}, (rs, rowNum) -> new SearchTag(rs.getString("KEY"), rs.getString("VALUE")));
     }
 
-    @Override
-    public void save(SearchTag searchTag) {
-        jdbcTemplate.update("INSERT INTO SEARCH_TAG(KEY, VALUE, USER_NAME) VALUES (?, ?, ?) ON CONFLICT (KEY) DO UPDATE SET VALUE=?", searchTag.getKey(), searchTag.getValue(), searchTag.getValue());
-    }
+        @Override
+        public void save (SearchTag searchTag){
+            jdbcTemplate.update("INSERT INTO SEARCH_TAG(KEY, VALUE, USER_NAME) VALUES (?, ?, ?) ON CONFLICT (KEY) DO UPDATE SET VALUE=?", searchTag.getKey(), searchTag.getValue(), searchTag.getValue());
+        }
 
-    @Override
-    public void delete(String key) {
-        jdbcTemplate.update("DELETE FROM SEARCH_TAG WHERE KEY=? AND USER_NAME=?", key, userRepository.currentLoggedUserName());
+        @Override
+        public void delete (String key){
+            jdbcTemplate.update("DELETE FROM SEARCH_TAG WHERE KEY=? AND USER_NAME=?", key, userRepository.currentLoggedUserName());
+        }
     }
-}
