@@ -17,5 +17,6 @@ resource "aws_dynamodb_table" "search_tag_table" {
   tags = {
     Name        = var.search_tag_table_name
     Environment = var.environment
+    Product = var.product_name
   }
 }
