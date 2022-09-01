@@ -1,7 +1,11 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository;
 
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -12,7 +16,9 @@ import static it.valeriovaudi.onlyoneportal.budgetservice.support.DatabaseUtils.
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class DynamoDBSearchTagRepositoryIT extends AbstractSearchTagRepositoryIT {
+class DynamoDBSearchTagRepositoryIT {
+
+    private SearchTagRepository searchTagRepository;
 
     @Mock
     private UserRepository userRepository;
@@ -21,12 +27,36 @@ class DynamoDBSearchTagRepositoryIT extends AbstractSearchTagRepositoryIT {
     public void setUp() {
         DynamoDbClient client = dynamoClient();
         resetDatabase();
-        budgetExpenseRepository = new DynamoDBSearchTagRepository(SEARCH_TAG_TABLE_NAME, userRepository, client);
+        searchTagRepository = new DynamoDBSearchTagRepository(SEARCH_TAG_TABLE_NAME, userRepository, client);
 
         given(userRepository.currentLoggedUserName())
                 .willReturn(A_USER_NAME);
 
-        loadSearchTags().forEach(budgetExpenseRepository::save);
+        loadSearchTags().forEach(searchTagRepository::save);
     }
 
+
+    @Test
+    public void findAll() {
+        Assertions.assertEquals(24, searchTagRepository.findAllSearchTag().size());
+    }
+
+    @Test
+    public void findSearchTagBy() {
+        Assertions.assertEquals(searchTagRepository.findSearchTagBy("super-market"), new SearchTag("super-market", "Spesa"));
+    }
+
+    @Test
+    public void delete() {
+        searchTagRepository.delete("loan");
+        SearchTag actual = searchTagRepository.findSearchTagBy("loan");
+        Assertions.assertNull(actual);
+    }
+
+    @Test
+    public void save() {
+        searchTagRepository.save(new SearchTag("test", "Test"));
+        SearchTag actual = searchTagRepository.findSearchTagBy("test");
+        Assertions.assertEquals(new SearchTag("test", "Test"), actual);
+    }
 }
