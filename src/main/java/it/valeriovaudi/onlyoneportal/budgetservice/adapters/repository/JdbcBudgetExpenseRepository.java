@@ -81,7 +81,7 @@ public class JdbcBudgetExpenseRepository implements BudgetExpenseRepository {
         jdbcTemplate.update(DELETE_BUDGET_EXPENSE_QUERY, idBudgetExpense.getContent());
     }
 
-    RowMapper<BudgetExpense> budgetExpenseRowMapper =
+    static RowMapper<BudgetExpense> budgetExpenseRowMapper =
             (resultSet, i) -> new BudgetExpense(new BudgetExpenseId(resultSet.getString("ID")),
                     new UserName(resultSet.getString("USER_NAME")),
                     new Date(resultSet.getObject("DATE", LocalDate.class)),

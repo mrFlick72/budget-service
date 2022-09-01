@@ -1,9 +1,7 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository;
 
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -15,9 +13,6 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class DynamoDBSearchTagRepositoryIT extends AbstractSearchTagRepositoryIT {
-
-
-    private SearchTagRepository budgetExpenseRepository;
 
     @Mock
     private UserRepository userRepository;
@@ -34,24 +29,4 @@ class DynamoDBSearchTagRepositoryIT extends AbstractSearchTagRepositoryIT {
         loadSearchTags().forEach(budgetExpenseRepository::save);
     }
 
-
-    @Test
-    public void findAll() {
-        super.findAll(budgetExpenseRepository);
-    }
-
-    @Test
-    public void findSearchTagBy() {
-        super.findSearchTagBy(budgetExpenseRepository);
-    }
-
-    @Test
-    public void delete() {
-        super.delete(budgetExpenseRepository);
-    }
-
-    @Test
-    public void save() {
-        super.save(budgetExpenseRepository);
-    }
 }

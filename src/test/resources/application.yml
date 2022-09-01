@@ -1,11 +1,3 @@
-attachment:
-  repository:
-    access-key:
-    secret-key:
-    bucket-name: family-budget-data/dev
-    bucket-prefix: /dev
-    region: eu-central-1
-
 granted-role:
   budget-service: USER
 
