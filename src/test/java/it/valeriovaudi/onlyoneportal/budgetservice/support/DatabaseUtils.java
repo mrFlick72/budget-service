@@ -19,6 +19,7 @@ public class DatabaseUtils {
 
 
     public static final String SEARCH_TAG_TABLE_NAME = "BUDGET_SERVICE_SEARCH_TAGS_STAGING";
+    public static final String BUDGET_EXPENSE_TABLE_NAME = "BUDGET_EXPENSE_TABLE_NAME_STAGING";
 
     private DatabaseUtils() {
     }
@@ -55,6 +56,9 @@ public class DatabaseUtils {
         try {
             dynamoDbClient.deleteTable(DeleteTableRequest.builder()
                     .tableName(SEARCH_TAG_TABLE_NAME)
+                    .build());
+            dynamoDbClient.deleteTable(DeleteTableRequest.builder()
+                    .tableName(BUDGET_EXPENSE_TABLE_NAME)
                     .build());
         } catch (Exception e) {
         }
