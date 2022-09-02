@@ -5,18 +5,27 @@ import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExp
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user.UserName;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetExpenseRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository {
     private final String tableName;
     private final DynamoDbClient dynamoClient;
+    private final BudgetDynamoDbIdFactory idFactory;
+    private final UserRepository userRepository;
 
-    public DynamoDbBudgetExpenseRepository(String tableName, DynamoDbClient dynamoClient) {
+    public DynamoDbBudgetExpenseRepository(String tableName,
+                                           DynamoDbClient dynamoClient,
+                                           BudgetDynamoDbIdFactory idFactory,
+                                           UserRepository userRepository) {
         this.tableName = tableName;
         this.dynamoClient = dynamoClient;
+        this.idFactory = idFactory;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -31,43 +40,33 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
 
     @Override
     public void save(BudgetExpense budgetExpense) {
-        partitionKeyFor(budgetExpense);
-        rangeKeyFor(budgetExpense);
-
+        dynamoClient.putItem(
+                PutItemRequest.builder()
+                        .tableName(tableName)
+                        .item(putItemPayloadFor(budgetExpense))
+                        .build()
+        );
 
     }
 
-    private void partitionKeyFor(BudgetExpense budgetExpense) {
+    private Map<String, AttributeValue> putItemPayloadFor(BudgetExpense budgetExpense) {
+        Map<String, AttributeValue> payload = new HashMap<>();
 
-        budgetExpense.getDate().getLocalDate().getYear();
-        budgetExpense.getDate().getLocalDate().getMonthValue();
-    }
+        payload.put("pk", AttributeValue.builder().s(idFactory.partitionKeyFor(budgetExpense)).build());
+        payload.put("range_key", AttributeValue.builder().s(idFactory.rangeKeyFor(budgetExpense)).build());
 
-    private void rangeKeyFor(BudgetExpense budgetExpense) {
+        payload.put("budget_id", AttributeValue.builder().s(budgetExpense.getId().getContent()).build());
+        payload.put("user_name", AttributeValue.builder().s(userRepository.currentLoggedUserName().getContent()).build());
+        payload.put("date", AttributeValue.builder().s(budgetExpense.getDate().formattedDate()).build());
+        payload.put("amount", AttributeValue.builder().s(budgetExpense.getAmount().stringifyAmount()).build());
+        payload.put("note", AttributeValue.builder().s(budgetExpense.getNote()).build());
+        payload.put("tag", AttributeValue.builder().s(budgetExpense.getTag()).build());
 
+        return payload;
     }
 
     @Override
     public void delete(BudgetExpenseId idBudgetExpense) {
 
-    }
-}
-
-class BudgetDynamoDbIdFactory {
-    public String partitionKeyFor(BudgetExpense budgetExpense) {
-        int budgetExpenseYear = budgetExpense.getDate().getLocalDate().getYear();
-        int budgetExpenseMonth = budgetExpense.getDate().getLocalDate().getMonthValue();
-        String budgetExpenseUser = budgetExpense.getUserName().getContent();
-        return String.format("%s_%s_%s", budgetExpenseYear, budgetExpenseMonth, budgetExpenseUser);
-    }
-
-    public String rangeKeyFor(BudgetExpense budgetExpense) {
-        int dayOfMonth = budgetExpense.getDate().getLocalDate().getDayOfMonth();
-        String budgetId = budgetExpense.getId().getContent();
-        return String.format("%s_%s", dayOfMonth, budgetId);
-    }
-
-    private String encrypt(String data) {
-        return null;
     }
 }

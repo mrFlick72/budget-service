@@ -22,7 +22,7 @@ class DynamoDbBudgetExpenseRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        budgetExpenseRepository = new DynamoDbBudgetExpenseRepository(BUDGET_EXPENSE_TABLE_NAME, dynamoClient());
+        budgetExpenseRepository = new DynamoDbBudgetExpenseRepository(BUDGET_EXPENSE_TABLE_NAME, dynamoClient(), new BudgetDynamoDbIdFactory(), userRepository);
         resetDatabase();
     }
 

@@ -13,7 +13,7 @@ import java.util.UUID;
 class BudgetDynamoDbIdFactoryTest {
 
     public static final BudgetExpense BUDGET_EXPENSE = new BudgetExpense(
-            new BudgetExpenseId(UUID.randomUUID().toString()),
+            new BudgetExpenseId("AN_ID"),
             new UserName("USER"),
             Date.dateFor("01/01/2018"),
             Money.ONE,
@@ -27,7 +27,7 @@ class BudgetDynamoDbIdFactoryTest {
         String actual = budgetDynamoDbIdFactory.partitionKeyFor(BUDGET_EXPENSE);
 
 
-        Assertions.assertEquals("2018_1_USER", actual);
+        Assertions.assertEquals("MjAxOF8xX1VTRVI=", actual);
     }
 
     @Test
@@ -35,6 +35,6 @@ class BudgetDynamoDbIdFactoryTest {
         BudgetDynamoDbIdFactory budgetDynamoDbIdFactory = new BudgetDynamoDbIdFactory();
         String actual = budgetDynamoDbIdFactory.rangeKeyFor(BUDGET_EXPENSE);
 
-        Assertions.assertEquals("1_"+ BUDGET_EXPENSE.getId().getContent(), actual);
+        Assertions.assertEquals("MV9BTl9JRA==", actual);
     }
 }

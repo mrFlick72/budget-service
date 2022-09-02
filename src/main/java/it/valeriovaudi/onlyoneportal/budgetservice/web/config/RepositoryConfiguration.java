@@ -37,7 +37,7 @@ public class RepositoryConfiguration {
                                                        @Value("${budget-service.dynamo-db.search-tags.table-name}") String searchTagsDynamoDbTableName,
                                                        UserRepository userRepository, JdbcTemplate jdbcTemplate) {
         JdbcSearchTagRepository jdbcSearchTagRepository = new JdbcSearchTagRepository(userRepository, jdbcTemplate);
-        DynamoDBSearchTagRepository dynamoDBSearchTagRepository = new DynamoDBSearchTagRepository(searchTagsDynamoDbTableName, userRepository, dynamoDbClient);
+        DynamoDBSearchTagRepository dynamoDBSearchTagRepository = new DynamoDBSearchTagRepository(searchTagsDynamoDbTableName, userRepository, dynamoDbClient, new DynamoDbAttributeValueFactory());
         return new CompositeSearchTagRepository(jdbcSearchTagRepository, dynamoDBSearchTagRepository);
     }
 

@@ -27,7 +27,7 @@ class DynamoDBSearchTagRepositoryIT {
     public void setUp() {
         DynamoDbClient client = dynamoClient();
         resetDatabase();
-        searchTagRepository = new DynamoDBSearchTagRepository(SEARCH_TAG_TABLE_NAME, userRepository, client);
+        searchTagRepository = new DynamoDBSearchTagRepository(SEARCH_TAG_TABLE_NAME, userRepository, client, new DynamoDbAttributeValueFactory());
 
         given(userRepository.currentLoggedUserName())
                 .willReturn(A_USER_NAME);

@@ -15,11 +15,16 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
     private final String tableName;
     private final UserRepository userRepository;
     private final DynamoDbClient client;
+    private final DynamoDbAttributeValueFactory attributeValueFactory;
 
-    public DynamoDBSearchTagRepository(String tableName, UserRepository userRepository, DynamoDbClient client) {
+    public DynamoDBSearchTagRepository(String tableName,
+                                       UserRepository userRepository,
+                                       DynamoDbClient client,
+                                       DynamoDbAttributeValueFactory attributeValueFactory) {
         this.tableName = tableName;
         this.userRepository = userRepository;
         this.client = client;
+        this.attributeValueFactory = attributeValueFactory;
     }
 
     @Override
@@ -77,20 +82,21 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
 
     private HashMap<String, AttributeValue> itemKeyConditionFor(String key) {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
-        itemKeyCondition.put(":user_name", dynamoDbStringAttributeFor(userRepository.currentLoggedUserName().getContent()));
-        itemKeyCondition.put(":search_tag_key", dynamoDbStringAttributeFor(key));
+        itemKeyCondition.put(":user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));
+        itemKeyCondition.put(":search_tag_key", attributeValueFactory.stringAttributeFor(key));
         return itemKeyCondition;
     }
+
     private HashMap<String, AttributeValue> itemKeysFor(String key) {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
-        itemKeyCondition.put("user_name", dynamoDbStringAttributeFor(userRepository.currentLoggedUserName().getContent()));
-        itemKeyCondition.put("search_tag_key", dynamoDbStringAttributeFor(key));
+        itemKeyCondition.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));
+        itemKeyCondition.put("search_tag_key", attributeValueFactory.stringAttributeFor(key));
         return itemKeyCondition;
     }
 
     private HashMap<String, AttributeValue> findAllItemKeyCondition() {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
-        itemKeyCondition.put(":user_name", dynamoDbStringAttributeFor(userRepository.currentLoggedUserName().getContent()));
+        itemKeyCondition.put(":user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));
         return itemKeyCondition;
     }
 
@@ -100,13 +106,9 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
 
     private HashMap<String, AttributeValue> putItemPayloadFor(SearchTag searchTag) {
         HashMap<String, AttributeValue> attributes = new HashMap<>();
-        attributes.put("user_name", dynamoDbStringAttributeFor(userRepository.currentLoggedUserName().getContent()));
-        attributes.put("search_tag_key", dynamoDbStringAttributeFor(searchTag.getKey()));
-        attributes.put("search_tag_value", dynamoDbStringAttributeFor(searchTag.getValue()));
+        attributes.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));
+        attributes.put("search_tag_key", attributeValueFactory.stringAttributeFor(searchTag.getKey()));
+        attributes.put("search_tag_value", attributeValueFactory.stringAttributeFor(searchTag.getValue()));
         return attributes;
-    }
-
-    private AttributeValue dynamoDbStringAttributeFor(String content) {
-        return AttributeValue.builder().s(content).build();
     }
 }
