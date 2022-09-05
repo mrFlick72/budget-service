@@ -10,22 +10,28 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository {
     private final String tableName;
     private final DynamoDbClient dynamoClient;
     private final BudgetDynamoDbIdFactory idFactory;
     private final UserRepository userRepository;
+    private final DynamoDbAttributeValueFactory attributeValueFactory;
 
     public DynamoDbBudgetExpenseRepository(String tableName,
                                            DynamoDbClient dynamoClient,
                                            BudgetDynamoDbIdFactory idFactory,
-                                           UserRepository userRepository) {
+                                           UserRepository userRepository, 
+                                           DynamoDbAttributeValueFactory attributeValueFactory) {
         this.tableName = tableName;
         this.dynamoClient = dynamoClient;
         this.idFactory = idFactory;
         this.userRepository = userRepository;
+        this.attributeValueFactory = attributeValueFactory;
     }
 
     @Override
@@ -39,7 +45,7 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
     }
 
     @Override
-    public void save(BudgetExpense budgetExpense) {
+    public BudgetExpense save(BudgetExpense budgetExpense) {
         dynamoClient.putItem(
                 PutItemRequest.builder()
                         .tableName(tableName)
@@ -47,20 +53,29 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
                         .build()
         );
 
+        return new BudgetExpense(
+                new BudgetExpenseId(String.format("%s.%s", idFactory.partitionKeyFor(budgetExpense), idFactory.rangeKeyFor(budgetExpense))),
+                budgetExpense.getUserName(),
+                budgetExpense.getDate(),
+                budgetExpense.getAmount(),
+                budgetExpense.getNote(),
+                budgetExpense.getTag()
+        );
+
     }
 
     private Map<String, AttributeValue> putItemPayloadFor(BudgetExpense budgetExpense) {
         Map<String, AttributeValue> payload = new HashMap<>();
 
-        payload.put("pk", AttributeValue.builder().s(idFactory.partitionKeyFor(budgetExpense)).build());
-        payload.put("range_key", AttributeValue.builder().s(idFactory.rangeKeyFor(budgetExpense)).build());
+        payload.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFor(budgetExpense)));
+        payload.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFor(budgetExpense)));
 
-        payload.put("budget_id", AttributeValue.builder().s(budgetExpense.getId().getContent()).build());
-        payload.put("user_name", AttributeValue.builder().s(userRepository.currentLoggedUserName().getContent()).build());
-        payload.put("date", AttributeValue.builder().s(budgetExpense.getDate().formattedDate()).build());
-        payload.put("amount", AttributeValue.builder().s(budgetExpense.getAmount().stringifyAmount()).build());
-        payload.put("note", AttributeValue.builder().s(budgetExpense.getNote()).build());
-        payload.put("tag", AttributeValue.builder().s(budgetExpense.getTag()).build());
+        payload.put("budget_id", attributeValueFactory.stringAttributeFor(budgetExpense.getId().getContent()));
+        payload.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));
+        payload.put("date", attributeValueFactory.stringAttributeFor(budgetExpense.getDate().formattedDate()));
+        payload.put("amount", attributeValueFactory.stringAttributeFor(budgetExpense.getAmount().stringifyAmount()));
+        payload.put("note", attributeValueFactory.stringAttributeFor(budgetExpense.getNote()));
+        payload.put("tag", attributeValueFactory.stringAttributeFor(budgetExpense.getTag()));
 
         return payload;
     }

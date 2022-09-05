@@ -8,7 +8,7 @@ import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user.UserName;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.UUID;
+import static it.valeriovaudi.onlyoneportal.budgetservice.BudgetFixture.saltGenerator;
 
 class BudgetDynamoDbIdFactoryTest {
 
@@ -23,7 +23,7 @@ class BudgetDynamoDbIdFactoryTest {
 
     @Test
     void makeAPartitionKey() {
-        BudgetDynamoDbIdFactory budgetDynamoDbIdFactory = new BudgetDynamoDbIdFactory();
+        BudgetDynamoDbIdFactory budgetDynamoDbIdFactory = new BudgetDynamoDbIdFactory(saltGenerator);
         String actual = budgetDynamoDbIdFactory.partitionKeyFor(BUDGET_EXPENSE);
 
 
@@ -32,7 +32,7 @@ class BudgetDynamoDbIdFactoryTest {
 
     @Test
     void makeARangeKey() {
-        BudgetDynamoDbIdFactory budgetDynamoDbIdFactory = new BudgetDynamoDbIdFactory();
+        BudgetDynamoDbIdFactory budgetDynamoDbIdFactory = new BudgetDynamoDbIdFactory(saltGenerator);
         String actual = budgetDynamoDbIdFactory.rangeKeyFor(BUDGET_EXPENSE);
 
         Assertions.assertEquals("MV9BTl9JRA==", actual);

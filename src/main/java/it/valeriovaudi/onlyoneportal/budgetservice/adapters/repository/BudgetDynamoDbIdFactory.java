@@ -8,6 +8,13 @@ class BudgetDynamoDbIdFactory {
 
     private final static Base64.Encoder ENCODER = Base64.getEncoder();
 
+    private final SaltGenerator saltGenerator;
+
+    BudgetDynamoDbIdFactory(SaltGenerator saltGenerator) {
+        this.saltGenerator = saltGenerator;
+    }
+
+
     public String partitionKeyFor(BudgetExpense budgetExpense) {
         int budgetExpenseYear = budgetExpense.getDate().getLocalDate().getYear();
         int budgetExpenseMonth = budgetExpense.getDate().getLocalDate().getMonthValue();
@@ -20,11 +27,12 @@ class BudgetDynamoDbIdFactory {
 
     public String rangeKeyFor(BudgetExpense budgetExpense) {
         int dayOfMonth = budgetExpense.getDate().getLocalDate().getDayOfMonth();
-        String budgetId = budgetExpense.getId().getContent();
+        String salt = saltGenerator.newSalt();
 
-        String rangeKey = String.format("%s_%s", dayOfMonth, budgetId);
+        String rangeKey = String.format("%s_%s", dayOfMonth, salt);
 
         return ENCODER.encodeToString(rangeKey.getBytes());
     }
 
 }
+

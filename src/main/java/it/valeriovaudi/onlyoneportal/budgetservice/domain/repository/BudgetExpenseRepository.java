@@ -14,7 +14,7 @@ public interface BudgetExpenseRepository {
 
     List<BudgetExpense> findByDateRange(UserName userName, Date star, Date end, String... searchTags);
 
-    void save(BudgetExpense budgetExpense);
+    BudgetExpense save(BudgetExpense budgetExpense);
 
     void delete(BudgetExpenseId idBudgetExpense);
 }

@@ -64,7 +64,7 @@ public class JdbcBudgetExpenseRepository implements BudgetExpenseRepository {
     }
 
     @Override
-    public void save(BudgetExpense budgetExpense) {
+    public BudgetExpense save(BudgetExpense budgetExpense) {
         jdbcTemplate.update(INSERT_BUDGET_EXPENSE_QUERY, budgetExpense.getId().getContent(),
                 budgetExpense.getUserName().getContent(),
                 budgetExpense.getDate().getLocalDate(),
@@ -73,7 +73,7 @@ public class JdbcBudgetExpenseRepository implements BudgetExpenseRepository {
                 budgetExpense.getDate().getLocalDate(),
                 budgetExpense.getAmount().getAmount(), budgetExpense.getNote(), budgetExpense.getTag());
 
-
+        return null;
     }
 
     @Override

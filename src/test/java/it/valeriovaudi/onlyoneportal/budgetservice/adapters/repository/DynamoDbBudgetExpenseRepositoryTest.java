@@ -6,23 +6,43 @@ import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExp
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user.UserName;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetExpenseRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static it.valeriovaudi.onlyoneportal.budgetservice.BudgetFixture.saltGenerator;
+import static it.valeriovaudi.onlyoneportal.budgetservice.UserTestFixture.A_USER_NAME;
 import static it.valeriovaudi.onlyoneportal.budgetservice.support.DatabaseUtils.*;
+import static org.mockito.BDDMockito.given;
 
+@ExtendWith(MockitoExtension.class)
 class DynamoDbBudgetExpenseRepositoryTest {
     private static final String DATE_STRING = "12/02/2018";
     private static final Date DATE = Date.dateFor("12/02/2018");
 
+    @Mock
+    private UserRepository userRepository;
 
     private BudgetExpenseRepository budgetExpenseRepository;
+    private final BudgetDynamoDbIdFactory idFactory = new BudgetDynamoDbIdFactory(saltGenerator);
 
     @BeforeEach
     public void setUp() {
-        budgetExpenseRepository = new DynamoDbBudgetExpenseRepository(BUDGET_EXPENSE_TABLE_NAME, dynamoClient(), new BudgetDynamoDbIdFactory(), userRepository);
+        budgetExpenseRepository = new DynamoDbBudgetExpenseRepository(BUDGET_EXPENSE_TABLE_NAME,
+                dynamoClient(),
+                idFactory,
+                userRepository,
+                new DynamoDbAttributeValueFactory()
+        );
+        given(userRepository.currentLoggedUserName())
+                .willReturn(A_USER_NAME);
+
         resetDatabase();
     }
 
@@ -33,9 +53,10 @@ class DynamoDbBudgetExpenseRepositoryTest {
 
         budgetExpenseRepository.save(expected);
 
-//        BudgetExpense actual = getBudgetExpense("USER", DATE_STRING, "10.50", "NOTE", "TAG");
-//
-//        Assertions.assertEquals(actual, expected);
+        Assertions.assertEquals(String.format("%s-%s", idFactory.partitionKeyFor(expected), idFactory.rangeKeyFor(expected)), expected.getId().getContent());
+//        BudgetExpense actual = budgetExpenseRepository.findFor(expected.getId());
+
+//        Assertions.assertEquals(expected, actual);
     }
 /*
         @Test

@@ -83,6 +83,27 @@ public class DatabaseUtils {
                                     .build())
                     .billingMode(BillingMode.PAY_PER_REQUEST)
                     .build());
+
+            dynamoDbClient.createTable(CreateTableRequest.builder()
+                    .tableName(BUDGET_EXPENSE_TABLE_NAME)
+                    .keySchema(KeySchemaElement.builder()
+                                    .attributeName("pk")
+                                    .keyType(KeyType.HASH)
+                                    .build(),
+                            KeySchemaElement.builder()
+                                    .attributeName("range_key")
+                                    .keyType(KeyType.RANGE)
+                                    .build())
+                    .attributeDefinitions(AttributeDefinition.builder()
+                                    .attributeName("pk")
+                                    .attributeType(ScalarAttributeType.S)
+                                    .build(),
+                            AttributeDefinition.builder()
+                                    .attributeName("range_key")
+                                    .attributeType(ScalarAttributeType.S)
+                                    .build())
+                    .billingMode(BillingMode.PAY_PER_REQUEST)
+                    .build());
         } catch (Exception e) {
         }
     }
