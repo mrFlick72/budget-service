@@ -13,7 +13,7 @@ import static it.valeriovaudi.onlyoneportal.budgetservice.BudgetFixture.saltGene
 class BudgetDynamoDbIdFactoryTest {
 
     public static final BudgetExpense BUDGET_EXPENSE = new BudgetExpense(
-            new BudgetExpenseId("AN_ID"),
+            null,
             new UserName("USER"),
             Date.dateFor("01/01/2018"),
             Money.ONE,
@@ -35,6 +35,14 @@ class BudgetDynamoDbIdFactoryTest {
         BudgetDynamoDbIdFactory budgetDynamoDbIdFactory = new BudgetDynamoDbIdFactory(saltGenerator);
         String actual = budgetDynamoDbIdFactory.rangeKeyFor(BUDGET_EXPENSE);
 
-        Assertions.assertEquals("MV9BTl9JRA==", actual);
+        Assertions.assertEquals("MV9BX1NBTFQ=", actual);
+    }
+
+    @Test
+    void getACompleteBudgetId() {
+        BudgetDynamoDbIdFactory budgetDynamoDbIdFactory = new BudgetDynamoDbIdFactory(saltGenerator);
+        BudgetExpenseId actual = budgetDynamoDbIdFactory.budgetIdFrom(BUDGET_EXPENSE);
+
+        Assertions.assertEquals("MjAxOF8xX1VTRVI=-MV9BX1NBTFQ=", actual.getContent());
     }
 }

@@ -25,7 +25,7 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
     public DynamoDbBudgetExpenseRepository(String tableName,
                                            DynamoDbClient dynamoClient,
                                            BudgetDynamoDbIdFactory idFactory,
-                                           UserRepository userRepository, 
+                                           UserRepository userRepository,
                                            DynamoDbAttributeValueFactory attributeValueFactory) {
         this.tableName = tableName;
         this.dynamoClient = dynamoClient;
@@ -46,29 +46,29 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
 
     @Override
     public BudgetExpense save(BudgetExpense budgetExpense) {
-        dynamoClient.putItem(
-                PutItemRequest.builder()
-                        .tableName(tableName)
-                        .item(putItemPayloadFor(budgetExpense))
-                        .build()
-        );
-
-        return new BudgetExpense(
-                new BudgetExpenseId(String.format("%s.%s", idFactory.partitionKeyFor(budgetExpense), idFactory.rangeKeyFor(budgetExpense))),
+        BudgetExpense budgetExpenseToSave = new BudgetExpense(
+                idFactory.budgetIdFrom(budgetExpense),
                 budgetExpense.getUserName(),
                 budgetExpense.getDate(),
                 budgetExpense.getAmount(),
                 budgetExpense.getNote(),
                 budgetExpense.getTag()
         );
+        dynamoClient.putItem(
+                PutItemRequest.builder()
+                        .tableName(tableName)
+                        .item(putItemPayloadFor(budgetExpenseToSave))
+                        .build()
+        );
 
+        return budgetExpenseToSave;
     }
 
     private Map<String, AttributeValue> putItemPayloadFor(BudgetExpense budgetExpense) {
         Map<String, AttributeValue> payload = new HashMap<>();
 
-        payload.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFor(budgetExpense)));
-        payload.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFor(budgetExpense)));
+        payload.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFor(budgetExpense.getId())));
+        payload.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFor(budgetExpense.getId())));
 
         payload.put("budget_id", attributeValueFactory.stringAttributeFor(budgetExpense.getId().getContent()));
         payload.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));

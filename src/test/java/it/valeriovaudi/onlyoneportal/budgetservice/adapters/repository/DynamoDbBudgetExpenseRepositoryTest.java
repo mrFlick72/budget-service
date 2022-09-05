@@ -14,8 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.UUID;
-
 import static it.valeriovaudi.onlyoneportal.budgetservice.BudgetFixture.saltGenerator;
 import static it.valeriovaudi.onlyoneportal.budgetservice.UserTestFixture.A_USER_NAME;
 import static it.valeriovaudi.onlyoneportal.budgetservice.support.DatabaseUtils.*;
@@ -48,12 +46,12 @@ class DynamoDbBudgetExpenseRepositoryTest {
 
     @Test
     public void saveAnewBudgetExpense() {
-        BudgetExpenseId id = new BudgetExpenseId(UUID.randomUUID().toString());
+        BudgetExpenseId id = new BudgetExpenseId("MjAxOF8yX1VTRVI=-MTJfQV9TQUxU");
         BudgetExpense expected = new BudgetExpense(id, new UserName("USER"), DATE, Money.moneyFor("10.50"), "NOTE", "TAG");
 
-        budgetExpenseRepository.save(expected);
+        BudgetExpense actual = budgetExpenseRepository.save(expected);
 
-        Assertions.assertEquals(String.format("%s-%s", idFactory.partitionKeyFor(expected), idFactory.rangeKeyFor(expected)), expected.getId().getContent());
+        Assertions.assertEquals(expected, actual);
 //        BudgetExpense actual = budgetExpenseRepository.findFor(expected.getId());
 
 //        Assertions.assertEquals(expected, actual);
