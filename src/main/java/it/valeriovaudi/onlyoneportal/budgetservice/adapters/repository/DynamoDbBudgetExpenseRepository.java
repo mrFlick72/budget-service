@@ -1,5 +1,6 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository;
 
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpense;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpenseId;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
@@ -9,6 +10,7 @@ import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserReposit
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +38,24 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
 
     @Override
     public Optional<BudgetExpense> findFor(BudgetExpenseId budgetExpenseId) {
-        return Optional.empty();
+        HashMap<String, AttributeValue> itemKeyCondition = itemKeyConditionFor(budgetExpenseId);
+        return dynamoClient.query(
+                        QueryRequest.builder()
+                                .tableName(tableName)
+                                .keyConditionExpression("pk =:pk AND range_key =:range_key")
+                                .expressionAttributeValues(itemKeyCondition)
+                                .build()
+                ).items()
+                .stream()
+                .findFirst()
+                .map(this::fromDynamoDbToModel);
+    }
+
+    private HashMap<String, AttributeValue> itemKeyConditionFor(BudgetExpenseId budgetExpenseId) {
+        HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
+        itemKeyCondition.put(":pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFor(budgetExpenseId)));
+        itemKeyCondition.put(":range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFor(budgetExpenseId)));
+        return itemKeyCondition;
     }
 
     @Override
@@ -62,6 +81,17 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
         );
 
         return budgetExpenseToSave;
+    }
+
+    private BudgetExpense fromDynamoDbToModel(Map<String, AttributeValue> item) {
+        return new BudgetExpense(
+                new BudgetExpenseId(item.get("budget_id").s()),
+                new UserName(item.get("user_name").s()),
+                Date.dateFor(item.get("date").s()),
+                Money.moneyFor(item.get("amount").s()),
+                item.get("note").s(),
+                item.get("tag").s()
+        );
     }
 
     private Map<String, AttributeValue> putItemPayloadFor(BudgetExpense budgetExpense) {

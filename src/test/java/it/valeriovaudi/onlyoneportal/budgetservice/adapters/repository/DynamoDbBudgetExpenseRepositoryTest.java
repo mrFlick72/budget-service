@@ -52,9 +52,8 @@ class DynamoDbBudgetExpenseRepositoryTest {
         BudgetExpense actual = budgetExpenseRepository.save(expected);
 
         Assertions.assertEquals(expected, actual);
-//        BudgetExpense actual = budgetExpenseRepository.findFor(expected.getId());
-
-//        Assertions.assertEquals(expected, actual);
+        BudgetExpense retrievedBudgetExpense = budgetExpenseRepository.findFor(expected.getId()).get();
+        Assertions.assertEquals(expected, retrievedBudgetExpense);
     }
 /*
         @Test
