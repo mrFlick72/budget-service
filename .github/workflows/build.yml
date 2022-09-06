@@ -18,6 +18,17 @@ jobs:
           sudo update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
           java -version
 
+      - name: build testing environment
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.13.5
+      - run: |
+          cd src/test/resources
+          docker-compose up &
+          sleep 60s
+          sudo chown -R $USER:$USER *
+          chmod 777 -R docker/dynamodb
+
       - name: Build
         run: |
           export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
