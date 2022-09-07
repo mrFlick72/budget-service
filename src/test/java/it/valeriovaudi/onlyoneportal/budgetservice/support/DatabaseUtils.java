@@ -1,6 +1,10 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.support;
 
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpense;
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user.UserName;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
@@ -42,6 +46,30 @@ public class DatabaseUtils {
             return br.lines().map(line -> {
                         String[] split = line.split(",");
                         return new SearchTag(split[0], split[1]);
+                    })
+                    .collect(Collectors.toList());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+//USER,2018-02-12,10.50,Super Market,super-market
+    public static List<BudgetExpense> loadBudgetExpense() {
+        try (InputStream in = DatabaseUtils.class.getClassLoader().getResourceAsStream("budget-expense/find-by-date-range-data-set.csv");
+             InputStreamReader inputStreamReader = new InputStreamReader(in);
+             BufferedReader br = new BufferedReader(inputStreamReader);
+        ) {
+            return br.lines().map(line -> {
+                        String[] split = line.split(",");
+                        return new BudgetExpense(
+                                null,
+                                new UserName(split[0]),
+                                Date.dateFor(split[1]),
+                                Money.moneyFor(split[2]),
+                                split[3],
+                                split[4]
+                        );
                     })
                     .collect(Collectors.toList());
 

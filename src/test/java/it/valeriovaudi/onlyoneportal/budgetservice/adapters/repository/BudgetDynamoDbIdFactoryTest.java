@@ -21,22 +21,6 @@ class BudgetDynamoDbIdFactoryTest {
             ""
     );
 
-    @Test
-    void makeAPartitionKey() {
-        BudgetDynamoDbIdFactory budgetDynamoDbIdFactory = new BudgetDynamoDbIdFactory(saltGenerator);
-        String actual = budgetDynamoDbIdFactory.partitionKeyFor(BUDGET_EXPENSE);
-
-
-        Assertions.assertEquals("MjAxOF8xX1VTRVI=", actual);
-    }
-
-    @Test
-    void makeARangeKey() {
-        BudgetDynamoDbIdFactory budgetDynamoDbIdFactory = new BudgetDynamoDbIdFactory(saltGenerator);
-        String actual = budgetDynamoDbIdFactory.rangeKeyFor(BUDGET_EXPENSE);
-
-        Assertions.assertEquals("MV9BX1NBTFQ=", actual);
-    }
 
     @Test
     void getACompleteBudgetId() {
