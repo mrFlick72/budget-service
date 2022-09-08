@@ -136,7 +136,8 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
         itemKeyCondition.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFrom(idBudgetExpense)));
         itemKeyCondition.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFrom(idBudgetExpense)));
-        return itemKeyCondition;    }
+        return itemKeyCondition;
+    }
 
     private BudgetExpense fromDynamoDbToModel(Map<String, AttributeValue> item) {
         return new BudgetExpense(

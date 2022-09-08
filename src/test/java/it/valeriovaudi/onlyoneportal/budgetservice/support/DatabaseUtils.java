@@ -3,6 +3,7 @@ package it.valeriovaudi.onlyoneportal.budgetservice.support;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpense;
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetRevenue;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user.UserName;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -24,6 +25,7 @@ public class DatabaseUtils {
 
     public static final String SEARCH_TAG_TABLE_NAME = "BUDGET_SERVICE_SEARCH_TAGS_STAGING";
     public static final String BUDGET_EXPENSE_TABLE_NAME = "BUDGET_EXPENSE_TABLE_NAME_STAGING";
+    public static final String BUDGET_REVENUE_TABLE_NAME = "BUDGET_REVENUE_TABLE_NAME_STAGING";
 
     private DatabaseUtils() {
     }
@@ -54,7 +56,6 @@ public class DatabaseUtils {
         }
     }
 
-//USER,2018-02-12,10.50,Super Market,super-market
     public static List<BudgetExpense> loadBudgetExpense() {
         try (InputStream in = DatabaseUtils.class.getClassLoader().getResourceAsStream("budget-expense/find-by-date-range-data-set.csv");
              InputStreamReader inputStreamReader = new InputStreamReader(in);
@@ -69,6 +70,28 @@ public class DatabaseUtils {
                                 Money.moneyFor(split[2]),
                                 split[3],
                                 split[4]
+                        );
+                    })
+                    .collect(Collectors.toList());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    public static List<BudgetRevenue> loadBudgetRevenue() {
+        try (InputStream in = DatabaseUtils.class.getClassLoader().getResourceAsStream("budget-revenue/find-by-date-range-data-set.csv");
+             InputStreamReader inputStreamReader = new InputStreamReader(in);
+             BufferedReader br = new BufferedReader(inputStreamReader);
+        ) {
+            return br.lines().map(line -> {
+                        String[] split = line.split(",");
+                        return new BudgetRevenue(
+                                null,
+                                split[0],
+                                Date.dateFor(split[1]),
+                                Money.moneyFor(split[2]),
+                                split[3]
                         );
                     })
                     .collect(Collectors.toList());

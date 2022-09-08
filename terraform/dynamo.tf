@@ -20,3 +20,49 @@ resource "aws_dynamodb_table" "search_tag_table" {
     Product = var.product_name
   }
 }
+
+resource "aws_dynamodb_table" "budget_expense_table" {
+  name         = var.search_tag_table_name
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "pk"
+  range_key    = "range_key"
+
+  attribute {
+    name = "pk"
+    type = "S"
+  }
+
+  attribute {
+    name = "range_key"
+    type = "S"
+  }
+
+  tags = {
+    Name        = var.budget_expense_table_name
+    Environment = var.environment
+    Product = var.product_name
+  }
+}
+
+resource "aws_dynamodb_table" "budget_revenue_table" {
+  name         = var.search_tag_table_name
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "pk"
+  range_key    = "range_key"
+
+  attribute {
+    name = "pk"
+    type = "S"
+  }
+
+  attribute {
+    name = "range_key"
+    type = "S"
+  }
+
+  tags = {
+    Name        = var.budget_revenue_table_name
+    Environment = var.environment
+    Product = var.product_name
+  }
+}

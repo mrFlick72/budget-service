@@ -7,7 +7,6 @@ import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user.UserName;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetExpenseRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.support.DatabaseUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,8 +35,7 @@ class DynamoDbBudgetExpenseRepositoryTest {
     private final BudgetDynamoDbIdFactory idFactory = new BudgetDynamoDbIdFactory(saltGenerator);
 
     private void databaseInit() {
-        DatabaseUtils.loadBudgetExpense()
-                .stream().forEach(budgetExpenseRepository::save);
+        loadBudgetExpense().forEach(budgetExpenseRepository::save);
     }
 
     @BeforeEach
