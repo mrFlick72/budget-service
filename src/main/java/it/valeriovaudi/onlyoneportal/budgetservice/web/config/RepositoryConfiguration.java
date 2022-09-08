@@ -36,8 +36,8 @@ public class RepositoryConfiguration {
                 new BudgetDynamoDbIdFactory(new UUIDSaltGenerator()),
                 userRepository, new DynamoDbAttributeValueFactory());
         return new CompositeBudgetExpenseRepository(
-                jdbcBudgetExpenseRepository,
-                dynamoDbBudgetExpenseRepository
+                dynamoDbBudgetExpenseRepository,
+                jdbcBudgetExpenseRepository
         );
     }
 
@@ -47,7 +47,7 @@ public class RepositoryConfiguration {
                                                    UserRepository userRepository, JdbcTemplate jdbcTemplate) {
         JdbcSearchTagRepository jdbcSearchTagRepository = new JdbcSearchTagRepository(userRepository, jdbcTemplate);
         DynamoDBSearchTagRepository dynamoDBSearchTagRepository = new DynamoDBSearchTagRepository(tableName, userRepository, dynamoDbClient, new DynamoDbAttributeValueFactory());
-        return new CompositeSearchTagRepository(jdbcSearchTagRepository, dynamoDBSearchTagRepository);
+        return new CompositeSearchTagRepository(dynamoDBSearchTagRepository,jdbcSearchTagRepository);
     }
 
     @Bean
