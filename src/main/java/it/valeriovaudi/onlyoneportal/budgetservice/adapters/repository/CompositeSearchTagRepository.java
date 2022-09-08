@@ -10,40 +10,40 @@ import java.util.List;
 @Transactional
 public class CompositeSearchTagRepository implements SearchTagRepository {
 
-    private final SearchTagRepository database;
-    private final SearchTagRepository dynamodb;
+    private final SearchTagRepository primary;
+    private final SearchTagRepository secondary;
 
-    public CompositeSearchTagRepository(SearchTagRepository database, SearchTagRepository dynamodb) {
-        this.database = database;
-        this.dynamodb = dynamodb;
+    public CompositeSearchTagRepository(SearchTagRepository primary, SearchTagRepository secondary) {
+        this.primary = primary;
+        this.secondary = secondary;
     }
 
 
     @Override
     public SearchTag findSearchTagBy(String key) {
-        SearchTag searchTagBy = database.findSearchTagBy(key);
-        dynamodb.findSearchTagBy(key);
+        SearchTag searchTagBy = primary.findSearchTagBy(key);
+        secondary.findSearchTagBy(key);
 
         return searchTagBy;
     }
 
     @Override
     public List<SearchTag> findAllSearchTag() {
-        List<SearchTag> searchTagBy = database.findAllSearchTag();
-        dynamodb.findAllSearchTag();
+        List<SearchTag> searchTagBy = primary.findAllSearchTag();
+        secondary.findAllSearchTag();
 
         return searchTagBy;
     }
 
     @Override
     public void save(SearchTag searchTag) {
-        database.save(searchTag);
-        dynamodb.save(searchTag);
+        primary.save(searchTag);
+        secondary.save(searchTag);
     }
 
     @Override
     public void delete(String key) {
-        database.delete(key);
-        dynamodb.delete(key);
+        primary.delete(key);
+        secondary.delete(key);
     }
 }

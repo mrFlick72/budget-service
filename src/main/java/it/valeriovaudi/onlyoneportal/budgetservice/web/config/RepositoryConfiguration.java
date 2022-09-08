@@ -28,16 +28,25 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public BudgetExpenseRepository jdbBudgetExpenseRepository(JdbcTemplate jdbcTemplate) {
-        return new JdbcBudgetExpenseRepository(jdbcTemplate);
+    public BudgetExpenseRepository budgetExpenseRepository(DynamoDbClient dynamoDbClient,
+                                                           @Value("${budget-service.dynamo-db.budget-expense.table-name}") String tableName,
+                                                           UserRepository userRepository, JdbcTemplate jdbcTemplate) {
+        JdbcBudgetExpenseRepository jdbcBudgetExpenseRepository = new JdbcBudgetExpenseRepository(jdbcTemplate);
+        DynamoDbBudgetExpenseRepository dynamoDbBudgetExpenseRepository = new DynamoDbBudgetExpenseRepository(tableName, dynamoDbClient,
+                new BudgetDynamoDbIdFactory(new UUIDSaltGenerator()),
+                userRepository, new DynamoDbAttributeValueFactory());
+        return new CompositeBudgetExpenseRepository(
+                jdbcBudgetExpenseRepository,
+                dynamoDbBudgetExpenseRepository
+        );
     }
 
     @Bean
-    public SearchTagRepository jdbcSearchTagRepository(DynamoDbClient dynamoDbClient,
-                                                       @Value("${budget-service.dynamo-db.search-tags.table-name}") String searchTagsDynamoDbTableName,
-                                                       UserRepository userRepository, JdbcTemplate jdbcTemplate) {
+    public SearchTagRepository searchTagRepository(DynamoDbClient dynamoDbClient,
+                                                   @Value("${budget-service.dynamo-db.search-tags.table-name}") String tableName,
+                                                   UserRepository userRepository, JdbcTemplate jdbcTemplate) {
         JdbcSearchTagRepository jdbcSearchTagRepository = new JdbcSearchTagRepository(userRepository, jdbcTemplate);
-        DynamoDBSearchTagRepository dynamoDBSearchTagRepository = new DynamoDBSearchTagRepository(searchTagsDynamoDbTableName, userRepository, dynamoDbClient, new DynamoDbAttributeValueFactory());
+        DynamoDBSearchTagRepository dynamoDBSearchTagRepository = new DynamoDBSearchTagRepository(tableName, userRepository, dynamoDbClient, new DynamoDbAttributeValueFactory());
         return new CompositeSearchTagRepository(jdbcSearchTagRepository, dynamoDBSearchTagRepository);
     }
 
