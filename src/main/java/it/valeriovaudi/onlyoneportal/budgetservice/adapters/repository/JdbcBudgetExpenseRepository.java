@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
@@ -65,7 +66,8 @@ public class JdbcBudgetExpenseRepository implements BudgetExpenseRepository {
 
     @Override
     public BudgetExpense save(BudgetExpense budgetExpense) {
-        jdbcTemplate.update(INSERT_BUDGET_EXPENSE_QUERY, budgetExpense.getId().getContent(),
+        BudgetExpenseId budgetExpenseId = Optional.ofNullable(budgetExpense.getId()).orElse(new BudgetExpenseId(UUID.randomUUID().toString()));
+        jdbcTemplate.update(INSERT_BUDGET_EXPENSE_QUERY, budgetExpenseId.getContent(),
                 budgetExpense.getUserName().getContent(),
                 budgetExpense.getDate().getLocalDate(),
                 budgetExpense.getAmount().getAmount(), budgetExpense.getNote(), budgetExpense.getTag(),
