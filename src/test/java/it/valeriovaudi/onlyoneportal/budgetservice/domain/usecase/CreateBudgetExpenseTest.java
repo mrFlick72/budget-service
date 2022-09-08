@@ -43,7 +43,7 @@ public class CreateBudgetExpenseTest {
         given(userRepository.currentLoggedUserName())
                 .willReturn(new UserName("USER"));
 
-        given(idProvider.budgetExpenseId())
+        given(idProvider.newBudgetExpenseId())
                 .willReturn(A_BUDGET_EXPENSE_ID);
 
         BudgetExpense budgetExpense = new BudgetExpense(A_BUDGET_EXPENSE_ID, new UserName("USER"), date, amount, "", SearchTag.DEFAULT_KEY);
@@ -51,7 +51,7 @@ public class CreateBudgetExpenseTest {
         createBudgetExpense.newBudgetExpense(new NewBudgetExpenseRequest(date, amount, "", ""));
 
         verify(userRepository).currentLoggedUserName();
-        verify(idProvider).budgetExpenseId();
+        verify(idProvider).newBudgetExpenseId();
         verify(budgetExpenseRepository).save(budgetExpense);
     }
 }

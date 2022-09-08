@@ -24,7 +24,7 @@ public class CreateBudgetExpense {
     }
 
     public BudgetExpense newBudgetExpense(NewBudgetExpenseRequest newBudgetExpenseRequest) {
-        BudgetExpense budgetExpense = new BudgetExpense(idProvider.budgetExpenseId(),
+        BudgetExpense budgetExpense = new BudgetExpense(idProvider.newBudgetExpenseId(),
                 userRepository.currentLoggedUserName(),
                 newBudgetExpenseRequest.getDate(),
                 newBudgetExpenseRequest.getAmount(),

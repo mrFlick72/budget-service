@@ -1,6 +1,7 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.web.config;
 
 
+import it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository.DynamoDbIdProvider;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.IdProvider;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.TimeProvider;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +12,7 @@ public class ProviderConfig {
 
     @Bean
     public IdProvider idProvider() {
-        return new IdProvider();
+        return new DynamoDbIdProvider();
     }
 
     @Bean
