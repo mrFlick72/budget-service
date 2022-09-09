@@ -23,8 +23,17 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public BudgetRevenueRepository jdbcBudgetRevenueRepository(JdbcTemplate jdbcTemplate) {
-        return new JdbcBudgetRevenueRepository(jdbcTemplate);
+    public BudgetRevenueRepository jdbcBudgetRevenueRepository(DynamoDbClient dynamoDbClient,
+                                                               @Value("${budget-service.dynamo-db.budget-revenue.table-name}") String tableName,
+                                                               UserRepository userRepository, JdbcTemplate jdbcTemplate) {
+        JdbcBudgetRevenueRepository jdbcBudgetRevenueRepository = new JdbcBudgetRevenueRepository(jdbcTemplate);
+        DynamoDbBudgetRevenueRepository dynamoDbBudgetExpenseRepository = new DynamoDbBudgetRevenueRepository(tableName, dynamoDbClient,
+                new BudgetDynamoDbIdFactory(new UUIDSaltGenerator()),
+                userRepository, new DynamoDbAttributeValueFactory());
+        return new CompositeBudgetRevenueRepository(
+                dynamoDbBudgetExpenseRepository,
+                jdbcBudgetRevenueRepository
+        );
     }
 
     @Bean
@@ -47,7 +56,7 @@ public class RepositoryConfiguration {
                                                    UserRepository userRepository, JdbcTemplate jdbcTemplate) {
         JdbcSearchTagRepository jdbcSearchTagRepository = new JdbcSearchTagRepository(userRepository, jdbcTemplate);
         DynamoDBSearchTagRepository dynamoDBSearchTagRepository = new DynamoDBSearchTagRepository(tableName, userRepository, dynamoDbClient, new DynamoDbAttributeValueFactory());
-        return new CompositeSearchTagRepository(dynamoDBSearchTagRepository,jdbcSearchTagRepository);
+        return new CompositeSearchTagRepository(dynamoDBSearchTagRepository, jdbcSearchTagRepository);
     }
 
     @Bean
