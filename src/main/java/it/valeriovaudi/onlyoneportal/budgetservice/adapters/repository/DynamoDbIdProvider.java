@@ -8,7 +8,7 @@ import java.util.UUID;
 public class DynamoDbIdProvider implements IdProvider {
 
     public String id() {
-        return UUID.randomUUID().toString();
+        return null;
     }
 
     public BudgetExpenseId newBudgetExpenseId() {
