@@ -11,13 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.EmptyResultDataAccessException;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 
 import java.util.List;
-import java.util.Map;
 
 import static it.valeriovaudi.onlyoneportal.budgetservice.BudgetFixture.saltGenerator;
 import static it.valeriovaudi.onlyoneportal.budgetservice.UserTestFixture.A_USER_NAME;
