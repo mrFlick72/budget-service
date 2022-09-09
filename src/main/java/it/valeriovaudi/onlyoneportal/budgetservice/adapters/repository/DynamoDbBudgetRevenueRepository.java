@@ -51,6 +51,7 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
                     ).items().stream();
                 })
                 .map(this::fromDynamoDbToModel)
+                .sorted(Comparator.comparing(o -> o.getRegistrationDate().getLocalDate()))
                 .collect(Collectors.toList());
     }
 
