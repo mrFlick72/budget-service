@@ -65,11 +65,12 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
         List<String> searchTagsList = Arrays.stream(searchTags).toList();
         return pks.stream()
                 .flatMap(pk -> {
-                    Map<String, AttributeValue> itemKeyCondition = monthlyItemKeyConditionFor(pk);
+                    Map<String, AttributeValue> itemKeyCondition = monthlyItemKeyConditionFor(pk,star, end);
                     return dynamoClient.query(
                             QueryRequest.builder()
                                     .tableName(tableName)
                                     .keyConditionExpression("pk =:pk")
+                                    .filterExpression("transaction_date >= :star AND transaction_date <= :end")
                                     .expressionAttributeValues(itemKeyCondition)
                                     .build()
                     ).items().stream();
@@ -95,9 +96,11 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
         return primaryKeys;
     }
 
-    private Map<String, AttributeValue> monthlyItemKeyConditionFor(String pk) {
+    private Map<String, AttributeValue> monthlyItemKeyConditionFor(String pk, Date star, Date end) {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
         itemKeyCondition.put(":pk", attributeValueFactory.stringAttributeFor(pk));
+        itemKeyCondition.put(":star", attributeValueFactory.stringAttributeFor(star.isoFormattedDate()));
+        itemKeyCondition.put(":end", attributeValueFactory.stringAttributeFor(end.isoFormattedDate()));
         return itemKeyCondition;
     }
 
@@ -143,7 +146,7 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
         return new BudgetExpense(
                 new BudgetExpenseId(item.get("budget_id").s()),
                 new UserName(item.get("user_name").s()),
-                Date.dateFor(item.get("date").s()),
+                Date.isoDateFor(item.get("transaction_date").s()),
                 Money.moneyFor(item.get("amount").s()),
                 item.get("note").s(),
                 item.get("tag").s()
@@ -158,7 +161,7 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
 
         payload.put("budget_id", attributeValueFactory.stringAttributeFor(budgetExpense.getId().getContent()));
         payload.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));
-        payload.put("date", attributeValueFactory.stringAttributeFor(budgetExpense.getDate().formattedDate()));
+        payload.put("transaction_date", attributeValueFactory.stringAttributeFor(budgetExpense.getDate().isoFormattedDate()));
         payload.put("amount", attributeValueFactory.stringAttributeFor(budgetExpense.getAmount().stringifyAmount()));
         payload.put("note", attributeValueFactory.stringAttributeFor(budgetExpense.getNote()));
         payload.put("tag", attributeValueFactory.stringAttributeFor(budgetExpense.getTag()));
