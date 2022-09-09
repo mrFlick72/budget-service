@@ -16,6 +16,7 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public final class Date implements Comparable<Date> {
 
     static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER = ofPattern("dd/MM/yyyy");
+    static final DateTimeFormatter ISO_DATE_TIME_FORMATTER = DateTimeFormatter.ISO_DATE;
 
     @Getter
     private final LocalDate localDate;
@@ -35,8 +36,15 @@ public final class Date implements Comparable<Date> {
         return dateTimeFormatter.format(localDate);
     }
 
+    public String isoFormattedDate(){
+        return ISO_DATE_TIME_FORMATTER.format(localDate);
+    }
+
     public static Date dateFor(String date) {
         return new Date(LocalDate.parse(date, DEFAULT_DATE_TIME_FORMATTER));
+    }
+    public static Date isoDateFor(String date) {
+        return new Date(LocalDate.parse(date, ISO_DATE_TIME_FORMATTER));
     }
 
     public static Date firstDateOfMonth(Month month, Year year) {

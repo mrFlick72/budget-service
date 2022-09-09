@@ -80,7 +80,7 @@ public class DatabaseUtils {
     }
 
     public static List<BudgetRevenue> loadBudgetRevenue() {
-        try (InputStream in = DatabaseUtils.class.getClassLoader().getResourceAsStream("budget-revenue/find-by-date-range-data-set.csv");
+        try (InputStream in = DatabaseUtils.class.getClassLoader().getResourceAsStream("budget_revenue/find-by-date-range-data-set.csv");
              InputStreamReader inputStreamReader = new InputStreamReader(in);
              BufferedReader br = new BufferedReader(inputStreamReader);
         ) {
@@ -111,6 +111,9 @@ public class DatabaseUtils {
             dynamoDbClient.deleteTable(DeleteTableRequest.builder()
                     .tableName(BUDGET_EXPENSE_TABLE_NAME)
                     .build());
+            dynamoDbClient.deleteTable(DeleteTableRequest.builder()
+                    .tableName(BUDGET_REVENUE_TABLE_NAME)
+                    .build());
         } catch (Exception e) {
         }
         try {
@@ -137,6 +140,28 @@ public class DatabaseUtils {
 
             dynamoDbClient.createTable(CreateTableRequest.builder()
                     .tableName(BUDGET_EXPENSE_TABLE_NAME)
+                    .keySchema(KeySchemaElement.builder()
+                                    .attributeName("pk")
+                                    .keyType(KeyType.HASH)
+                                    .build(),
+                            KeySchemaElement.builder()
+                                    .attributeName("range_key")
+                                    .keyType(KeyType.RANGE)
+                                    .build())
+                    .attributeDefinitions(AttributeDefinition.builder()
+                                    .attributeName("pk")
+                                    .attributeType(ScalarAttributeType.S)
+                                    .build(),
+                            AttributeDefinition.builder()
+                                    .attributeName("range_key")
+                                    .attributeType(ScalarAttributeType.S)
+                                    .build())
+                    .billingMode(BillingMode.PAY_PER_REQUEST)
+                    .build());
+
+
+            dynamoDbClient.createTable(CreateTableRequest.builder()
+                    .tableName(BUDGET_REVENUE_TABLE_NAME)
                     .keySchema(KeySchemaElement.builder()
                                     .attributeName("pk")
                                     .keyType(KeyType.HASH)
