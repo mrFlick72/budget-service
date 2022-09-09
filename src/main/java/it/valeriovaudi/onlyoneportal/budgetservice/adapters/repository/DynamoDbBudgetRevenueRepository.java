@@ -1,6 +1,7 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpenseId;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetRevenue;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetRevenueRepository;
@@ -86,7 +87,7 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
 
     @Override
     public BudgetRevenue save(BudgetRevenue budgetRevenue) {
-        BudgetRevenue budgetExpenseToSave = new BudgetRevenue(
+        BudgetRevenue budgetRevenueToSave = new BudgetRevenue(
                 idFactory.budgetIdFrom(budgetRevenue),
                 budgetRevenue.getUserName(),
                 budgetRevenue.getRegistrationDate(),
@@ -97,11 +98,11 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
         dynamoClient.putItem(
                 PutItemRequest.builder()
                         .tableName(tableName)
-                        .item(putItemPayloadFor(budgetExpenseToSave))
+                        .item(putItemPayloadFor(budgetRevenueToSave))
                         .build()
         );
 
-        return budgetExpenseToSave;
+        return budgetRevenueToSave;
     }
 
     private Map<String, AttributeValue> putItemPayloadFor(BudgetRevenue budgetExpense) {

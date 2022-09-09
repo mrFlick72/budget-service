@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Transactional
 public class JdbcBudgetRevenueRepository implements BudgetRevenueRepository {
@@ -33,7 +35,9 @@ public class JdbcBudgetRevenueRepository implements BudgetRevenueRepository {
 
     @Override
     public BudgetRevenue save(BudgetRevenue budgetRevenue) {
-        jdbcTemplate.update(INSERT_BUDGET_REVENUE_QUERY, budgetRevenue.getId(), budgetRevenue.getUserName(),
+        String budgetRevenueId = Optional.ofNullable(budgetRevenue.getId()).orElse(UUID.randomUUID().toString());
+
+        jdbcTemplate.update(INSERT_BUDGET_REVENUE_QUERY, budgetRevenueId, budgetRevenue.getUserName(),
                 budgetRevenue.getRegistrationDate().getLocalDate(), budgetRevenue.getAmount().getAmount(),
                 budgetRevenue.getNote());
         return null;
