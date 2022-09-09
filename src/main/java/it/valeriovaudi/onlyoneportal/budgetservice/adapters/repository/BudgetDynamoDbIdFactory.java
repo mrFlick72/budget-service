@@ -83,7 +83,7 @@ public class BudgetDynamoDbIdFactory {
         int budgetRevenueMonth = budgetRevenue.getRegistrationDate().getLocalDate().getMonthValue();
         String salt = saltGenerator.newSalt();
 
-        String rangeKey = String.format("%s_%s_%s", dayOfMonth, budgetRevenueMonth, salt);
+        String rangeKey = String.format("%s_%s_%s", budgetRevenueMonth, dayOfMonth, salt);
 
         return ENCODER.encodeToString(rangeKey.getBytes());
     }

@@ -70,11 +70,12 @@ class DynamoDbBudgetRevenueRepositoryIT {
 
         List<BudgetRevenue> actualRange = budgetRevenueRepository.findByDateRange("USER", Date.dateFor("01/01/2018"), Date.dateFor("05/05/2018"));
         List<BudgetRevenue> expectedRange =
-                asList(new BudgetRevenue("MjAxOF9VU0VS-Nl8xX0FfU0FMVA==", "USER", Date.dateFor("06/01/2018"), Money.moneyFor("17.50"), "Lanch"),
-                        new BudgetRevenue("MjAxOF9VU0VS-MTJfMl9BX1NBTFQ=", "USER", Date.dateFor("12/02/2018"), Money.moneyFor("10.50"), "Super Market"),
-                        new BudgetRevenue("MjAxOF9VU0VS-MTNfMl9BX1NBTFQ=", "USER", Date.dateFor("13/02/2018"), Money.moneyFor("17.50"), "Dinner"),
-                        new BudgetRevenue("MjAxOF9VU0VS-MjJfMl9BX1NBTFQ=", "USER", Date.dateFor("22/02/2018"), Money.moneyFor("17.50"), "Super Market"));
+                asList(new BudgetRevenue("MjAxOF9VU0VS-MV82X0FfU0FMVA==", "USER", Date.dateFor("06/01/2018"), Money.moneyFor("17.50"), "Lanch"),
+                        new BudgetRevenue("MjAxOF9VU0VS-Ml8xMl9BX1NBTFQ=", "USER", Date.dateFor("12/02/2018"), Money.moneyFor("10.50"), "Super Market"),
+                        new BudgetRevenue("MjAxOF9VU0VS-Ml8xM19BX1NBTFQ=", "USER", Date.dateFor("13/02/2018"), Money.moneyFor("17.50"), "Dinner"),
+                        new BudgetRevenue("MjAxOF9VU0VS-Ml8yMl9BX1NBTFQ=", "USER", Date.dateFor("22/02/2018"), Money.moneyFor("17.50"), "Super Market"));
 
+        System.out.println(actualRange);
         Assertions.assertTrue(actualRange.containsAll(expectedRange));
     }
 
