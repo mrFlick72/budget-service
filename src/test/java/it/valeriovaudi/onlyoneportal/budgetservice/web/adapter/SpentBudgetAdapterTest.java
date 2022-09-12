@@ -48,7 +48,7 @@ public class SpentBudgetAdapterTest {
 
     private SpentBudgetRepresentation getExpectation() {
         return new SpentBudgetRepresentation("50.50", asList(new DailyBudgetExpenseRepresentation(asList(new BudgetExpenseRepresentation("1", DATE_12_02_2018, "12.50", "", "super-market", "super-market"),
-                new BudgetExpenseRepresentation("2", DATE_12_02_2018, "15.50", "", "super-market", "super-market")), DATE_12_02_2018, "28.00"),
+                        new BudgetExpenseRepresentation("2", DATE_12_02_2018, "15.50", "", "super-market", "super-market")), DATE_12_02_2018, "28.00"),
                 new DailyBudgetExpenseRepresentation(asList(new BudgetExpenseRepresentation("3", DATE_22_02_2018, "22.50", "", "super-market", "super-market")), DATE_22_02_2018, "22.50")),
                 asList(new TotalBySearchTagDetail("super-market", "super-market", "50.50")));
     }

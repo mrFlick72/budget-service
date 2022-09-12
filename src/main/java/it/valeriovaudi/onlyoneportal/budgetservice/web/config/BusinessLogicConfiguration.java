@@ -1,12 +1,5 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.web.config;
 
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.processor.excel.XslxDataExporter;
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.processor.excel.builder.RowBuilder;
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.processor.excel.factory.CellStyleFactory;
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.processor.excel.factory.DailyBudgetExpenseRowFactory;
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.processor.excel.factory.FooterFactory;
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.processor.excel.factory.HeaderFactory;
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.processor.pdf.PdfDataExporter;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.IdProvider;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetExpenseRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetRevenueRepository;
@@ -43,11 +36,6 @@ public class BusinessLogicConfiguration {
         return new FindSpentBudget(userRepository, budgetExpenseRepository, searchTagRepository);
     }
 
-    @Bean
-    public ExportSpentBudget pdfSpentBudgetExporter(FindSpentBudget findSpentBudget,
-                                                    SearchTagRepository searchTagRepository) {
-        return new ExportSpentBudget(findSpentBudget, new PdfDataExporter(searchTagRepository));
-    }
 
     @Bean
     public CreateBudgetExpense createBudgetExpense(UserRepository userRepository,
@@ -56,13 +44,4 @@ public class BusinessLogicConfiguration {
         return new CreateBudgetExpense(budgetExpenseRepository, userRepository, idProvider);
     }
 
-    @Bean
-    public ExportSpentBudget xslxDataExporter(FindSpentBudget findSpentBudget,
-                                              SearchTagRepository searchTagRepository) {
-        RowBuilder rowBuilder = new RowBuilder();
-        return new ExportSpentBudget(findSpentBudget, new XslxDataExporter(new FooterFactory(rowBuilder),
-                new HeaderFactory(rowBuilder),
-                new DailyBudgetExpenseRowFactory(rowBuilder, searchTagRepository),
-                new CellStyleFactory()));
-    }
 }

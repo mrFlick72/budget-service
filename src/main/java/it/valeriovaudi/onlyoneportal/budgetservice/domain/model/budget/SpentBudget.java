@@ -3,11 +3,10 @@ package it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.processor.DataExporter;
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user.UserName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,10 +26,6 @@ public final class SpentBudget {
         this.searchTags = adaptSearchTag(searchTags);
     }
 
-    public InputStream printBudgetExpenseList(DataExporter strategy) {
-        return strategy.exportData(budgetExpenseList);
-    }
-
     public Money total() {
         return budgetExpenseList.stream()
                 .map(BudgetExpense::getAmount)
@@ -39,7 +34,7 @@ public final class SpentBudget {
 
     public Map<SearchTag, Money> totalForSearchTags() {
         return budgetExpenseList.stream()
-                .collect(groupingBy(classifier -> findSearchTagFor(classifier.getTag()),
+                .collect(groupingBy(classifier -> findSearchTagFor(classifier.getUserName(), classifier.getTag()),
                         Collectors.mapping(BudgetExpense::getAmount, Collectors.reducing(Money.ZERO, Money::plus))));
     }
 
@@ -61,7 +56,7 @@ public final class SpentBudget {
     }
 
 
-    private SearchTag findSearchTagFor(String searchTag) {
+    private SearchTag findSearchTagFor(UserName userName, String searchTag) {
         return Optional.ofNullable(this.searchTags.get(searchTag))
                 .map(searchTagValue -> new SearchTag(searchTag, searchTagValue))
                 .orElse(null);

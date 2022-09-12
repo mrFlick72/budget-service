@@ -1,18 +1,17 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.web.config;
 
 
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository.JdbcBudgetExpenseRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository.JdbcBudgetRevenueRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository.JdbcSearchTagRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository.SpringSecurityUserRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository.*;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetExpenseRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetRevenueRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.client.RestTemplate;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 @Configuration
 public class RepositoryConfiguration {
@@ -23,18 +22,30 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public BudgetRevenueRepository jdbcBudgetRevenueRepository(JdbcTemplate jdbcTemplate) {
-        return new JdbcBudgetRevenueRepository(jdbcTemplate);
+    public BudgetRevenueRepository jdbcBudgetRevenueRepository(DynamoDbClient dynamoDbClient,
+                                                               @Value("${budget-service.dynamo-db.budget-revenue.table-name}") String tableName,
+                                                               UserRepository userRepository) {
+
+        return new DynamoDbBudgetRevenueRepository(tableName, dynamoDbClient,
+                new BudgetDynamoDbIdFactory(new UUIDSaltGenerator()),
+                userRepository, new DynamoDbAttributeValueFactory());
     }
 
     @Bean
-    public BudgetExpenseRepository jdbBudgetExpenseRepository(JdbcTemplate jdbcTemplate) {
-        return new JdbcBudgetExpenseRepository(jdbcTemplate);
+    public BudgetExpenseRepository budgetExpenseRepository(DynamoDbClient dynamoDbClient,
+                                                           @Value("${budget-service.dynamo-db.budget-expense.table-name}") String tableName,
+                                                           UserRepository userRepository) {
+
+        return new DynamoDbBudgetExpenseRepository(tableName, dynamoDbClient,
+                new BudgetDynamoDbIdFactory(new UUIDSaltGenerator()),
+                userRepository, new DynamoDbAttributeValueFactory());
     }
 
     @Bean
-    public JdbcSearchTagRepository jdbcSearchTagRepository(JdbcTemplate jdbcTemplate) {
-        return new JdbcSearchTagRepository(jdbcTemplate);
+    public SearchTagRepository searchTagRepository(DynamoDbClient dynamoDbClient,
+                                                   @Value("${budget-service.dynamo-db.search-tags.table-name}") String tableName,
+                                                   UserRepository userRepository) {
+        return new DynamoDBSearchTagRepository(tableName, userRepository, dynamoDbClient, new DynamoDbAttributeValueFactory());
     }
 
     @Bean

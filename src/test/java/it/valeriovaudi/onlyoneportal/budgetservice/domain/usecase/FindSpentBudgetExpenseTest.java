@@ -8,7 +8,6 @@ import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.SpentBudg
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Month;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Year;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user.UserName;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetExpenseRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
@@ -20,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Map;
 
+import static it.valeriovaudi.onlyoneportal.budgetservice.UserTestFixture.A_USER_NAME;
 import static java.util.Arrays.asList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.lenient;
@@ -40,21 +40,21 @@ public class FindSpentBudgetExpenseTest {
     @Test
     public void budgetExpenseTotalBySearchTagsWithConstraints() {
         given(userRepository.currentLoggedUserName())
-                .willReturn(new UserName("USER"));
+                .willReturn(A_USER_NAME);
 
         lenient().when(searchTagRepository.findSearchTagBy("super-market")).thenReturn(new SearchTag("super-market", "super-market"));
         given(searchTagRepository.findSearchTagBy("dinner")).willReturn(new SearchTag("dinner", "dinner"));
 
-        given(budgetExpenseRepository.findByDateRange(new UserName("USER"), Date.firstDateOfMonth(Month.FEBRUARY, Year.of(2018)),
+        given(budgetExpenseRepository.findByDateRange(A_USER_NAME, Date.firstDateOfMonth(Month.FEBRUARY, Year.of(2018)),
                 Date.lastDateOfMonth(Month.FEBRUARY, Year.of(2018)), "dinner", "super-market"))
 
-                .willReturn(asList(new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("15/02/2018"), Money.moneyFor("10"), "dinner", "dinner"),
-                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("01/02/2018"), Money.moneyFor("12.50"), "super-market", "super-market"),
-                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("05/02/2018"), Money.moneyFor("12.50"), "super-market", "super-market"),
-                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("04/02/2018"), Money.moneyFor("20"), "dinner", "dinner"),
-                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("03/02/2018"), Money.moneyFor("12.50"), "super-market", "super-market"),
-                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("02/02/2018"), Money.moneyFor("12.50"), "super-market", "super-market"),
-                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("01/02/2018"), Money.moneyFor("15"), "dinner", "dinner")));
+                .willReturn(asList(new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("15/02/2018"), Money.moneyFor("10"), "dinner", "dinner"),
+                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("01/02/2018"), Money.moneyFor("12.50"), "super-market", "super-market"),
+                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("05/02/2018"), Money.moneyFor("12.50"), "super-market", "super-market"),
+                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("04/02/2018"), Money.moneyFor("20"), "dinner", "dinner"),
+                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("03/02/2018"), Money.moneyFor("12.50"), "super-market", "super-market"),
+                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("02/02/2018"), Money.moneyFor("12.50"), "super-market", "super-market"),
+                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("01/02/2018"), Money.moneyFor("15"), "dinner", "dinner")));
 
         SpentBudget actual = new FindSpentBudget(userRepository, budgetExpenseRepository, searchTagRepository)
                 .findBy(Month.FEBRUARY, Year.of(2018), asList("dinner", "super-market"));
@@ -66,10 +66,10 @@ public class FindSpentBudgetExpenseTest {
         verify(searchTagRepository).findSearchTagBy("dinner");
         verify(searchTagRepository).findSearchTagBy("super-market");
         verify(budgetExpenseRepository)
-                .findByDateRange(new UserName("USER"), Date.firstDateOfMonth(Month.FEBRUARY, Year.of(2018)),
+                .findByDateRange(A_USER_NAME, Date.firstDateOfMonth(Month.FEBRUARY, Year.of(2018)),
                         Date.lastDateOfMonth(Month.FEBRUARY, Year.of(2018)), "dinner", "super-market");
 
-        Assertions.assertEquals(actual.totalForSearchTags(), expected);
+        Assertions.assertEquals(expected, actual.totalForSearchTags());
         Assertions.assertEquals(actual.total(), Money.moneyFor("95.00"));
     }
 
@@ -77,19 +77,19 @@ public class FindSpentBudgetExpenseTest {
     @Test
     public void budgetExpenseTotalBySearchTagsWithoutConstraints() {
         given(userRepository.currentLoggedUserName())
-                .willReturn(new UserName("USER"));
+                .willReturn(A_USER_NAME);
 
-        given(budgetExpenseRepository.findByDateRange(new UserName("USER"),
+        given(budgetExpenseRepository.findByDateRange(A_USER_NAME,
                 Date.firstDateOfMonth(Month.FEBRUARY, Year.of(2018)),
                 Date.lastDateOfMonth(Month.FEBRUARY, Year.of(2018))))
 
-                .willReturn(asList(new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("15/02/2018"), Money.moneyFor("10"), "dinner", "dinner"),
-                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("01/02/2018"), Money.moneyFor("12.50"), "super market", "super-market"),
-                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("05/02/2018"), Money.moneyFor("12.50"), "super market", "super-market"),
-                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("04/02/2018"), Money.moneyFor("20"), "dinner", "dinner"),
-                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("03/02/2018"), Money.moneyFor("12.50"), "super market", "super-market"),
-                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("02/02/2018"), Money.moneyFor("12.50"), "super market", "super-market"),
-                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), new UserName("USER"), Date.dateFor("01/02/2018"), Money.moneyFor("15"), "dinner", "dinner")));
+                .willReturn(asList(new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("15/02/2018"), Money.moneyFor("10"), "dinner", "dinner"),
+                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("01/02/2018"), Money.moneyFor("12.50"), "super market", "super-market"),
+                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("05/02/2018"), Money.moneyFor("12.50"), "super market", "super-market"),
+                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("04/02/2018"), Money.moneyFor("20"), "dinner", "dinner"),
+                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("03/02/2018"), Money.moneyFor("12.50"), "super market", "super-market"),
+                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("02/02/2018"), Money.moneyFor("12.50"), "super market", "super-market"),
+                        new BudgetExpense(BudgetExpenseId.emptyBudgetExpenseId(), A_USER_NAME, Date.dateFor("01/02/2018"), Money.moneyFor("15"), "dinner", "dinner")));
 
         lenient().when(searchTagRepository.findSearchTagBy("super-market")).thenReturn(new SearchTag("super-market", "super-market"));
         given(searchTagRepository.findSearchTagBy("dinner")).willReturn(new SearchTag("dinner", "dinner"));
@@ -104,7 +104,7 @@ public class FindSpentBudgetExpenseTest {
         verify(searchTagRepository).findSearchTagBy("dinner");
         verify(searchTagRepository).findSearchTagBy("super-market");
         verify(budgetExpenseRepository)
-                .findByDateRange(new UserName("USER"),
+                .findByDateRange(A_USER_NAME,
                         Date.firstDateOfMonth(Month.FEBRUARY, Year.of(2018)),
                         Date.lastDateOfMonth(Month.FEBRUARY, Year.of(2018)));
 

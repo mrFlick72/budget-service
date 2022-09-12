@@ -12,23 +12,6 @@ import org.springframework.security.oauth2.server.resource.web.DefaultBearerToke
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-/*import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
-
-@Configuration
-@EnableResourceServer
-public class SecurityOAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter {
-
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .and().authorizeRequests().mvcMatchers("/actuator/**").permitAll().and()
-                .authorizeRequests().anyRequest().authenticated().and()
-                .exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
-    }
-
-}*/
 
 @EnableWebSecurity
 public class SecurityOAuth2ResourceServerConfig extends WebSecurityConfigurerAdapter {

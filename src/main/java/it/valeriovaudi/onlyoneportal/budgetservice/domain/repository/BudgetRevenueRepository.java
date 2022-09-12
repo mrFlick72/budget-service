@@ -9,7 +9,7 @@ public interface BudgetRevenueRepository {
 
     List<BudgetRevenue> findByDateRange(String user, Date star, Date end);
 
-    void save(BudgetRevenue budgetRevenue);
+    BudgetRevenue save(BudgetRevenue budgetRevenue);
 
     void update(BudgetRevenue budgetRevenue);
 
