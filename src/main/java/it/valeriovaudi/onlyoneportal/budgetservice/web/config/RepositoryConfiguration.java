@@ -30,10 +30,11 @@ public class RepositoryConfiguration {
         DynamoDbBudgetRevenueRepository dynamoDbBudgetExpenseRepository = new DynamoDbBudgetRevenueRepository(tableName, dynamoDbClient,
                 new BudgetDynamoDbIdFactory(new UUIDSaltGenerator()),
                 userRepository, new DynamoDbAttributeValueFactory());
-        return new CompositeBudgetRevenueRepository(
+        new CompositeBudgetRevenueRepository(
                 dynamoDbBudgetExpenseRepository,
                 jdbcBudgetRevenueRepository
         );
+        return dynamoDbBudgetExpenseRepository;
     }
 
     @Bean
@@ -44,10 +45,11 @@ public class RepositoryConfiguration {
         DynamoDbBudgetExpenseRepository dynamoDbBudgetExpenseRepository = new DynamoDbBudgetExpenseRepository(tableName, dynamoDbClient,
                 new BudgetDynamoDbIdFactory(new UUIDSaltGenerator()),
                 userRepository, new DynamoDbAttributeValueFactory());
-        return new CompositeBudgetExpenseRepository(
+        new CompositeBudgetExpenseRepository(
                 dynamoDbBudgetExpenseRepository,
                 jdbcBudgetExpenseRepository
         );
+        return dynamoDbBudgetExpenseRepository;
     }
 
     @Bean
