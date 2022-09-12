@@ -22,7 +22,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class DynamoDbBudgetRevenueRepositoryIT {
+class DynamoDbBudgetRevenueRepositoryTest {
 
     private static final Date DATE = Date.dateFor("12/02/2000");
     public static final DynamoDbClient DYNAMO_DB_CLIENT = dynamoClient();

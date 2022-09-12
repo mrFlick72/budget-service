@@ -16,7 +16,7 @@ import static it.valeriovaudi.onlyoneportal.budgetservice.support.DatabaseUtils.
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class DynamoDBSearchTagRepositoryIT {
+class DynamoDBSearchTagRepositoryTest {
 
     private SearchTagRepository searchTagRepository;
 
