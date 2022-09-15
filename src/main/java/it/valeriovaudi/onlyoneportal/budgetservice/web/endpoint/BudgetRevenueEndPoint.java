@@ -1,5 +1,6 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.web.endpoint;
 
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.endpoint.BudgetSearchCriteriaRepresentation;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.IdProvider;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetRevenue;
@@ -10,7 +11,6 @@ import it.valeriovaudi.onlyoneportal.budgetservice.time.Year;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.web.adapter.BudgetRevenueAdapter;
 import it.valeriovaudi.onlyoneportal.budgetservice.web.model.BudgetRevenueRepresentation;
-import it.valeriovaudi.onlyoneportal.budgetservice.web.model.BudgetSearchCriteriaRepresentation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

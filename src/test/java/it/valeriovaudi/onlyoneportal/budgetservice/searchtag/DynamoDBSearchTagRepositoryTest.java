@@ -1,6 +1,6 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.searchtag;
 
-import it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository.DynamoDbAttributeValueFactory;
+import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.DynamoDbAttributeValueFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,8 +10,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
-import static it.valeriovaudi.onlyoneportal.budgetservice.UserTestFixture.A_USER_NAME;
 import static it.valeriovaudi.onlyoneportal.budgetservice.support.DatabaseUtils.*;
+import static it.valeriovaudi.onlyoneportal.budgetservice.support.UserTestFixture.A_USER_NAME;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)

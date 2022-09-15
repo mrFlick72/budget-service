@@ -3,6 +3,8 @@ package it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetRevenue;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetRevenueRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.BudgetDynamoDbIdFactory;
+import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.DynamoDbAttributeValueFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -15,9 +17,9 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 import java.util.List;
 
-import static it.valeriovaudi.onlyoneportal.budgetservice.BudgetFixture.saltGenerator;
-import static it.valeriovaudi.onlyoneportal.budgetservice.UserTestFixture.A_USER_NAME;
+import static it.valeriovaudi.onlyoneportal.budgetservice.support.BudgetFixture.saltGenerator;
 import static it.valeriovaudi.onlyoneportal.budgetservice.support.DatabaseUtils.*;
+import static it.valeriovaudi.onlyoneportal.budgetservice.support.UserTestFixture.A_USER_NAME;
 import static java.util.Arrays.asList;
 import static org.mockito.BDDMockito.given;
 

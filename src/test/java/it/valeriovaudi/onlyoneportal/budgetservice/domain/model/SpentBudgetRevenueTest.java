@@ -1,9 +1,9 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.domain.model;
 
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpense;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpenseId;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.DailyBudgetExpense;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.SpentBudget;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpense;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpenseId;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.DailyBudgetExpense;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.SpentBudget;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
 import org.junit.jupiter.api.Assertions;

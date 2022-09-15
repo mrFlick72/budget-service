@@ -1,14 +1,15 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository;
 
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpense;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpenseId;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpense;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpenseId;
+import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.BudgetDynamoDbIdFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static it.valeriovaudi.onlyoneportal.budgetservice.BudgetFixture.saltGenerator;
+import static it.valeriovaudi.onlyoneportal.budgetservice.support.BudgetFixture.saltGenerator;
 
 class BudgetDynamoDbIdFactoryTest {
 
