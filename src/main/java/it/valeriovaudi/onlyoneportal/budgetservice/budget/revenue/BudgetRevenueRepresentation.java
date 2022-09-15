@@ -1,4 +1,4 @@
-package it.valeriovaudi.onlyoneportal.budgetservice.web.model;
+package it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

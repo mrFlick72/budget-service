@@ -2,16 +2,10 @@ package it.valeriovaudi.onlyoneportal.budgetservice.web.endpoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
-import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenue;
-import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenueId;
-import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenueRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.FindBudgetRevenue;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.IdProvider;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.*;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Year;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.web.adapter.BudgetRevenueAdapter;
-import it.valeriovaudi.onlyoneportal.budgetservice.web.model.BudgetRevenueRepresentation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +50,6 @@ public class BudgetRevenueEndPointTest {
     private FindBudgetRevenue findBudgetRevenue;
 
     @MockBean
-    private IdProvider idProvider;
-
-    @MockBean
     private UserRepository userRepository;
 
     @MockBean
@@ -67,12 +58,8 @@ public class BudgetRevenueEndPointTest {
     @Test
     @WithMockUser("USER")
     public void addANewBudgetRevenue() throws Exception {
+        BudgetRevenue budgetRevenue = new BudgetRevenue(null, "USER", dateFor("10/10/2018"), Money.ONE, "A_NOTE");
 
-        String mockedId = UUID.randomUUID().toString();
-
-        BudgetRevenue budgetRevenue = new BudgetRevenue(new BudgetRevenueId(mockedId), "USER", dateFor("10/10/2018"), Money.ONE, "A_NOTE");
-
-        given(idProvider.id()).willReturn(mockedId);
         given(userRepository.currentLoggedUserName()).willReturn(new UserName("USER"));
 
         BudgetRevenueRepresentation budgetRevenueRepresentation = new BudgetRevenueRepresentation(null, "10/10/2018", "1.00", "A_NOTE");

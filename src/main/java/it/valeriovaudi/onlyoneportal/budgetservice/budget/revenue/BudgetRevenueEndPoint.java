@@ -1,17 +1,10 @@
-package it.valeriovaudi.onlyoneportal.budgetservice.web.endpoint;
+package it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.endpoint.BudgetSearchCriteriaRepresentation;
-import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenue;
-import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenueId;
-import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenueRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.FindBudgetRevenue;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.IdProvider;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Year;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.web.adapter.BudgetRevenueAdapter;
-import it.valeriovaudi.onlyoneportal.budgetservice.web.model.BudgetRevenueRepresentation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,22 +21,20 @@ public class BudgetRevenueEndPoint {
     private final FindBudgetRevenue findBudgetRevenue;
 
     private final BudgetRevenueAdapter budgetRevenueAdapter;
-    private final IdProvider idProvider;
     private final UserRepository userRepository;
 
     public BudgetRevenueEndPoint(BudgetRevenueRepository budgetRevenueRepository,
                                  FindBudgetRevenue findBudgetRevenue, BudgetRevenueAdapter budgetRevenueAdapter,
-                                 IdProvider idProvider, UserRepository userRepository) {
+                                 UserRepository userRepository) {
         this.budgetRevenueRepository = budgetRevenueRepository;
         this.findBudgetRevenue = findBudgetRevenue;
         this.budgetRevenueAdapter = budgetRevenueAdapter;
-        this.idProvider = idProvider;
         this.userRepository = userRepository;
     }
 
     @PostMapping
     public ResponseEntity newBudgetRevenue(@RequestBody BudgetRevenueRepresentation budgetRevenueRepresentation) {
-        budgetRevenueRepository.save(new BudgetRevenue(new BudgetRevenueId(idProvider.id()), userRepository.currentLoggedUserName().getContent(),
+        budgetRevenueRepository.save(new BudgetRevenue(null, userRepository.currentLoggedUserName().getContent(),
                 Date.dateFor(budgetRevenueRepresentation.getDate()),
                 Money.moneyFor(budgetRevenueRepresentation.getAmount()),
                 budgetRevenueRepresentation.getNote()));
