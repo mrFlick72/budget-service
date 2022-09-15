@@ -2,8 +2,8 @@ package it.valeriovaudi.onlyoneportal.budgetservice.web.adapter;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetRevenue;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
+import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.web.model.BudgetRevenueRepresentation;
 
 

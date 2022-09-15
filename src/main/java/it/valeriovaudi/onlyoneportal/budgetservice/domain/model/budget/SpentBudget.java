@@ -1,9 +1,9 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user.UserName;
 import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTag;
+import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
+import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 

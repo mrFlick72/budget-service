@@ -1,7 +1,7 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.domain.repository;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetRevenue;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
+import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 
 import java.util.List;
 

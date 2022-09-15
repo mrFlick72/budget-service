@@ -1,11 +1,10 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpenseId;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetRevenue;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetRevenueRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
+import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;

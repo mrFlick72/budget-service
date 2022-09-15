@@ -1,8 +1,5 @@
-package it.valeriovaudi.onlyoneportal.budgetservice.domain.model;
+package it.valeriovaudi.onlyoneportal.budgetservice.time;
 
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Month;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Year;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

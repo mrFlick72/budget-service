@@ -1,4 +1,4 @@
-package it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time;
+package it.valeriovaudi.onlyoneportal.budgetservice.time;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -1,11 +1,11 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.domain.usecase;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetRevenue;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Month;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Year;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetRevenueRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
+import it.valeriovaudi.onlyoneportal.budgetservice.time.Month;
+import it.valeriovaudi.onlyoneportal.budgetservice.time.Year;
+import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user;
+package it.valeriovaudi.onlyoneportal.budgetservice.user;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

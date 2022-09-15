@@ -4,8 +4,8 @@ import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExp
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpenseId;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.DailyBudgetExpense;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.SpentBudget;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user.UserName;
+import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
+import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

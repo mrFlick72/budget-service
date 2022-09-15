@@ -2,7 +2,7 @@ package it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget;
 
 
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
+import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

@@ -2,9 +2,9 @@ package it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetRevenue;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetRevenueRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
+import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

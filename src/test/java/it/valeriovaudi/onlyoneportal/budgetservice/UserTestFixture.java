@@ -1,6 +1,6 @@
 package it.valeriovaudi.onlyoneportal.budgetservice;
 
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user.UserName;
+import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
 
 public class UserTestFixture {
 
