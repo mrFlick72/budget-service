@@ -17,7 +17,7 @@ public class BudgetRevenueAdapter {
     }
 
     public BudgetRevenue fromRepresentationToModel(BudgetRevenueRepresentation budgetRevenueRepresentation) {
-        return new BudgetRevenue(budgetRevenueRepresentation.getId(),
+        return new BudgetRevenue(
                 new BudgetRevenueId(budgetRevenueRepresentation.getId()),
                 userRepository.currentLoggedUserName().getContent(),
                 Date.dateFor(budgetRevenueRepresentation.getDate()),
@@ -26,7 +26,7 @@ public class BudgetRevenueAdapter {
     }
 
     public BudgetRevenueRepresentation fromDomainToRepresentation(BudgetRevenue budgetRevenue) {
-        return new BudgetRevenueRepresentation(budgetRevenue.getId(),
+        return new BudgetRevenueRepresentation(budgetRevenue.getId().content(),
                 budgetRevenue.getRegistrationDate().formattedDate(),
                 budgetRevenue.getAmount().stringifyAmount(),
                 budgetRevenue.getNote());

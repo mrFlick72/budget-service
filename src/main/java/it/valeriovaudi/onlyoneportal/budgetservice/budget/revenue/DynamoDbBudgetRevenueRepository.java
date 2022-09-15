@@ -76,7 +76,6 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
 
     private BudgetRevenue fromDynamoDbToModel(Map<String, AttributeValue> item) {
         return new BudgetRevenue(
-                item.get("budget_id").s(),
                 new BudgetRevenueId(item.get("budget_id").s()),
                 item.get("user_name").s(),
                 Date.isoDateFor(item.get("transaction_date").s()),
@@ -89,7 +88,6 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
     public BudgetRevenue save(BudgetRevenue budgetRevenue) {
         BudgetRevenue budgetRevenueToSave = new BudgetRevenue(
                 idFactory.budgetIdFrom(budgetRevenue),
-                new BudgetRevenueId(idFactory.budgetIdFrom(budgetRevenue)),
                 budgetRevenue.getUserName(),
                 budgetRevenue.getRegistrationDate(),
                 budgetRevenue.getAmount(),
@@ -109,10 +107,10 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
     private Map<String, AttributeValue> putItemPayloadFor(BudgetRevenue budgetExpense) {
         Map<String, AttributeValue> payload = new HashMap<>();
 
-        payload.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFrom(budgetExpense.getId())));
-        payload.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFrom(budgetExpense.getId())));
+        payload.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFrom(budgetExpense.getId().content())));
+        payload.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFrom(budgetExpense.getId().content())));
 
-        payload.put("budget_id", attributeValueFactory.stringAttributeFor(budgetExpense.getId()));
+        payload.put("budget_id", attributeValueFactory.stringAttributeFor(budgetExpense.getId().content()));
         payload.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));
         payload.put("transaction_date", attributeValueFactory.stringAttributeFor(budgetExpense.getRegistrationDate().isoFormattedDate()));
         payload.put("amount", attributeValueFactory.stringAttributeFor(budgetExpense.getAmount().stringifyAmount()));
@@ -127,7 +125,7 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
     }
 
     @Override
-    public void delete(String idBudgetRevenue) {
+    public void delete(BudgetRevenueId idBudgetRevenue) {
         HashMap<String, AttributeValue> itemKeyCondition = keysFor(idBudgetRevenue);
         dynamoClient.deleteItem(
                 DeleteItemRequest.builder()
@@ -137,10 +135,10 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
         );
     }
 
-    private HashMap<String, AttributeValue> keysFor(String idBudgetRevenue) {
+    private HashMap<String, AttributeValue> keysFor(BudgetRevenueId idBudgetRevenue) {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
-        itemKeyCondition.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFrom(idBudgetRevenue)));
-        itemKeyCondition.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFrom(idBudgetRevenue)));
+        itemKeyCondition.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFrom(idBudgetRevenue.content())));
+        itemKeyCondition.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFrom(idBudgetRevenue.content())));
         return itemKeyCondition;
     }
 

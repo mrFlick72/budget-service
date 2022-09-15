@@ -12,5 +12,5 @@ public interface BudgetRevenueRepository {
 
     void update(BudgetRevenue budgetRevenue);
 
-    void delete(String idBudgetRevenue);
+    void delete(BudgetRevenueId idBudgetRevenue);
 }

@@ -70,7 +70,7 @@ public class BudgetRevenueEndPointTest {
 
         String mockedId = UUID.randomUUID().toString();
 
-        BudgetRevenue budgetRevenue = new BudgetRevenue(mockedId, new BudgetRevenueId(mockedId), "USER", dateFor("10/10/2018"), Money.ONE, "A_NOTE");
+        BudgetRevenue budgetRevenue = new BudgetRevenue(new BudgetRevenueId(mockedId), "USER", dateFor("10/10/2018"), Money.ONE, "A_NOTE");
 
         given(idProvider.id()).willReturn(mockedId);
         given(userRepository.currentLoggedUserName()).willReturn(new UserName("USER"));
@@ -91,7 +91,7 @@ public class BudgetRevenueEndPointTest {
     public void updateABudgetRevenue() throws Exception {
         String mockedId = UUID.randomUUID().toString();
 
-        BudgetRevenue budgetRevenue = new BudgetRevenue(mockedId,  new BudgetRevenueId(mockedId), "USER", dateFor("10/10/2018"), Money.ONE, "A_NOTE");
+        BudgetRevenue budgetRevenue = new BudgetRevenue(new BudgetRevenueId(mockedId), "USER", dateFor("10/10/2018"), Money.ONE, "A_NOTE");
         BudgetRevenueRepresentation budgetRevenueRepresentation = new BudgetRevenueRepresentation(mockedId, "10/10/2018", "1.00", "A_NOTE");
 
         given(budgetRevenueAdapter.fromRepresentationToModel(budgetRevenueRepresentation))
@@ -116,7 +116,7 @@ public class BudgetRevenueEndPointTest {
                 .with(csrf()))
                 .andExpect(status().isNoContent());
 
-        verify(budgetRevenueRepository).delete(mockedId);
+        verify(budgetRevenueRepository).delete(new BudgetRevenueId(mockedId));
     }
 
     @Test
@@ -124,8 +124,8 @@ public class BudgetRevenueEndPointTest {
     public void findAllBudgetRevenue() throws Exception {
         Year year = Year.of(2018);
 
-        BudgetRevenue aBudgetRevenue = new BudgetRevenue("AN_ID",  new BudgetRevenueId("AN_ID"), "USER", dateFor("05/01/2018"), Money.ONE, "A_NOTE");
-        BudgetRevenue anotherBudgetRevenue = new BudgetRevenue("AN_OTHER_ID", new BudgetRevenueId("AN_OTHER_ID"), "USER", dateFor("15/01/2018"), Money.ONE, "");
+        BudgetRevenue aBudgetRevenue = new BudgetRevenue(new BudgetRevenueId("AN_ID"), "USER", dateFor("05/01/2018"), Money.ONE, "A_NOTE");
+        BudgetRevenue anotherBudgetRevenue = new BudgetRevenue(new BudgetRevenueId("AN_OTHER_ID"), "USER", dateFor("15/01/2018"), Money.ONE, "");
 
 
         List<BudgetRevenue> budgetRevenueList = asList(aBudgetRevenue, anotherBudgetRevenue);

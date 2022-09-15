@@ -36,13 +36,13 @@ public class FindBudgetRevenueIT {
 
         List<BudgetRevenue> yearlyBudgetRevenueList = findBudgetRevenue.findBy(of);
         List<BudgetRevenue> expectedBudgetRevenueList =
-                asList(new BudgetRevenue("ID_1", null, "USER", Date.dateFor("01/01/2018"), Money.ONE, ""),
-                        new BudgetRevenue("ID_2", null, "USER", Date.dateFor("01/02/2018"), Money.ONE, ""),
-                        new BudgetRevenue("ID_3", null, "USER", Date.dateFor("01/03/2018"), Money.ONE, ""),
-                        new BudgetRevenue("ID_5", null, "USER", Date.dateFor("01/05/2018"), Money.ONE, ""),
-                        new BudgetRevenue("ID_6", null, "USER", Date.dateFor("01/06/2018"), Money.ONE, ""),
-                        new BudgetRevenue("ID_9", null, "USER", Date.dateFor("01/09/2018"), Money.ONE, ""),
-                        new BudgetRevenue("ID_10", null, "USER", Date.dateFor("01/10/2018"), Money.ONE, ""));
+                asList(new BudgetRevenue(null, "USER", Date.dateFor("01/01/2018"), Money.ONE, ""),
+                        new BudgetRevenue(null, "USER", Date.dateFor("01/02/2018"), Money.ONE, ""),
+                        new BudgetRevenue(null, "USER", Date.dateFor("01/03/2018"), Money.ONE, ""),
+                        new BudgetRevenue(null, "USER", Date.dateFor("01/05/2018"), Money.ONE, ""),
+                        new BudgetRevenue(null, "USER", Date.dateFor("01/06/2018"), Money.ONE, ""),
+                        new BudgetRevenue(null, "USER", Date.dateFor("01/09/2018"), Money.ONE, ""),
+                        new BudgetRevenue(null, "USER", Date.dateFor("01/10/2018"), Money.ONE, ""));
 
         System.out.println(yearlyBudgetRevenueList);
         System.out.println(expectedBudgetRevenueList);

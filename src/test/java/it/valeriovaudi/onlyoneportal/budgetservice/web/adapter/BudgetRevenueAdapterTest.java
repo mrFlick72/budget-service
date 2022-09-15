@@ -37,7 +37,7 @@ public class BudgetRevenueAdapterTest {
                 .willReturn(new UserName("USER"));
 
         BudgetRevenue actual = budgetRevenueAdapter.fromRepresentationToModel(new BudgetRevenueRepresentation("AN_ID", "01/01/2018", "1.00", "A_NOTE"));
-        BudgetRevenue expected = new BudgetRevenue("AN_ID", new BudgetRevenueId("AN_ID"), "USER", Date.dateFor("01/01/2018"), Money.ONE, "A_NOTE");
+        BudgetRevenue expected = new BudgetRevenue(new BudgetRevenueId("AN_ID"), "USER", Date.dateFor("01/01/2018"), Money.ONE, "A_NOTE");
         Assertions.assertEquals(actual, expected);
 
         verify(userRepository).currentLoggedUserName();
@@ -45,7 +45,7 @@ public class BudgetRevenueAdapterTest {
 
     @Test
     public void fromDomainToRepresentationHappyPath() {
-        BudgetRevenueRepresentation actual = budgetRevenueAdapter.fromDomainToRepresentation(new BudgetRevenue("AN_ID",  new BudgetRevenueId("AN_ID"), "USER", Date.dateFor("01/01/2018"), Money.ONE, "A_NOTE"));
+        BudgetRevenueRepresentation actual = budgetRevenueAdapter.fromDomainToRepresentation(new BudgetRevenue(new BudgetRevenueId("AN_ID"), "USER", Date.dateFor("01/01/2018"), Money.ONE, "A_NOTE"));
         BudgetRevenueRepresentation expected = new BudgetRevenueRepresentation("AN_ID", "01/01/2018", "1.00", "A_NOTE");
         Assertions.assertEquals(actual, expected);
     }

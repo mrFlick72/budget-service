@@ -9,25 +9,20 @@ import java.util.Objects;
 @Getter
 public final class BudgetRevenue {
 
-    //todo make it a BudgetRevenueId
-    private final String id;
-    private final BudgetRevenueId newId;
+    private final BudgetRevenueId id;
 
     private final String userName;
     private final Date registrationDate;
     private final Money amount;
     private final String note;
 
-    public BudgetRevenue(String id, BudgetRevenueId newId, String userName, Date registrationDate, Money amount, String note) {
+    public BudgetRevenue(BudgetRevenueId id, String userName, Date registrationDate, Money amount, String note) {
         this.id = id;
-        this.newId = newId;
         this.userName = userName;
         this.registrationDate = registrationDate;
         this.amount = amount;
         this.note = note;
     }
-
-
 
     @Override
     public boolean equals(Object o) {

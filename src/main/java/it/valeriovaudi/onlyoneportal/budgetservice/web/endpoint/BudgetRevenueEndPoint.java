@@ -43,7 +43,7 @@ public class BudgetRevenueEndPoint {
 
     @PostMapping
     public ResponseEntity newBudgetRevenue(@RequestBody BudgetRevenueRepresentation budgetRevenueRepresentation) {
-        budgetRevenueRepository.save(new BudgetRevenue(idProvider.id(), new BudgetRevenueId(idProvider.id()), userRepository.currentLoggedUserName().getContent(),
+        budgetRevenueRepository.save(new BudgetRevenue(new BudgetRevenueId(idProvider.id()), userRepository.currentLoggedUserName().getContent(),
                 Date.dateFor(budgetRevenueRepresentation.getDate()),
                 Money.moneyFor(budgetRevenueRepresentation.getAmount()),
                 budgetRevenueRepresentation.getNote()));
@@ -64,7 +64,7 @@ public class BudgetRevenueEndPoint {
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteBudgetRevenue(@PathVariable("id") String id) {
-        budgetRevenueRepository.delete(id);
+        budgetRevenueRepository.delete(new BudgetRevenueId(id));
         return ResponseEntity.noContent().build();
     }
 
