@@ -1,7 +1,5 @@
-package it.valeriovaudi.onlyoneportal.budgetservice.web.endpoint;
+package it.valeriovaudi.onlyoneportal.budgetservice.searchtag;
 
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

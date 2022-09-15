@@ -1,7 +1,6 @@
-package it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository;
+package it.valeriovaudi.onlyoneportal.budgetservice.searchtag;
 
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository.DynamoDbAttributeValueFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.*;

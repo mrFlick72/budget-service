@@ -1,4 +1,4 @@
-package it.valeriovaudi.onlyoneportal.budgetservice.domain.model;
+package it.valeriovaudi.onlyoneportal.budgetservice.searchtag;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -1,13 +1,13 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.web.adapter;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpense;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpenseId;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user.UserName;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTag;
+import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.web.model.BudgetExpenseRepresentation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

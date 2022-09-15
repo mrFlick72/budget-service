@@ -1,7 +1,6 @@
-package it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository;
+package it.valeriovaudi.onlyoneportal.budgetservice.searchtag;
 
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.adapters.repository.DynamoDbAttributeValueFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

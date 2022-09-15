@@ -3,9 +3,9 @@ package it.valeriovaudi.onlyoneportal.budgetservice.web.config;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.IdProvider;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetExpenseRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetRevenueRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.usecase.*;
+import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTagRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

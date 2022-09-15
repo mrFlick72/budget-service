@@ -1,7 +1,5 @@
-package it.valeriovaudi.onlyoneportal.budgetservice.domain.repository;
+package it.valeriovaudi.onlyoneportal.budgetservice.searchtag;
 
-
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
 
 import java.util.List;
 

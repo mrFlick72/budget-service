@@ -1,8 +1,6 @@
-package it.valeriovaudi.onlyoneportal.budgetservice.web.endpoint;
+package it.valeriovaudi.onlyoneportal.budgetservice.searchtag;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

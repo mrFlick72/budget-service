@@ -1,11 +1,11 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.domain.usecase;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.IdProvider;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpense;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.NewBudgetExpenseRequest;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetExpenseRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTag;
 
 import java.util.Optional;
 

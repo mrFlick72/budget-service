@@ -9,13 +9,3 @@ services:
     volumes:
       - "./docker/dynamodb:/home/dynamodblocal/data"
     working_dir: /home/dynamodblocal
-  postgres:
-    image: postgres
-    ports:
-      - 35432:5432
-    environment:
-      POSTGRES_DB: budget_expense
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-    volumes:
-      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql

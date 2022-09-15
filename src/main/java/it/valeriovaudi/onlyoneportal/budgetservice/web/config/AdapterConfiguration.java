@@ -1,7 +1,7 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.web.config;
 
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.web.adapter.BudgetExpenseAdapter;
 import it.valeriovaudi.onlyoneportal.budgetservice.web.adapter.BudgetRevenueAdapter;
 import it.valeriovaudi.onlyoneportal.budgetservice.web.adapter.SpentBudgetAdapter;

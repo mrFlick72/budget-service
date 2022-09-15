@@ -1,6 +1,5 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.domain.usecase;
 
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.SearchTag;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetExpense;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.SpentBudget;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date;
@@ -8,8 +7,9 @@ import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Month;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Year;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user.UserName;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetExpenseRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTag;
+import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTagRepository;
 
 import java.util.Comparator;
 import java.util.List;
