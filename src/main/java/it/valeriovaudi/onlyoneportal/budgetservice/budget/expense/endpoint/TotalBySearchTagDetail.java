@@ -1,27 +1,18 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.endpoint;
 
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.Objects;
 
-@Data
-@ToString
-@EqualsAndHashCode
-public class TotalBySearchTagDetail implements Serializable {
+public record TotalBySearchTagDetail(String searchTagKey, String searchTagValue, String total) implements Serializable {
 
-    private String searchTagKey;
-    private String searchTagValue;
-    private String total;
-
-    public TotalBySearchTagDetail() {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TotalBySearchTagDetail that = (TotalBySearchTagDetail) o;
+        return Objects.equals(searchTagKey, that.searchTagKey) && Objects.equals(searchTagValue, that.searchTagValue) && Objects.equals(total, that.total);
     }
 
-    public TotalBySearchTagDetail(String searchTagKey, String searchTagValue, String total) {
-        this.searchTagKey = searchTagKey;
-        this.searchTagValue = searchTagValue;
-        this.total = total;
-    }
 }

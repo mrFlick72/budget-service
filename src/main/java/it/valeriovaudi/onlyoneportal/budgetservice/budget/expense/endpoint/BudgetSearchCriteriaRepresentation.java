@@ -1,25 +1,22 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.endpoint;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-@Data
-@EqualsAndHashCode
-public class BudgetSearchCriteriaRepresentation {
+public record BudgetSearchCriteriaRepresentation(Integer month, Integer year, List<String> searchTagList) {
 
-    private Integer month;
-    private Integer year;
-    private List<String> searchTagList = new ArrayList<>();
-
-    public BudgetSearchCriteriaRepresentation() {
+    public static BudgetSearchCriteriaRepresentation empty() {
+        return new BudgetSearchCriteriaRepresentation(null, null, new ArrayList<>());
     }
 
-    public BudgetSearchCriteriaRepresentation(Integer month, Integer year, List<String> searchTagList) {
-        this.month = month;
-        this.year = year;
-        this.searchTagList = searchTagList;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BudgetSearchCriteriaRepresentation that = (BudgetSearchCriteriaRepresentation) o;
+        return Objects.equals(month, that.month) && Objects.equals(year, that.year) && Objects.equals(searchTagList, that.searchTagList);
     }
+
 }

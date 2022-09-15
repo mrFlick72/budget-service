@@ -5,14 +5,12 @@ import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.endpoint.Budge
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Year;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static java.util.stream.Collectors.toList;
 
-@Slf4j
 @RestController
 @RequestMapping("/budget/revenue")
 public class BudgetRevenueEndPoint {
@@ -65,7 +63,7 @@ public class BudgetRevenueEndPoint {
 
     @GetMapping
     public ResponseEntity findAllBudgetRevenue(@RequestParam("q") BudgetSearchCriteriaRepresentation searchCriteria) {
-        Year year = Year.of(searchCriteria.getYear());
+        Year year = Year.of(searchCriteria.year());
 
         return ResponseEntity.ok(findBudgetRevenue.findBy(year)
                 .stream().map(budgetRevenueAdapter::fromDomainToRepresentation)

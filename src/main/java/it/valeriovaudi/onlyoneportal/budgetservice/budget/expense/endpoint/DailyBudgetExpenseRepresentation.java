@@ -1,26 +1,18 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.endpoint;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.util.List;
+import java.util.Objects;
 
-@Data
-@ToString
-@EqualsAndHashCode
-public class DailyBudgetExpenseRepresentation {
+public record DailyBudgetExpenseRepresentation(List<BudgetExpenseRepresentation> budgetExpenseRepresentationList,
+                                               String date, String total) {
 
-    private List<BudgetExpenseRepresentation> budgetExpenseRepresentationList;
-    private String date;
-    private String total;
-
-    public DailyBudgetExpenseRepresentation() { }
-
-    public DailyBudgetExpenseRepresentation(List<BudgetExpenseRepresentation> budgetExpenseRepresentationList,
-                                            String date, String total) {
-        this.budgetExpenseRepresentationList = budgetExpenseRepresentationList;
-        this.date = date;
-        this.total = total;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DailyBudgetExpenseRepresentation that = (DailyBudgetExpenseRepresentation) o;
+        return Objects.equals(budgetExpenseRepresentationList, that.budgetExpenseRepresentationList) && Objects.equals(date, that.date) && Objects.equals(total, that.total);
     }
+
 }

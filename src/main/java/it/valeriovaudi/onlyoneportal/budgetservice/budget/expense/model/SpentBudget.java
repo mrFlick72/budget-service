@@ -4,8 +4,6 @@ import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTag;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,8 +11,6 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-@ToString
-@EqualsAndHashCode
 public final class SpentBudget {
 
     private final List<BudgetExpense> budgetExpenseList;
@@ -78,4 +74,16 @@ public final class SpentBudget {
                 ).orElse(new HashMap<>());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SpentBudget that = (SpentBudget) o;
+        return Objects.equals(budgetExpenseList, that.budgetExpenseList) && Objects.equals(searchTags, that.searchTags);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(budgetExpenseList, searchTags);
+    }
 }

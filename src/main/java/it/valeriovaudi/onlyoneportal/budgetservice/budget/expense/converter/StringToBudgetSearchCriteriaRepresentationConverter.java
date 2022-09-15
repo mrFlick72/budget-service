@@ -33,11 +33,11 @@ public class StringToBudgetSearchCriteriaRepresentationConverter implements Conv
                                 Optional.ofNullable(hashMap.get("searchTag"))
                                         .map(tag -> asList(tag.split(",")))
                                         .orElse(asList())))
-                        .orElse(new BudgetSearchCriteriaRepresentation());
+                        .orElse(BudgetSearchCriteriaRepresentation.empty());
 
 
         return Optional.ofNullable(representation)
                 .map(converter)
-                .orElse(new BudgetSearchCriteriaRepresentation());
+                .orElse(BudgetSearchCriteriaRepresentation.empty());
     }
 }

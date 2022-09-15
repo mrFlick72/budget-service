@@ -12,12 +12,10 @@ import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetEx
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.SpentBudget;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Month;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Year;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
 @RequestMapping("/budget/expense")
 public class BudgetExpenseEndPoint {
@@ -46,16 +44,24 @@ public class BudgetExpenseEndPoint {
 
     @GetMapping
     public ResponseEntity getBudgetExpenseList(@RequestParam("q") BudgetSearchCriteriaRepresentation budgetExpenseRequest) {
-        final SpentBudget findSpentBudgetBy = findSpentBudget.findBy(Month.of(budgetExpenseRequest.getMonth()),
-                Year.of(budgetExpenseRequest.getYear()), budgetExpenseRequest.getSearchTagList());
+        final SpentBudget findSpentBudgetBy = findSpentBudget.findBy(Month.of(budgetExpenseRequest.month()),
+                Year.of(budgetExpenseRequest.year()), budgetExpenseRequest.searchTagList());
 
         return ResponseEntity.ok(spentBudgetConverter.domainToRepresentationModel(findSpentBudgetBy));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity updateBudgetExpense(@PathVariable("id") String id, @RequestBody BudgetExpenseRepresentation request) {
-        request.setId(id);
-        updateBudgetExpenseDetails.updateWithoutAttachment(budgetExpenseConverter.representationModelToDomainModel(request));
+        updateBudgetExpenseDetails.updateWithoutAttachment(budgetExpenseConverter.representationModelToDomainModel(
+                new BudgetExpenseRepresentation(
+                        id,
+                        request.date(),
+                        request.amount(),
+                        request.note(),
+                        request.tagKey(),
+                        request.tagValue()
+                )
+        ));
         return ResponseEntity.noContent().build();
     }
 

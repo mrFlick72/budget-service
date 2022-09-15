@@ -1,32 +1,18 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.endpoint;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.Objects;
 
-@Data
-@ToString
-@EqualsAndHashCode
-public class BudgetExpenseRepresentation implements Serializable {
-    private String id;
-    private String date;
-    private String amount;
-    private String note;
-    private String tagKey;
-    private String tagValue;
+public record BudgetExpenseRepresentation(String id, String date, String amount, String note, String tagKey,
+                                          String tagValue) implements Serializable {
 
-    public BudgetExpenseRepresentation() {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BudgetExpenseRepresentation that = (BudgetExpenseRepresentation) o;
+        return Objects.equals(id, that.id) && Objects.equals(date, that.date) && Objects.equals(amount, that.amount) && Objects.equals(note, that.note) && Objects.equals(tagKey, that.tagKey) && Objects.equals(tagValue, that.tagValue);
     }
 
-    public BudgetExpenseRepresentation(String id, String date, String amount, String note, String tagKey, String tagValue) {
-        this.id = id;
-        this.date = date;
-        this.amount = amount;
-        this.note = note;
-        this.tagKey = tagKey;
-        this.tagValue = tagValue;
-
-    }
 }

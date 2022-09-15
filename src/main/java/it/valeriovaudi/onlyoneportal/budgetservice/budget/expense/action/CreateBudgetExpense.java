@@ -22,9 +22,9 @@ public class CreateBudgetExpense {
     public BudgetExpense newBudgetExpense(NewBudgetExpenseRequest newBudgetExpenseRequest) {
         BudgetExpense budgetExpense = new BudgetExpense(null,
                 userRepository.currentLoggedUserName(),
-                newBudgetExpenseRequest.getDate(),
-                newBudgetExpenseRequest.getAmount(),
-                newBudgetExpenseRequest.getNote(),
+                newBudgetExpenseRequest.date(),
+                newBudgetExpenseRequest.amount(),
+                newBudgetExpenseRequest.note(),
                 getSearchTag(newBudgetExpenseRequest));
 
         budgetExpenseRepository.save(budgetExpense);
@@ -32,7 +32,7 @@ public class CreateBudgetExpense {
     }
 
     private String getSearchTag(NewBudgetExpenseRequest newBudgetExpenseRequest) {
-        return Optional.ofNullable(newBudgetExpenseRequest.getTag())
+        return Optional.ofNullable(newBudgetExpenseRequest.tag())
                 .map(tag -> tag.isBlank() ? DEFAULT_TAG : tag)
                 .orElse(DEFAULT_TAG);
     }

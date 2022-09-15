@@ -3,28 +3,18 @@ package it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.util.List;
+import java.util.Objects;
 
-@Data
-@ToString
-@EqualsAndHashCode
-public class DailyBudgetExpense {
+public record DailyBudgetExpense(List<BudgetExpense> budgetExpenseList, Date date, Money total) {
 
-    private List<BudgetExpense> budgetExpenseList;
-    private Date date;
-    private Money total;
-
-    public DailyBudgetExpense() { }
-
-    public DailyBudgetExpense(List<BudgetExpense> budgetExpenseList,
-                              Date date, Money total) {
-
-        this.budgetExpenseList = budgetExpenseList;
-        this.date = date;
-        this.total = total;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DailyBudgetExpense that = (DailyBudgetExpense) o;
+        return Objects.equals(budgetExpenseList, that.budgetExpenseList) && Objects.equals(date, that.date) && Objects.equals(total, that.total);
     }
+
 }

@@ -1,29 +1,20 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.endpoint;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
-@Data
-@ToString
-@EqualsAndHashCode
-public class SpentBudgetRepresentation implements Serializable {
+public record SpentBudgetRepresentation(String total,
+                                        List<DailyBudgetExpenseRepresentation> dailyBudgetExpenseRepresentationList,
+                                        List<TotalBySearchTagDetail> totalDetailList) implements Serializable {
 
-    private List<DailyBudgetExpenseRepresentation> dailyBudgetExpenseRepresentationList;
-    private List<TotalBySearchTagDetail> totalDetailList;
-    private String total;
-
-    public SpentBudgetRepresentation() {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SpentBudgetRepresentation that = (SpentBudgetRepresentation) o;
+        return Objects.equals(dailyBudgetExpenseRepresentationList, that.dailyBudgetExpenseRepresentationList) && Objects.equals(totalDetailList, that.totalDetailList) && Objects.equals(total, that.total);
     }
 
-    public SpentBudgetRepresentation(String total,
-                                     List<DailyBudgetExpenseRepresentation> dailyBudgetExpenseRepresentationList,
-                                     List<TotalBySearchTagDetail> totalDetailList) {
-        this.dailyBudgetExpenseRepresentationList = dailyBudgetExpenseRepresentationList;
-        this.totalDetailList = totalDetailList;
-        this.total = total;
-    }
 }

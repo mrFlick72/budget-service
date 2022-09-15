@@ -1,7 +1,5 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.time;
 
-import lombok.Getter;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
@@ -15,7 +13,6 @@ public final class Date implements Comparable<Date> {
     static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER = ofPattern("dd/MM/yyyy");
     static final DateTimeFormatter ISO_DATE_TIME_FORMATTER = DateTimeFormatter.ISO_DATE;
 
-    @Getter
     private final LocalDate localDate;
     private final DateTimeFormatter dateTimeFormatter;
 
@@ -27,6 +24,10 @@ public final class Date implements Comparable<Date> {
     public Date(LocalDate localDate) {
         this.localDate = localDate;
         this.dateTimeFormatter = DEFAULT_DATE_TIME_FORMATTER;
+    }
+
+    public LocalDate getLocalDate() {
+        return localDate;
     }
 
     public String formattedDate(){
