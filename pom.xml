@@ -22,6 +22,7 @@
         <java.version>17</java.version>
         <spring-cloud.version>2021.0.3</spring-cloud.version>
         <aws.sdk.version>2.17.271</aws.sdk.version>
+        <snakeyaml.version>1.32</snakeyaml.version>
     </properties>
 
     <dependencies>
