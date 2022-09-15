@@ -2,6 +2,7 @@ package it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.BudgetDynamoDbIdFactory;
+import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.BudgetRevenueDynamoDbIdFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.DynamoDbAttributeValueFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
@@ -32,7 +33,7 @@ class DynamoDbBudgetRevenueRepositoryTest {
 
     private BudgetRevenueRepository budgetRevenueRepository;
 
-    private final BudgetDynamoDbIdFactory idFactory = new BudgetDynamoDbIdFactory(saltGenerator);
+    private final BudgetDynamoDbIdFactory idFactory = new BudgetRevenueDynamoDbIdFactory(saltGenerator);
 
 
     @BeforeEach

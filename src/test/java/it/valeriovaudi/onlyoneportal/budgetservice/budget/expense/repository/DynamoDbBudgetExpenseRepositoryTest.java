@@ -4,6 +4,7 @@ import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpense;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpenseId;
 import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.BudgetDynamoDbIdFactory;
+import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.BudgetExpenseDynamoDbIdFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.DynamoDbAttributeValueFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
@@ -32,7 +33,7 @@ class DynamoDbBudgetExpenseRepositoryTest {
     private UserRepository userRepository;
 
     private BudgetExpenseRepository budgetExpenseRepository;
-    private final BudgetDynamoDbIdFactory idFactory = new BudgetDynamoDbIdFactory(saltGenerator);
+    private final BudgetDynamoDbIdFactory idFactory = new BudgetExpenseDynamoDbIdFactory(saltGenerator);
 
     private void databaseInit() {
         loadBudgetExpense().forEach(budgetExpenseRepository::save);

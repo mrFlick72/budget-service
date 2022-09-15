@@ -5,7 +5,8 @@ import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.repository.Bud
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.repository.DynamoDbBudgetExpenseRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenueRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.DynamoDbBudgetRevenueRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.BudgetDynamoDbIdFactory;
+import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.BudgetExpenseDynamoDbIdFactory;
+import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.BudgetRevenueDynamoDbIdFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.DynamoDbAttributeValueFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.UUIDSaltGenerator;
 import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.DynamoDBSearchTagRepository;
@@ -28,12 +29,12 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public BudgetRevenueRepository jdbcBudgetRevenueRepository(DynamoDbClient dynamoDbClient,
-                                                               @Value("${budget-service.dynamo-db.budget-revenue.table-name}") String tableName,
-                                                               UserRepository userRepository) {
+    public BudgetRevenueRepository budgetRevenueRepository(DynamoDbClient dynamoDbClient,
+                                                           @Value("${budget-service.dynamo-db.budget-revenue.table-name}") String tableName,
+                                                           UserRepository userRepository) {
 
         return new DynamoDbBudgetRevenueRepository(tableName, dynamoDbClient,
-                new BudgetDynamoDbIdFactory(new UUIDSaltGenerator()),
+                new BudgetRevenueDynamoDbIdFactory(new UUIDSaltGenerator()),
                 userRepository, new DynamoDbAttributeValueFactory());
     }
 
@@ -43,7 +44,7 @@ public class RepositoryConfiguration {
                                                            UserRepository userRepository) {
 
         return new DynamoDbBudgetExpenseRepository(tableName, dynamoDbClient,
-                new BudgetDynamoDbIdFactory(new UUIDSaltGenerator()),
+                new BudgetExpenseDynamoDbIdFactory(new UUIDSaltGenerator()),
                 userRepository, new DynamoDbAttributeValueFactory());
     }
 

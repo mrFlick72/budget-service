@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository {
     private final String tableName;
     private final DynamoDbClient dynamoClient;
-    private final BudgetDynamoDbIdFactory idFactory;
+    private final BudgetDynamoDbIdFactory<BudgetExpenseId, BudgetExpense> idFactory;
     private final UserRepository userRepository;
     private final DynamoDbAttributeValueFactory attributeValueFactory;
 

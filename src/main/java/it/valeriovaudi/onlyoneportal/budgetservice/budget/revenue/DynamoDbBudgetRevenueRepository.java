@@ -19,7 +19,7 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
 
     private final String tableName;
     private final DynamoDbClient dynamoClient;
-    private final BudgetDynamoDbIdFactory idFactory;
+    private final BudgetDynamoDbIdFactory<BudgetRevenueId, BudgetRevenue> idFactory;
     private final UserRepository userRepository;
     private final DynamoDbAttributeValueFactory attributeValueFactory;
 
@@ -59,7 +59,7 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
         Set<String> primaryKeys = new TreeSet<>();
         LocalDate current = star.getLocalDate();
         while (!current.isAfter(end.getLocalDate())) {
-            primaryKeys.add(idFactory.partitionKeyFrom(new Date(current), userRepository.currentLoggedUserName().getContent()));
+            primaryKeys.add(idFactory.partitionKeyFrom(new Date(current), userRepository.currentLoggedUserName()));
             current = current.plusYears(1);
         }
 
@@ -107,8 +107,8 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
     private Map<String, AttributeValue> putItemPayloadFor(BudgetRevenue budgetExpense) {
         Map<String, AttributeValue> payload = new HashMap<>();
 
-        payload.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFrom(budgetExpense.getId().content())));
-        payload.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFrom(budgetExpense.getId().content())));
+        payload.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFrom(budgetExpense.getId())));
+        payload.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFrom(budgetExpense.getId())));
 
         payload.put("budget_id", attributeValueFactory.stringAttributeFor(budgetExpense.getId().content()));
         payload.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));
@@ -137,8 +137,8 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
 
     private HashMap<String, AttributeValue> keysFor(BudgetRevenueId idBudgetRevenue) {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
-        itemKeyCondition.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFrom(idBudgetRevenue.content())));
-        itemKeyCondition.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFrom(idBudgetRevenue.content())));
+        itemKeyCondition.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFrom(idBudgetRevenue)));
+        itemKeyCondition.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFrom(idBudgetRevenue)));
         return itemKeyCondition;
     }
 
