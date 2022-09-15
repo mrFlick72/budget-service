@@ -2,6 +2,7 @@ package it.valeriovaudi.onlyoneportal.budgetservice.web.adapter;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenue;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenueId;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.web.model.BudgetRevenueRepresentation;
@@ -17,6 +18,7 @@ public class BudgetRevenueAdapter {
 
     public BudgetRevenue fromRepresentationToModel(BudgetRevenueRepresentation budgetRevenueRepresentation) {
         return new BudgetRevenue(budgetRevenueRepresentation.getId(),
+                new BudgetRevenueId(budgetRevenueRepresentation.getId()),
                 userRepository.currentLoggedUserName().getContent(),
                 Date.dateFor(budgetRevenueRepresentation.getDate()),
                 Money.moneyFor(budgetRevenueRepresentation.getAmount()),

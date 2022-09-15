@@ -55,7 +55,7 @@ class DynamoDbBudgetRevenueRepositoryTest {
 
     @Test
     void saveAnewBudgetRevenue() {
-        BudgetRevenue budgetRevenue = new BudgetRevenue(null, "USER", DATE, Money.ONE, "A_NOTE");
+        BudgetRevenue budgetRevenue = new BudgetRevenue(null, null, "USER", DATE, Money.ONE, "A_NOTE");
 
         budgetRevenueRepository.save(budgetRevenue);
 
@@ -70,10 +70,10 @@ class DynamoDbBudgetRevenueRepositoryTest {
 
         List<BudgetRevenue> actualRange = budgetRevenueRepository.findByDateRange("USER", Date.dateFor("01/01/2018"), Date.dateFor("05/05/2018"));
         List<BudgetRevenue> expectedRange =
-                asList(new BudgetRevenue("MjAxOF9VU0VS-MV82X0FfU0FMVA==", "USER", Date.dateFor("06/01/2018"), Money.moneyFor("17.50"), "Lanch"),
-                        new BudgetRevenue("MjAxOF9VU0VS-Ml8xMl9BX1NBTFQ=", "USER", Date.dateFor("12/02/2018"), Money.moneyFor("10.50"), "Super Market"),
-                        new BudgetRevenue("MjAxOF9VU0VS-Ml8xM19BX1NBTFQ=", "USER", Date.dateFor("13/02/2018"), Money.moneyFor("17.50"), "Dinner"),
-                        new BudgetRevenue("MjAxOF9VU0VS-Ml8yMl9BX1NBTFQ=", "USER", Date.dateFor("22/02/2018"), Money.moneyFor("17.50"), "Super Market"));
+                asList(new BudgetRevenue("MjAxOF9VU0VS-MV82X0FfU0FMVA==", new BudgetRevenueId("MjAxOF9VU0VS-MV82X0FfU0FMVA=="), "USER", Date.dateFor("06/01/2018"), Money.moneyFor("17.50"), "Lanch"),
+                        new BudgetRevenue("MjAxOF9VU0VS-Ml8xMl9BX1NBTFQ=", new BudgetRevenueId("MjAxOF9VU0VS-Ml8xMl9BX1NBTFQ="), "USER", Date.dateFor("12/02/2018"), Money.moneyFor("10.50"), "Super Market"),
+                        new BudgetRevenue("MjAxOF9VU0VS-Ml8xM19BX1NBTFQ=", new BudgetRevenueId("MjAxOF9VU0VS-Ml8xM19BX1NBTFQ="), "USER", Date.dateFor("13/02/2018"), Money.moneyFor("17.50"), "Dinner"),
+                        new BudgetRevenue("MjAxOF9VU0VS-Ml8yMl9BX1NBTFQ=", new BudgetRevenueId("MjAxOF9VU0VS-Ml8yMl9BX1NBTFQ="), "USER", Date.dateFor("22/02/2018"), Money.moneyFor("17.50"), "Super Market"));
 
         System.out.println(actualRange);
         Assertions.assertTrue(actualRange.containsAll(expectedRange));
@@ -82,13 +82,13 @@ class DynamoDbBudgetRevenueRepositoryTest {
 
     @Test
     public void updateBudgetRevenue() {
-        BudgetRevenue budgetRevenue = new BudgetRevenue(null, "USER", DATE, Money.ONE, "A_NOTE");
+        BudgetRevenue budgetRevenue = new BudgetRevenue(null, null, "USER", DATE, Money.ONE, "A_NOTE");
         BudgetRevenue revenue = budgetRevenueRepository.save(budgetRevenue);
 
 
         budgetRevenueRepository.update(new BudgetRevenue(
                 revenue.getId(),
-                revenue.getUserName(),
+                new BudgetRevenueId(revenue.getId()), revenue.getUserName(),
                 revenue.getRegistrationDate(),
                 revenue.getAmount(),
                 "A NEW NOTE"
@@ -101,7 +101,7 @@ class DynamoDbBudgetRevenueRepositoryTest {
 
     @Test
     public void deleteBudgetExpense() {
-        BudgetRevenue budgetRevenue = new BudgetRevenue(null, "USER", DATE, Money.ONE, "A_NOTE");
+        BudgetRevenue budgetRevenue = new BudgetRevenue(null, null, "USER", DATE, Money.ONE, "A_NOTE");
 
         BudgetRevenue revenue = budgetRevenueRepository.save(budgetRevenue);
 

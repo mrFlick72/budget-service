@@ -40,7 +40,7 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
         Set<String> pks = primaryKeysFor(star, end);
         return pks.stream()
                 .flatMap(pk -> {
-                    Map<String, AttributeValue> itemKeyCondition = yearlyItemKeyConditionFor(pk,star, end);
+                    Map<String, AttributeValue> itemKeyCondition = yearlyItemKeyConditionFor(pk, star, end);
                     return dynamoClient.query(
                             QueryRequest.builder()
                                     .tableName(tableName)
@@ -77,6 +77,7 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
     private BudgetRevenue fromDynamoDbToModel(Map<String, AttributeValue> item) {
         return new BudgetRevenue(
                 item.get("budget_id").s(),
+                new BudgetRevenueId(item.get("budget_id").s()),
                 item.get("user_name").s(),
                 Date.isoDateFor(item.get("transaction_date").s()),
                 Money.moneyFor(item.get("amount").s()),
@@ -88,6 +89,7 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
     public BudgetRevenue save(BudgetRevenue budgetRevenue) {
         BudgetRevenue budgetRevenueToSave = new BudgetRevenue(
                 idFactory.budgetIdFrom(budgetRevenue),
+                new BudgetRevenueId(idFactory.budgetIdFrom(budgetRevenue)),
                 budgetRevenue.getUserName(),
                 budgetRevenue.getRegistrationDate(),
                 budgetRevenue.getAmount(),

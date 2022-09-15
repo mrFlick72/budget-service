@@ -88,6 +88,7 @@ public class DatabaseUtils {
                         String[] split = line.split(",");
                         return new BudgetRevenue(
                                 null,
+                                null,
                                 split[0],
                                 Date.dateFor(split[1]),
                                 Money.moneyFor(split[2]),

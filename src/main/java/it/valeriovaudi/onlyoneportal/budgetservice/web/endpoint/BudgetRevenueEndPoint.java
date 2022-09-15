@@ -3,6 +3,7 @@ package it.valeriovaudi.onlyoneportal.budgetservice.web.endpoint;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.endpoint.BudgetSearchCriteriaRepresentation;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenue;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenueId;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenueRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.FindBudgetRevenue;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.IdProvider;
@@ -42,7 +43,7 @@ public class BudgetRevenueEndPoint {
 
     @PostMapping
     public ResponseEntity newBudgetRevenue(@RequestBody BudgetRevenueRepresentation budgetRevenueRepresentation) {
-        budgetRevenueRepository.save(new BudgetRevenue(idProvider.id(), userRepository.currentLoggedUserName().getContent(),
+        budgetRevenueRepository.save(new BudgetRevenue(idProvider.id(), new BudgetRevenueId(idProvider.id()), userRepository.currentLoggedUserName().getContent(),
                 Date.dateFor(budgetRevenueRepresentation.getDate()),
                 Money.moneyFor(budgetRevenueRepresentation.getAmount()),
                 budgetRevenueRepresentation.getNote()));
