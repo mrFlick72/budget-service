@@ -26,7 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
 
-import static it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpenseId.emptyBudgetExpenseId;
+import static it.valeriovaudi.onlyoneportal.budgetservice.support.BudgetFixture.emptyBudgetExpenseId;
 import static java.util.Arrays.asList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;

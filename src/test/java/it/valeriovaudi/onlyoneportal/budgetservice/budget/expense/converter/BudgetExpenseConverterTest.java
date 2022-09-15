@@ -6,6 +6,7 @@ import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetEx
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpenseId;
 import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTag;
 import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTagRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.support.BudgetFixture;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
@@ -35,8 +36,8 @@ public class BudgetExpenseConverterTest {
 
     @Test
     public void convertWebRepresentationToDomainModel() {
-        BudgetExpenseId id = BudgetExpenseId.randomBudgetExpenseId();
-        BudgetExpenseRepresentation budgetExpenseRepresentation = new BudgetExpenseRepresentation(id.getContent(), DATE, AMOUNT, "super-market", "super-market", "Super Market");
+        BudgetExpenseId id = BudgetFixture.randomBudgetExpenseId();
+        BudgetExpenseRepresentation budgetExpenseRepresentation = new BudgetExpenseRepresentation(id.content(), DATE, AMOUNT, "super-market", "super-market", "Super Market");
         BudgetExpenseConverter budgetExpenseConverter = new BudgetExpenseConverter(searchTagRepository, userRepository);
 
         given(userRepository.currentLoggedUserName())
@@ -50,7 +51,7 @@ public class BudgetExpenseConverterTest {
 
     @Test
     public void convertDomainModelToWebRepresentation() {
-        BudgetExpenseId id = BudgetExpenseId.randomBudgetExpenseId();
+        BudgetExpenseId id = BudgetFixture.randomBudgetExpenseId();
 
         BudgetExpense budgetExpense = new BudgetExpense(id, USER, DOMAIN_DATE, MONEY_AMOUNT, "Super Market", "super-market");
         BudgetExpenseConverter budgetExpenseConverter = new BudgetExpenseConverter(searchTagRepository, userRepository);
@@ -63,7 +64,7 @@ public class BudgetExpenseConverterTest {
 
         verify(searchTagRepository).findSearchTagBy("super-market");
 
-        Assertions.assertEquals(actualBudgetExpenseRepresentation, new BudgetExpenseRepresentation(id.getContent(), DATE, AMOUNT, "Super Market", "super-market", "Super Market"));
+        Assertions.assertEquals(actualBudgetExpenseRepresentation, new BudgetExpenseRepresentation(id.content(), DATE, AMOUNT, "Super Market", "super-market", "Super Market"));
     }
 
 }

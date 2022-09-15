@@ -1,28 +1,15 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 
-import java.util.UUID;
+public record BudgetExpenseId(String content) {
 
-@ToString
-@EqualsAndHashCode
-public class BudgetExpenseId {
-
-    private final String content;
-
-    public BudgetExpenseId(String content) {
-        this.content = content;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BudgetExpenseId that = (BudgetExpenseId) o;
+        return Objects.equals(content, that.content);
     }
 
-    public static BudgetExpenseId emptyBudgetExpenseId() {
-        return new BudgetExpenseId("");
-    }
-    public static BudgetExpenseId randomBudgetExpenseId() {
-        return new BudgetExpenseId(UUID.randomUUID().toString());
-    }
-
-    public String getContent() {
-        return content;
-    }
 }

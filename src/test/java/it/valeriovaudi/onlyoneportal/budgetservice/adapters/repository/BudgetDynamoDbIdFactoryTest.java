@@ -28,6 +28,6 @@ class BudgetDynamoDbIdFactoryTest {
         BudgetDynamoDbIdFactory budgetDynamoDbIdFactory = new BudgetDynamoDbIdFactory(saltGenerator);
         BudgetExpenseId actual = budgetDynamoDbIdFactory.budgetIdFrom(BUDGET_EXPENSE);
 
-        Assertions.assertEquals("MjAxOF8xX1VTRVI=-MV9BX1NBTFQ=", actual.getContent());
+        Assertions.assertEquals("MjAxOF8xX1VTRVI=-MV9BX1NBTFQ=", actual.content());
     }
 }

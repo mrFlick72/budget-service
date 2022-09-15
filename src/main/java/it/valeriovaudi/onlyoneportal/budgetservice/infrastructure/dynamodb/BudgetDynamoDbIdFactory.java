@@ -37,11 +37,11 @@ public class BudgetDynamoDbIdFactory {
     }
 
     public String partitionKeyFrom(BudgetExpenseId id) {
-        return id.getContent().split("-")[0];
+        return id.content().split("-")[0];
     }
 
     public String rangeKeyFrom(BudgetExpenseId id) {
-        return id.getContent().split("-")[1];
+        return id.content().split("-")[1];
     }
 
 

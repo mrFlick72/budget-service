@@ -5,6 +5,7 @@ import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetEx
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpenseId;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.repository.BudgetExpenseRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTag;
+import it.valeriovaudi.onlyoneportal.budgetservice.support.BudgetFixture;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ public class UpdateBudgetExpenseDetailsTest {
 
     @Test
     public void update() {
-        BudgetExpenseId budgetExpenseId = BudgetExpenseId.randomBudgetExpenseId();
+        BudgetExpenseId budgetExpenseId = BudgetFixture.randomBudgetExpenseId();
 
         UpdateBudgetExpenseDetails updateBudgetExpenseDetails = new UpdateBudgetExpenseDetails(budgetExpenseRepository);
 

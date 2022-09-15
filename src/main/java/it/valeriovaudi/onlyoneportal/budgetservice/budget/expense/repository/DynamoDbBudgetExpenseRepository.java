@@ -160,7 +160,7 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
         payload.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFrom(budgetExpense.getId())));
         payload.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFrom(budgetExpense.getId())));
 
-        payload.put("budget_id", attributeValueFactory.stringAttributeFor(budgetExpense.getId().getContent()));
+        payload.put("budget_id", attributeValueFactory.stringAttributeFor(budgetExpense.getId().content()));
         payload.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));
         payload.put("transaction_date", attributeValueFactory.stringAttributeFor(budgetExpense.getDate().isoFormattedDate()));
         payload.put("amount", attributeValueFactory.stringAttributeFor(budgetExpense.getAmount().stringifyAmount()));
