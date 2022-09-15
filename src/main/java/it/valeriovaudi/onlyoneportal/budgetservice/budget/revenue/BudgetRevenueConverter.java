@@ -5,11 +5,11 @@ import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
 
 
-public class BudgetRevenueAdapter {
+public class BudgetRevenueConverter {
 
     private final UserRepository userRepository;
 
-    public BudgetRevenueAdapter(UserRepository userRepository) {
+    public BudgetRevenueConverter(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

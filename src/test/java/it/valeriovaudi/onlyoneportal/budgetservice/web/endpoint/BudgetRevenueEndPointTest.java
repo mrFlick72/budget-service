@@ -53,7 +53,7 @@ public class BudgetRevenueEndPointTest {
     private UserRepository userRepository;
 
     @MockBean
-    private BudgetRevenueAdapter budgetRevenueAdapter;
+    private BudgetRevenueConverter budgetRevenueConverter;
 
     @Test
     @WithMockUser("USER")
@@ -81,7 +81,7 @@ public class BudgetRevenueEndPointTest {
         BudgetRevenue budgetRevenue = new BudgetRevenue(new BudgetRevenueId(mockedId), "USER", dateFor("10/10/2018"), Money.ONE, "A_NOTE");
         BudgetRevenueRepresentation budgetRevenueRepresentation = new BudgetRevenueRepresentation(mockedId, "10/10/2018", "1.00", "A_NOTE");
 
-        given(budgetRevenueAdapter.fromRepresentationToModel(budgetRevenueRepresentation))
+        given(budgetRevenueConverter.fromRepresentationToModel(budgetRevenueRepresentation))
                 .willReturn(budgetRevenue);
 
         mockMvc.perform(put("/budget/revenue/" + mockedId)
@@ -119,10 +119,10 @@ public class BudgetRevenueEndPointTest {
         given(findBudgetRevenue.findBy(year))
                 .willReturn(budgetRevenueList);
 
-        given(budgetRevenueAdapter.fromDomainToRepresentation(aBudgetRevenue))
+        given(budgetRevenueConverter.fromDomainToRepresentation(aBudgetRevenue))
                 .willReturn(new BudgetRevenueRepresentation("AN_ID", "05/01/2018", "1.00", "A_NOTE"));
 
-        given(budgetRevenueAdapter.fromDomainToRepresentation(anotherBudgetRevenue))
+        given(budgetRevenueConverter.fromDomainToRepresentation(anotherBudgetRevenue))
                 .willReturn(new BudgetRevenueRepresentation("AN_OTHER_ID", "15/01/2018", "1.00", ""));
 
 
@@ -133,8 +133,8 @@ public class BudgetRevenueEndPointTest {
                 .andExpect(content().json(loadJson("budget_revenue/findAll.json")));
 
         verify(findBudgetRevenue).findBy(year);
-        verify(budgetRevenueAdapter).fromDomainToRepresentation(aBudgetRevenue);
-        verify(budgetRevenueAdapter).fromDomainToRepresentation(anotherBudgetRevenue);
+        verify(budgetRevenueConverter).fromDomainToRepresentation(aBudgetRevenue);
+        verify(budgetRevenueConverter).fromDomainToRepresentation(anotherBudgetRevenue);
     }
 
     public String loadJson(String stub) throws IOException {

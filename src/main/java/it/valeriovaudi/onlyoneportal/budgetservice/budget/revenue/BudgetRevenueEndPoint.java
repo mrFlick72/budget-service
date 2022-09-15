@@ -18,15 +18,15 @@ public class BudgetRevenueEndPoint {
     private final BudgetRevenueRepository budgetRevenueRepository;
     private final FindBudgetRevenue findBudgetRevenue;
 
-    private final BudgetRevenueAdapter budgetRevenueAdapter;
+    private final BudgetRevenueConverter budgetRevenueConverter;
     private final UserRepository userRepository;
 
     public BudgetRevenueEndPoint(BudgetRevenueRepository budgetRevenueRepository,
-                                 FindBudgetRevenue findBudgetRevenue, BudgetRevenueAdapter budgetRevenueAdapter,
+                                 FindBudgetRevenue findBudgetRevenue, BudgetRevenueConverter budgetRevenueConverter,
                                  UserRepository userRepository) {
         this.budgetRevenueRepository = budgetRevenueRepository;
         this.findBudgetRevenue = findBudgetRevenue;
-        this.budgetRevenueAdapter = budgetRevenueAdapter;
+        this.budgetRevenueConverter = budgetRevenueConverter;
         this.userRepository = userRepository;
     }
 
@@ -43,7 +43,7 @@ public class BudgetRevenueEndPoint {
     @PutMapping("/{id}")
     public ResponseEntity updateBudgetRevenue(@PathVariable("id") String id,
                                               @RequestBody BudgetRevenueRepresentation representation) {
-        BudgetRevenue budgetRevenue = budgetRevenueAdapter.fromRepresentationToModel(new BudgetRevenueRepresentation(
+        BudgetRevenue budgetRevenue = budgetRevenueConverter.fromRepresentationToModel(new BudgetRevenueRepresentation(
                 id,
                 representation.date(),
                 representation.amount(),
@@ -66,7 +66,7 @@ public class BudgetRevenueEndPoint {
         Year year = Year.of(searchCriteria.year());
 
         return ResponseEntity.ok(findBudgetRevenue.findBy(year)
-                .stream().map(budgetRevenueAdapter::fromDomainToRepresentation)
+                .stream().map(budgetRevenueConverter::fromDomainToRepresentation)
                 .collect(toList()));
     }
 
