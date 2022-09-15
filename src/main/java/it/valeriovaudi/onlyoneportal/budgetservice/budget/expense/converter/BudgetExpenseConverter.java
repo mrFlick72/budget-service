@@ -23,10 +23,10 @@ public class BudgetExpenseConverter {
     }
 
     public BudgetExpenseRepresentation domainToRepresentationModel(BudgetExpense budgetExpense) {
-        String searchTag = Optional.ofNullable(searchTagRepository.findSearchTagBy(budgetExpense.getTag()))
+        String searchTag = Optional.ofNullable(searchTagRepository.findSearchTagBy(budgetExpense.tag()))
                 .map(SearchTag::getValue).orElse("");
-        return new BudgetExpenseRepresentation(budgetExpense.getId().content(), budgetExpense.getDate().formattedDate(),
-                budgetExpense.getAmount().stringifyAmount(), budgetExpense.getNote(), budgetExpense.getTag(), searchTag);
+        return new BudgetExpenseRepresentation(budgetExpense.id().content(), budgetExpense.date().formattedDate(),
+                budgetExpense.amount().stringifyAmount(), budgetExpense.note(), budgetExpense.tag(), searchTag);
     }
 
     public BudgetExpense representationModelToDomainModel(BudgetExpenseRepresentation budgetExpenseRepresentation) {

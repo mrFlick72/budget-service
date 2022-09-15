@@ -35,12 +35,12 @@ public class DeleteBudgetExpenseTest {
                 "TAG"
         );
 
-        given(budgetExpenseRepository.findFor(budgetExpense.getId()))
+        given(budgetExpenseRepository.findFor(budgetExpense.id()))
                 .willReturn(Optional.of(budgetExpense));
 
         deleteBudgetExpense.delete(new BudgetExpenseId("ID"));
 
-        verify(budgetExpenseRepository).findFor(budgetExpense.getId());
-        verify(budgetExpenseRepository).delete(budgetExpense.getId());
+        verify(budgetExpenseRepository).findFor(budgetExpense.id());
+        verify(budgetExpenseRepository).delete(budgetExpense.id());
     }
 }

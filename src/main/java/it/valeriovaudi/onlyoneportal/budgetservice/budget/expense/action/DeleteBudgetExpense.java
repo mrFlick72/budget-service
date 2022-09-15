@@ -15,7 +15,7 @@ public class DeleteBudgetExpense {
 
     public void delete(BudgetExpenseId budgetExpenseId) {
         budgetExpenseRepository.findFor(budgetExpenseId)
-                .ifPresentOrElse(budgetExpense -> budgetExpenseRepository.delete(budgetExpense.getId()),
+                .ifPresentOrElse(budgetExpense -> budgetExpenseRepository.delete(budgetExpense.id()),
                         () -> {
                             throw new BudgetExpenseNotFoundException();
                         });

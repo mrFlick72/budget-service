@@ -36,12 +36,12 @@ public class UpdateBudgetExpenseDetailsTest {
 
         BudgetExpense updatedBudgetExpense = new BudgetExpense(budgetExpenseId, new UserName("USER"), Date.dateFor("22/02/2018"), Money.ONE, "test", SearchTag.DEFAULT_KEY);
 
-        given(budgetExpenseRepository.findFor(budgetExpense.getId()))
+        given(budgetExpenseRepository.findFor(budgetExpense.id()))
                 .willReturn(Optional.of(foundBudgetExpense));
 
         updateBudgetExpenseDetails.updateWithoutAttachment(budgetExpense);
 
-        verify(budgetExpenseRepository).findFor(budgetExpense.getId());
+        verify(budgetExpenseRepository).findFor(budgetExpense.id());
         verify(budgetExpenseRepository).save(updatedBudgetExpense);
     }
 }

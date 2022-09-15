@@ -12,13 +12,13 @@ public class UpdateBudgetExpenseDetails {
     }
 
     public void updateWithoutAttachment(BudgetExpense budgetExpense) {
-        budgetExpenseRepository.findFor(budgetExpense.getId())
+        budgetExpenseRepository.findFor(budgetExpense.id())
                 .ifPresent(foundBudgetExpense -> {
-                    BudgetExpense updatedBudgetExpense = new BudgetExpense(budgetExpense.getId(),
-                            budgetExpense.getUserName(),
-                            budgetExpense.getDate(),
-                            budgetExpense.getAmount(), budgetExpense.getNote(),
-                            budgetExpense.getTag()
+                    BudgetExpense updatedBudgetExpense = new BudgetExpense(budgetExpense.id(),
+                            budgetExpense.userName(),
+                            budgetExpense.date(),
+                            budgetExpense.amount(), budgetExpense.note(),
+                            budgetExpense.tag()
                     );
 
                     budgetExpenseRepository.save(updatedBudgetExpense);

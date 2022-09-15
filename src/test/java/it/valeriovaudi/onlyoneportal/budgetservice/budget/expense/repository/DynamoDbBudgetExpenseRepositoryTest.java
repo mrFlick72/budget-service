@@ -61,7 +61,7 @@ class DynamoDbBudgetExpenseRepositoryTest {
         BudgetExpense actual = budgetExpenseRepository.save(expected);
 
         Assertions.assertEquals(expected, actual);
-        BudgetExpense retrievedBudgetExpense = budgetExpenseRepository.findFor(expected.getId()).get();
+        BudgetExpense retrievedBudgetExpense = budgetExpenseRepository.findFor(expected.id()).get();
         Assertions.assertEquals(expected, retrievedBudgetExpense);
     }
 
@@ -85,9 +85,9 @@ class DynamoDbBudgetExpenseRepositoryTest {
     public void findByDateRangeAndSearchTags() {
         List<BudgetExpense> actualRange = budgetExpenseRepository.findByDateRange(new UserName("USER"), Date.dateFor("01/01/2018"), Date.dateFor("05/05/2018"), "super-market", "dinner");
         List<BudgetExpense> expectedRange =
-                asList(new BudgetExpense(null, new UserName("USER"), Date.dateFor("12/02/2018"), Money.moneyFor("10.50"), "Super Market", "super-market"),
-                        new BudgetExpense(null, new UserName("USER"), Date.dateFor("13/02/2018"), Money.moneyFor("17.50"), "Dinner", "dinner"),
-                        new BudgetExpense(null, new UserName("USER"), Date.dateFor("22/02/2018"), Money.moneyFor("17.50"), "Super Market", "super-market"));
+                asList(new BudgetExpense(new BudgetExpenseId("MjAxOF8yX1VTRVI=-MTJfQV9TQUxU"), new UserName("USER"), Date.dateFor("12/02/2018"), Money.moneyFor("10.50"), "Super Market", "super-market"),
+                        new BudgetExpense(new BudgetExpenseId("MjAxOF8yX1VTRVI=-MTNfQV9TQUxU"), new UserName("USER"), Date.dateFor("13/02/2018"), Money.moneyFor("17.50"), "Dinner", "dinner"),
+                        new BudgetExpense(new BudgetExpenseId("MjAxOF8yX1VTRVI=-MjJfQV9TQUxU"), new UserName("USER"), Date.dateFor("22/02/2018"), Money.moneyFor("17.50"), "Super Market", "super-market"));
 
         Assertions.assertTrue(expectedRange.containsAll(actualRange) );
     }

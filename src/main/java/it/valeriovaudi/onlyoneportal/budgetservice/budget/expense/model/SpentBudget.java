@@ -28,20 +28,20 @@ public final class SpentBudget {
 
     public Money total() {
         return budgetExpenseList.stream()
-                .map(BudgetExpense::getAmount)
+                .map(BudgetExpense::amount)
                 .reduce(Money.ZERO, Money::plus);
     }
 
     public Map<SearchTag, Money> totalForSearchTags() {
         return budgetExpenseList.stream()
-                .collect(groupingBy(classifier -> findSearchTagFor(classifier.getUserName(), classifier.getTag()),
-                        Collectors.mapping(BudgetExpense::getAmount, Collectors.reducing(Money.ZERO, Money::plus))));
+                .collect(groupingBy(classifier -> findSearchTagFor(classifier.userName(), classifier.tag()),
+                        Collectors.mapping(BudgetExpense::amount, Collectors.reducing(Money.ZERO, Money::plus))));
     }
 
     public List<DailyBudgetExpense> dailyBudgetExpenseList() {
         LinkedHashMap<Date, List<BudgetExpense>> result = new LinkedHashMap<>();
         for (BudgetExpense budgetExpense : budgetExpenseList) {
-            Date key = budgetExpense.getDate();
+            Date key = budgetExpense.date();
             List<BudgetExpense> value = result.getOrDefault(key, new ArrayList<>());
             value.add(budgetExpense);
             result.put(key, value);
@@ -49,7 +49,7 @@ public final class SpentBudget {
         return result.entrySet().stream()
                 .map(entry -> new DailyBudgetExpense(entry.getValue(), entry.getKey(),
                         entry.getValue()
-                                .stream().map(BudgetExpense::getAmount)
+                                .stream().map(BudgetExpense::amount)
                                 .reduce(Money::plus)
                                 .orElse(Money.ZERO)))
                 .collect(toList());

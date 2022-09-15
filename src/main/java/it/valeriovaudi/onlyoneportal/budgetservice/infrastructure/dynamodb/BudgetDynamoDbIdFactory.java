@@ -22,8 +22,8 @@ public class BudgetDynamoDbIdFactory {
 
 
     public BudgetExpenseId budgetIdFrom(BudgetExpense budgetExpense) {
-        return Optional.ofNullable(budgetExpense.getId())
-                .orElseGet(() -> new BudgetExpenseId(String.format("%s-%s", partitionKeyFrom(budgetExpense.getDate(), budgetExpense.getUserName()), rangeKeyFrom(budgetExpense))));
+        return Optional.ofNullable(budgetExpense.id())
+                .orElseGet(() -> new BudgetExpenseId(String.format("%s-%s", partitionKeyFrom(budgetExpense.date(), budgetExpense.userName()), rangeKeyFrom(budgetExpense))));
     }
 
     public String partitionKeyFrom(Date date, UserName userName) {
@@ -46,7 +46,7 @@ public class BudgetDynamoDbIdFactory {
 
 
     private String rangeKeyFrom(BudgetExpense budgetExpense) {
-        int dayOfMonth = budgetExpense.getDate().getLocalDate().getDayOfMonth();
+        int dayOfMonth = budgetExpense.date().getLocalDate().getDayOfMonth();
         String salt = saltGenerator.newSalt();
 
         String rangeKey = String.format("%s_%s", dayOfMonth, salt);

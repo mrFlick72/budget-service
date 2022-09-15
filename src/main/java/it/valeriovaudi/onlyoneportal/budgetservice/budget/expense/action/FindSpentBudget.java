@@ -56,12 +56,12 @@ public class FindSpentBudget {
 
     private List<BudgetExpense> orderByDate(List<BudgetExpense> budgetExpenseListFromRepository) {
         return budgetExpenseListFromRepository.stream()
-                .sorted(Comparator.comparing(BudgetExpense::getDate))
+                .sorted(Comparator.comparing(BudgetExpense::date))
                 .collect(toList());
     }
 
     private List<SearchTag> getAllSearchTagFor(List<BudgetExpense> budgetExpenses) {
-        return budgetExpenses.stream().map(BudgetExpense::getTag)
+        return budgetExpenses.stream().map(BudgetExpense::tag)
                 .distinct().map(searchTagRepository::findSearchTagBy)
                 .collect(toList());
     }

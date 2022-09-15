@@ -82,7 +82,7 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
     }
 
     private static boolean haveToBeIncluded(List<String> searchTagsList, BudgetExpense budgetExpense) {
-        return searchTagsList.isEmpty() || searchTagsList.contains(budgetExpense.getTag());
+        return searchTagsList.isEmpty() || searchTagsList.contains(budgetExpense.tag());
 
     }
 
@@ -109,11 +109,11 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
     public BudgetExpense save(BudgetExpense budgetExpense) {
         BudgetExpense budgetExpenseToSave = new BudgetExpense(
                 idFactory.budgetIdFrom(budgetExpense),
-                budgetExpense.getUserName(),
-                budgetExpense.getDate(),
-                budgetExpense.getAmount(),
-                budgetExpense.getNote(),
-                budgetExpense.getTag()
+                budgetExpense.userName(),
+                budgetExpense.date(),
+                budgetExpense.amount(),
+                budgetExpense.note(),
+                budgetExpense.tag()
         );
         dynamoClient.putItem(
                 PutItemRequest.builder()
@@ -157,15 +157,15 @@ public class DynamoDbBudgetExpenseRepository implements BudgetExpenseRepository 
     private Map<String, AttributeValue> putItemPayloadFor(BudgetExpense budgetExpense) {
         Map<String, AttributeValue> payload = new HashMap<>();
 
-        payload.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFrom(budgetExpense.getId())));
-        payload.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFrom(budgetExpense.getId())));
+        payload.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFrom(budgetExpense.id())));
+        payload.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFrom(budgetExpense.id())));
 
-        payload.put("budget_id", attributeValueFactory.stringAttributeFor(budgetExpense.getId().content()));
+        payload.put("budget_id", attributeValueFactory.stringAttributeFor(budgetExpense.id().content()));
         payload.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));
-        payload.put("transaction_date", attributeValueFactory.stringAttributeFor(budgetExpense.getDate().isoFormattedDate()));
-        payload.put("amount", attributeValueFactory.stringAttributeFor(budgetExpense.getAmount().stringifyAmount()));
-        payload.put("note", attributeValueFactory.stringAttributeFor(budgetExpense.getNote()));
-        payload.put("tag", attributeValueFactory.stringAttributeFor(budgetExpense.getTag()));
+        payload.put("transaction_date", attributeValueFactory.stringAttributeFor(budgetExpense.date().isoFormattedDate()));
+        payload.put("amount", attributeValueFactory.stringAttributeFor(budgetExpense.amount().stringifyAmount()));
+        payload.put("note", attributeValueFactory.stringAttributeFor(budgetExpense.note()));
+        payload.put("tag", attributeValueFactory.stringAttributeFor(budgetExpense.tag()));
 
         return payload;
     }
