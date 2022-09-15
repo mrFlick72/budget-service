@@ -1,7 +1,6 @@
-package it.valeriovaudi.onlyoneportal.budgetservice.domain.usecase;
+package it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue;
 
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetRevenue;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Year;
 import org.junit.jupiter.api.Assertions;

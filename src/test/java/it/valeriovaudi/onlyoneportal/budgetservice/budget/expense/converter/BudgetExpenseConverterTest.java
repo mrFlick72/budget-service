@@ -1,9 +1,9 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.converter;
 
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.endpoint.BudgetExpenseRepresentation;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpense;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpenseId;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTag;
 import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;

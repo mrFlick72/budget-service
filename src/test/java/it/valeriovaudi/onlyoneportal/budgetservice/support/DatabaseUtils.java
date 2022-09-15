@@ -1,8 +1,8 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.support;
 
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpense;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetRevenue;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenue;
 import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTag;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;

@@ -1,4 +1,4 @@
-package it.valeriovaudi.onlyoneportal.budgetservice.domain.model;
+package it.valeriovaudi.onlyoneportal.budgetservice.budget;
 
 
 import org.junit.jupiter.api.Assertions;

@@ -5,9 +5,9 @@ import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.action.DeleteB
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.action.FindSpentBudget;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.action.UpdateBudgetExpenseDetails;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.repository.BudgetExpenseRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenueRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.FindBudgetRevenue;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.IdProvider;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetRevenueRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.usecase.FindBudgetRevenue;
 import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
 import org.springframework.context.annotation.Bean;

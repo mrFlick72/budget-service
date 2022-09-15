@@ -1,9 +1,9 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.action;
 
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpense;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpenseId;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.repository.BudgetExpenseRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
 import org.junit.jupiter.api.Test;

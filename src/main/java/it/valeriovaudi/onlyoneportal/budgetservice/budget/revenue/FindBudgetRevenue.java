@@ -1,7 +1,5 @@
-package it.valeriovaudi.onlyoneportal.budgetservice.domain.usecase;
+package it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue;
 
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetRevenue;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetRevenueRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Month;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Year;

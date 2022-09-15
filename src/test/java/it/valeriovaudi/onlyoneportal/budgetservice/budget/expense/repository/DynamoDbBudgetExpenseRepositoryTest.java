@@ -1,8 +1,8 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.repository;
 
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpense;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpenseId;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.BudgetDynamoDbIdFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.DynamoDbAttributeValueFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;

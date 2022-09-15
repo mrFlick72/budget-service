@@ -2,7 +2,7 @@ package it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpense;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.model.BudgetExpenseId;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetRevenue;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenue;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
 

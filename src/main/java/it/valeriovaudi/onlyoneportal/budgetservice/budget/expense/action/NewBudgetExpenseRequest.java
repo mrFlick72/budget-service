@@ -1,6 +1,6 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.action;
 
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

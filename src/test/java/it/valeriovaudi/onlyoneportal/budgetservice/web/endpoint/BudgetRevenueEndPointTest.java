@@ -1,11 +1,11 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.web.endpoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenue;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenueRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.FindBudgetRevenue;
 import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.IdProvider;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetRevenue;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetRevenueRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.usecase.FindBudgetRevenue;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Year;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
