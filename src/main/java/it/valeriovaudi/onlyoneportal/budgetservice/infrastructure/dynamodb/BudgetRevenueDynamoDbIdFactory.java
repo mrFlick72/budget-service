@@ -21,15 +21,15 @@ public class BudgetRevenueDynamoDbIdFactory implements BudgetDynamoDbIdFactory<B
 
     @Override
     public BudgetRevenueId budgetIdFrom(BudgetRevenue budgetRevenue) {
-        return Optional.ofNullable(budgetRevenue.getId())
-                .orElseGet(() -> new BudgetRevenueId(String.format("%s-%s", partitionKeyFrom(budgetRevenue.getRegistrationDate(), new UserName(budgetRevenue.getUserName())), rangeKeyFrom(budgetRevenue))));
+        return Optional.ofNullable(budgetRevenue.id())
+                .orElseGet(() -> new BudgetRevenueId(String.format("%s-%s", partitionKeyFrom(budgetRevenue.registrationDate(), new UserName(budgetRevenue.userName())), rangeKeyFrom(budgetRevenue))));
     }
 
 
     @Override
     public String partitionKeyFrom(Date date, UserName userName) {
         int budgetExpenseYear = date.getLocalDate().getYear();
-        String budgetRevenueUser = userName.getContent();
+        String budgetRevenueUser = userName.content();
 
         String partitionKey = String.format("%s_%s", budgetExpenseYear, budgetRevenueUser);
 
@@ -50,8 +50,8 @@ public class BudgetRevenueDynamoDbIdFactory implements BudgetDynamoDbIdFactory<B
 
 
     private String rangeKeyFrom(BudgetRevenue budgetRevenue) {
-        int dayOfMonth = budgetRevenue.getRegistrationDate().getLocalDate().getDayOfMonth();
-        int budgetRevenueMonth = budgetRevenue.getRegistrationDate().getLocalDate().getMonthValue();
+        int dayOfMonth = budgetRevenue.registrationDate().getLocalDate().getDayOfMonth();
+        int budgetRevenueMonth = budgetRevenue.registrationDate().getLocalDate().getMonthValue();
         String salt = saltGenerator.newSalt();
 
         String rangeKey = String.format("%s_%s_%s", budgetRevenueMonth, dayOfMonth, salt);

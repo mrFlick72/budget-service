@@ -88,15 +88,15 @@ class DynamoDbBudgetRevenueRepositoryTest {
 
 
         budgetRevenueRepository.update(new BudgetRevenue(
-                revenue.getId(), revenue.getUserName(),
-                revenue.getRegistrationDate(),
-                revenue.getAmount(),
+                revenue.id(), revenue.userName(),
+                revenue.registrationDate(),
+                revenue.amount(),
                 "A NEW NOTE"
         ));
 
         List<BudgetRevenue> user = budgetRevenueRepository.findByDateRange("USER", DATE, DATE);
 
-        Assertions.assertEquals("A NEW NOTE", user.get(0).getNote());
+        Assertions.assertEquals("A NEW NOTE", user.get(0).note());
     }
 
     @Test
@@ -109,7 +109,7 @@ class DynamoDbBudgetRevenueRepositoryTest {
 
         Assertions.assertFalse(expectedRange.isEmpty());
 
-        budgetRevenueRepository.delete(revenue.getId());
+        budgetRevenueRepository.delete(revenue.id());
         expectedRange = budgetRevenueRepository.findByDateRange("USER", DATE, DATE);
 
         Assertions.assertTrue(expectedRange.isEmpty());

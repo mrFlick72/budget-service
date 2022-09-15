@@ -1,39 +1,38 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.budget;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
 import java.math.BigDecimal;
+import java.util.Objects;
 
-@ToString
-@EqualsAndHashCode
-public final class Money {
+public record Money(BigDecimal amount) {
 
-    static final int SCALE_PRECISION                = 2;
-    static final int SCALE_CRITERIA                 = BigDecimal.ROUND_HALF_DOWN;
+    static final int SCALE_PRECISION = 2;
+    static final int SCALE_CRITERIA = BigDecimal.ROUND_HALF_DOWN;
 
     public static final Money ZERO = Money.moneyFor("0.00");
     public static final Money ONE = Money.moneyFor("1.00");
-
-    private final BigDecimal amount;
-
 
     public Money(BigDecimal amount) {
         this.amount = amount.setScale(SCALE_PRECISION, SCALE_CRITERIA);
     }
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
-    public static Money moneyFor(String amount){
+    public static Money moneyFor(String amount) {
         return new Money(new BigDecimal(amount));
     }
 
-    public Money plus(Money money){
-        return new Money(this.amount.add(money.getAmount()).setScale(SCALE_PRECISION, SCALE_CRITERIA));
+    public Money plus(Money money) {
+        return new Money(this.amount.add(money.amount()).setScale(SCALE_PRECISION, SCALE_CRITERIA));
     }
 
-    public String stringifyAmount(){
+    public String stringifyAmount() {
         return amount.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Money money = (Money) o;
+        return Objects.equals(amount, money.amount);
+    }
+
 }

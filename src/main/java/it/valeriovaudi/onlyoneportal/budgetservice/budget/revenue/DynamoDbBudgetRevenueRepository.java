@@ -51,7 +51,7 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
                     ).items().stream();
                 })
                 .map(this::fromDynamoDbToModel)
-                .sorted(Comparator.comparing(o -> o.getRegistrationDate().getLocalDate()))
+                .sorted(Comparator.comparing(o -> o.registrationDate().getLocalDate()))
                 .collect(Collectors.toList());
     }
 
@@ -88,10 +88,10 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
     public BudgetRevenue save(BudgetRevenue budgetRevenue) {
         BudgetRevenue budgetRevenueToSave = new BudgetRevenue(
                 idFactory.budgetIdFrom(budgetRevenue),
-                budgetRevenue.getUserName(),
-                budgetRevenue.getRegistrationDate(),
-                budgetRevenue.getAmount(),
-                budgetRevenue.getNote()
+                budgetRevenue.userName(),
+                budgetRevenue.registrationDate(),
+                budgetRevenue.amount(),
+                budgetRevenue.note()
         );
 
         dynamoClient.putItem(
@@ -107,14 +107,14 @@ public class DynamoDbBudgetRevenueRepository implements BudgetRevenueRepository 
     private Map<String, AttributeValue> putItemPayloadFor(BudgetRevenue budgetExpense) {
         Map<String, AttributeValue> payload = new HashMap<>();
 
-        payload.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFrom(budgetExpense.getId())));
-        payload.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFrom(budgetExpense.getId())));
+        payload.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFrom(budgetExpense.id())));
+        payload.put("range_key", attributeValueFactory.stringAttributeFor(idFactory.rangeKeyFrom(budgetExpense.id())));
 
-        payload.put("budget_id", attributeValueFactory.stringAttributeFor(budgetExpense.getId().content()));
-        payload.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));
-        payload.put("transaction_date", attributeValueFactory.stringAttributeFor(budgetExpense.getRegistrationDate().isoFormattedDate()));
-        payload.put("amount", attributeValueFactory.stringAttributeFor(budgetExpense.getAmount().stringifyAmount()));
-        payload.put("note", attributeValueFactory.stringAttributeFor(budgetExpense.getNote()));
+        payload.put("budget_id", attributeValueFactory.stringAttributeFor(budgetExpense.id().content()));
+        payload.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().content()));
+        payload.put("transaction_date", attributeValueFactory.stringAttributeFor(budgetExpense.registrationDate().isoFormattedDate()));
+        payload.put("amount", attributeValueFactory.stringAttributeFor(budgetExpense.amount().stringifyAmount()));
+        payload.put("note", attributeValueFactory.stringAttributeFor(budgetExpense.note()));
 
         return payload;
     }

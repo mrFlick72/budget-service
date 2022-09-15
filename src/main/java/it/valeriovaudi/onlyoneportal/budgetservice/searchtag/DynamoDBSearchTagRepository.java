@@ -81,21 +81,21 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
 
     private HashMap<String, AttributeValue> itemKeyConditionFor(String key) {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
-        itemKeyCondition.put(":user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));
+        itemKeyCondition.put(":user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().content()));
         itemKeyCondition.put(":search_tag_key", attributeValueFactory.stringAttributeFor(key));
         return itemKeyCondition;
     }
 
     private HashMap<String, AttributeValue> itemKeysFor(String key) {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
-        itemKeyCondition.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));
+        itemKeyCondition.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().content()));
         itemKeyCondition.put("search_tag_key", attributeValueFactory.stringAttributeFor(key));
         return itemKeyCondition;
     }
 
     private HashMap<String, AttributeValue> findAllItemKeyCondition() {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
-        itemKeyCondition.put(":user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));
+        itemKeyCondition.put(":user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().content()));
         return itemKeyCondition;
     }
 
@@ -105,9 +105,9 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
 
     private HashMap<String, AttributeValue> putItemPayloadFor(SearchTag searchTag) {
         HashMap<String, AttributeValue> attributes = new HashMap<>();
-        attributes.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().getContent()));
-        attributes.put("search_tag_key", attributeValueFactory.stringAttributeFor(searchTag.getKey()));
-        attributes.put("search_tag_value", attributeValueFactory.stringAttributeFor(searchTag.getValue()));
+        attributes.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().content()));
+        attributes.put("search_tag_key", attributeValueFactory.stringAttributeFor(searchTag.key()));
+        attributes.put("search_tag_value", attributeValueFactory.stringAttributeFor(searchTag.value()));
         return attributes;
     }
 }

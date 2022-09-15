@@ -27,8 +27,8 @@ public class SpentBudgetConverter {
                                         dailyBudgetExpense.getDate().formattedDate(),
                                         dailyBudgetExpense.getTotal().stringifyAmount())).collect(toList()),
                 spentBudget.totalForSearchTags().entrySet().stream()
-                        .map(total -> new TotalBySearchTagDetail(total.getKey().getKey(),
-                                total.getKey().getValue(),
+                        .map(total -> new TotalBySearchTagDetail(total.getKey().key(),
+                                total.getKey().value(),
                                 total.getValue().stringifyAmount()))
                         .collect(toList()));
     }

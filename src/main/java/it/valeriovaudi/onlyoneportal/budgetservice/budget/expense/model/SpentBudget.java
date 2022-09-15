@@ -68,7 +68,7 @@ public final class SpentBudget {
                         tags.stream()
                                 .map(search -> {
                                     HashMap<String, String> map = new HashMap<>();
-                                    map.put(search.getKey(), search.getValue());
+                                    map.put(search.key(), search.value());
                                     return map;
                                 })
                                 .reduce(new HashMap<>(), (m1, m2) -> {

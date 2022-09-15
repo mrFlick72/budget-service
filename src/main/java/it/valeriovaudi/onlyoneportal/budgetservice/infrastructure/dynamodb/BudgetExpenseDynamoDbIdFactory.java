@@ -29,7 +29,7 @@ public class BudgetExpenseDynamoDbIdFactory implements BudgetDynamoDbIdFactory<B
     public String partitionKeyFrom(Date date, UserName userName) {
         int budgetExpenseYear = date.getLocalDate().getYear();
         int budgetExpenseMonth = date.getLocalDate().getMonthValue();
-        String budgetExpenseUser = userName.getContent();
+        String budgetExpenseUser = userName.content();
 
         String partitionKey = String.format("%s_%s_%s", budgetExpenseYear, budgetExpenseMonth, budgetExpenseUser);
 

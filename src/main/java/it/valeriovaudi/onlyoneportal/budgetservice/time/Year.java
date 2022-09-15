@@ -1,14 +1,7 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.time;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import java.util.Objects;
 
-import java.time.LocalDate;
-
-@Getter
-@ToString
-@EqualsAndHashCode
 public final class Year {
 
     private final Integer yearValue;
@@ -20,7 +13,21 @@ public final class Year {
     public static Year of(Integer year) {
         return new Year(year);
     }
-    public static Year now() {
-        return new Year(LocalDate.now().getYear());
+
+    public Integer getYearValue() {
+        return yearValue;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Year year = (Year) o;
+        return Objects.equals(yearValue, year.yearValue);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(yearValue);
     }
 }

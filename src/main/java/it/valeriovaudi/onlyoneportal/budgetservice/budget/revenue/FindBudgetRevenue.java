@@ -18,7 +18,7 @@ public class FindBudgetRevenue {
     }
 
     public List<BudgetRevenue> findBy(Year year) {
-        return budgetRevenueRepository.findByDateRange(userRepository.currentLoggedUserName().getContent(),
+        return budgetRevenueRepository.findByDateRange(userRepository.currentLoggedUserName().content(),
                 Date.firstDateOfMonth(Month.JANUARY, year),
                 Date.lastDateOfMonth(Month.DECEMBER, year));
     }

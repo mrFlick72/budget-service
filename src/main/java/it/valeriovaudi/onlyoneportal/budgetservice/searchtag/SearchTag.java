@@ -1,21 +1,17 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.searchtag;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import java.util.Objects;
 
-@Getter
-@ToString
-@EqualsAndHashCode
-public final class SearchTag {
-
-    private final String key;
-    private final String value;
+public record SearchTag(String key, String value) {
 
     public static final String DEFAULT_KEY = "unknown";
 
-    public SearchTag(String key, String value) {
-        this.key = key;
-        this.value = value;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SearchTag searchTag = (SearchTag) o;
+        return Objects.equals(key, searchTag.key) && Objects.equals(value, searchTag.value);
     }
+
 }

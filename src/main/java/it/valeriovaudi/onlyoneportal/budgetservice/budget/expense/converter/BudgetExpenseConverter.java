@@ -24,7 +24,7 @@ public class BudgetExpenseConverter {
 
     public BudgetExpenseRepresentation domainToRepresentationModel(BudgetExpense budgetExpense) {
         String searchTag = Optional.ofNullable(searchTagRepository.findSearchTagBy(budgetExpense.tag()))
-                .map(SearchTag::getValue).orElse("");
+                .map(SearchTag::value).orElse("");
         return new BudgetExpenseRepresentation(budgetExpense.id().content(), budgetExpense.date().formattedDate(),
                 budgetExpense.amount().stringifyAmount(), budgetExpense.note(), budgetExpense.tag(), searchTag);
     }

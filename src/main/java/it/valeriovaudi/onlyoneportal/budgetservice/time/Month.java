@@ -1,17 +1,10 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.time;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-
-import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 
-@Getter
-@ToString
-@EqualsAndHashCode
 public final class Month {
 
     public static final Month JANUARY = new Month(1);
@@ -42,11 +35,20 @@ public final class Month {
                 Optional.ofNullable(locale).orElse(Locale.ENGLISH));
     }
 
-    public static Month now() {
-        return new Month(LocalDate.now().getMonthValue());
+    public Integer getMonthValue() {
+        return monthValue;
     }
 
-    public Integer monthValue() {
-        return monthValue;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Month month = (Month) o;
+        return Objects.equals(monthValue, month.monthValue);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(monthValue);
     }
 }

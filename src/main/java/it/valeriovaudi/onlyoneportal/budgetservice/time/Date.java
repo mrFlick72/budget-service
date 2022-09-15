@@ -1,18 +1,15 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.time;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Objects;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 
-@ToString
-@EqualsAndHashCode
 public final class Date implements Comparable<Date> {
 
     static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER = ofPattern("dd/MM/yyyy");
@@ -62,5 +59,18 @@ public final class Date implements Comparable<Date> {
     @Override
     public int compareTo(Date o) {
         return this.getLocalDate().compareTo(o.getLocalDate());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Date date = (Date) o;
+        return Objects.equals(localDate, date.localDate) && Objects.equals(dateTimeFormatter, date.dateTimeFormatter);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(localDate, dateTimeFormatter);
     }
 }

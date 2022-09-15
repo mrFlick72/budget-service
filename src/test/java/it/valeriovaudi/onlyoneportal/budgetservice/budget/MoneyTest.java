@@ -13,7 +13,7 @@ public class MoneyTest {
     public void manoeyScaleIsCorrect() throws Exception {
         Money money = Money.moneyFor("12.506");
         BigDecimal expectedValue = new BigDecimal(12.51).setScale(2, RoundingMode.HALF_DOWN);
-        BigDecimal actualValue = money.getAmount();
+        BigDecimal actualValue = money.amount();
         Assertions.assertEquals(actualValue, expectedValue);
     }
 

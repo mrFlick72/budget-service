@@ -1,17 +1,14 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.user;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import java.util.Objects;
 
-@Getter
-@ToString
-@EqualsAndHashCode
-public class UserName {
+public record UserName(String content) {
 
-    private final String content;
-
-    public UserName(String content) {
-        this.content = content;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserName userName = (UserName) o;
+        return Objects.equals(content, userName.content);
     }
 }

@@ -15,17 +15,17 @@ public class BudgetRevenueAdapter {
 
     public BudgetRevenue fromRepresentationToModel(BudgetRevenueRepresentation budgetRevenueRepresentation) {
         return new BudgetRevenue(
-                new BudgetRevenueId(budgetRevenueRepresentation.getId()),
-                userRepository.currentLoggedUserName().getContent(),
-                Date.dateFor(budgetRevenueRepresentation.getDate()),
-                Money.moneyFor(budgetRevenueRepresentation.getAmount()),
-                budgetRevenueRepresentation.getNote());
+                new BudgetRevenueId(budgetRevenueRepresentation.id()),
+                userRepository.currentLoggedUserName().content(),
+                Date.dateFor(budgetRevenueRepresentation.date()),
+                Money.moneyFor(budgetRevenueRepresentation.amount()),
+                budgetRevenueRepresentation.note());
     }
 
     public BudgetRevenueRepresentation fromDomainToRepresentation(BudgetRevenue budgetRevenue) {
-        return new BudgetRevenueRepresentation(budgetRevenue.getId().content(),
-                budgetRevenue.getRegistrationDate().formattedDate(),
-                budgetRevenue.getAmount().stringifyAmount(),
-                budgetRevenue.getNote());
+        return new BudgetRevenueRepresentation(budgetRevenue.id().content(),
+                budgetRevenue.registrationDate().formattedDate(),
+                budgetRevenue.amount().stringifyAmount(),
+                budgetRevenue.note());
     }
 }
