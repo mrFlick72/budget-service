@@ -65,6 +65,11 @@ public class CachedSearchTagRepository implements SearchTagRepository {
         UserName userName = userRepository.currentLoggedUserName();
         repository.save(searchTag);
         storeInCache(userName, searchTag);
+        evictCacheFor(userName);
+    }
+
+    private void evictCacheFor(UserName userName) {
+        redisTemplate.opsForHash().delete(cacheKeyFor(userName), sha256For(cacheKeyFor(userName)));
     }
 
     @Override

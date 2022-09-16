@@ -16,8 +16,7 @@ import java.util.List;
 
 import static it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.strings.Sha256Utils.sha256For;
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -134,5 +133,25 @@ class CachedSearchTagRepositoryTest {
         assertNotNull(actual);
         assertNotNull(expectedFormTheCache);
         assertEquals(expectedFormTheCache, actual);
+    }
+    @Test
+    void whenASaveDoEvictFindAllCache() {
+        SearchTag searchTag = new SearchTag("key", "value");
+        SearchTag anotherSearchTag = new SearchTag("key2", "value2");
+
+        given(repository.findAllSearchTag())
+                .willReturn(asList(searchTag, anotherSearchTag));
+
+        List<SearchTag> actual = underTest.findAllSearchTag();
+
+        List<SearchTag> expectedFormTheCache = (List<SearchTag>) redisTemplate.opsForHash().get(findAllCacheKey, sha256For(findAllCacheKey));
+
+        assertNotNull(actual);
+        assertNotNull(expectedFormTheCache);
+        assertEquals(expectedFormTheCache, actual);
+
+        underTest.save(searchTag);
+        expectedFormTheCache = (List<SearchTag>) redisTemplate.opsForHash().get(findAllCacheKey, sha256For(findAllCacheKey));
+        assertNull(expectedFormTheCache);
     }
 }
