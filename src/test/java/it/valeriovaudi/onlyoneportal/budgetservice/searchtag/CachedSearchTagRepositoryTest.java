@@ -2,26 +2,31 @@ package it.valeriovaudi.onlyoneportal.budgetservice.searchtag;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import static it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.strings.Sha256Utils.*;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
+import static it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.strings.Sha256Utils.sha256For;
+import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CachedSearchTagRepositoryTest {
+    String cacheKey = "search_tag_cache_anemail@test.com_key";
+    String findAllCacheKey = "search_tag_cache_anemail@test.com";
 
+    public static final UserName USER_NAME = new UserName("anemail@test.com");
     @Mock
     private SearchTagRepository repository;
 
@@ -34,6 +39,20 @@ class CachedSearchTagRepositoryTest {
 
     @BeforeEach
     void setup() {
+        reset(repository);
+        reset(userRepository);
+
+        setUpRedisTemplate();
+        underTest = new CachedSearchTagRepository("search_tag_cache", 1000, redisTemplate, userRepository, repository);
+
+        given(userRepository.currentLoggedUserName())
+                .willReturn(USER_NAME);
+
+        redisTemplate.opsForHash().delete(cacheKey,sha256For(cacheKey));
+        redisTemplate.opsForHash().delete(findAllCacheKey,sha256For(findAllCacheKey));
+    }
+
+    private void setUpRedisTemplate() {
         LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory("localhost", 6379);
         connectionFactory.afterPropertiesSet();
         redisTemplate = new RedisTemplate<>();
@@ -42,21 +61,11 @@ class CachedSearchTagRepositoryTest {
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
         redisTemplate.afterPropertiesSet();
-        underTest = new CachedSearchTagRepository("search_tag_cache", 1000, redisTemplate, userRepository, repository);
-
-        given(userRepository.currentLoggedUserName())
-                .willReturn(new UserName("anemail@test.com"));
     }
 
-    @AfterEach
-    void tearDown() {
-        reset(repository);
-        reset(userRepository);
-    }
 
     @Test
     void whenASearchTagIsStored() {
-        String cacheKey = "search_tag_cache_anemail@test.com_key";
         SearchTag searchTag = new SearchTag("key", "value");
 
         underTest.save(searchTag);
@@ -69,7 +78,6 @@ class CachedSearchTagRepositoryTest {
 
     @Test
     void whenASearchTagIsRetrievedFromTheCache() {
-        String cacheKey = "search_tag_cache_anemail@test.com_key";
         SearchTag searchTag = new SearchTag("key", "value");
 
         redisTemplate.opsForHash().put(cacheKey, sha256For(cacheKey), searchTag);
@@ -84,7 +92,6 @@ class CachedSearchTagRepositoryTest {
 
     @Test
     void whenASearchTagIsRetrievedFromTheDatabase() {
-        String cacheKey = "search_tag_cache_anemail@test.com_key";
         String searchTagKey = "key";
         SearchTag searchTag = new SearchTag(searchTagKey, "value");
 
@@ -95,6 +102,37 @@ class CachedSearchTagRepositoryTest {
 
         SearchTag expectedFormTheCache = (SearchTag) redisTemplate.opsForHash().get(cacheKey, sha256For(cacheKey));
 
+        assertEquals(expectedFormTheCache, actual);
+    }
+
+    @Test
+    void whenFindAllFromTheCache() {
+        SearchTag searchTag = new SearchTag("key", "value");
+
+        redisTemplate.opsForHash().put(findAllCacheKey, sha256For(findAllCacheKey), asList(searchTag));
+
+        List<SearchTag> actual = underTest.findAllSearchTag();
+        List<SearchTag> expectedFormTheCache = (List<SearchTag>) redisTemplate.opsForHash().get(findAllCacheKey, sha256For(findAllCacheKey));
+
+        assertNotNull(actual);
+        assertNotNull(expectedFormTheCache);
+        assertEquals(expectedFormTheCache, actual);
+        verifyNoMoreInteractions(repository);
+    }
+
+    @Test
+    void whenFindAllIsRetrievedFromTheDatabase() {
+        SearchTag searchTag = new SearchTag("key", "value");
+
+        given(repository.findAllSearchTag())
+                .willReturn(asList(searchTag));
+
+        List<SearchTag> actual = underTest.findAllSearchTag();
+
+        List<SearchTag> expectedFormTheCache = (List<SearchTag>) redisTemplate.opsForHash().get(findAllCacheKey, sha256For(findAllCacheKey));
+
+        assertNotNull(actual);
+        assertNotNull(expectedFormTheCache);
         assertEquals(expectedFormTheCache, actual);
     }
 }

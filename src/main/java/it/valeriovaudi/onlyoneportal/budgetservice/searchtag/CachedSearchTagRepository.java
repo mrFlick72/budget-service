@@ -50,7 +50,14 @@ public class CachedSearchTagRepository implements SearchTagRepository {
 
     @Override
     public List<SearchTag> findAllSearchTag() {
-        return null;
+        UserName userName = userRepository.currentLoggedUserName();
+
+        return Optional.ofNullable(getFromCache(userName))
+                .orElseGet(() -> {
+                    List<SearchTag> allSearchTag = repository.findAllSearchTag();
+                    storeInCache(userName, allSearchTag);
+                    return allSearchTag;
+                });
     }
 
     @Override
@@ -70,10 +77,19 @@ public class CachedSearchTagRepository implements SearchTagRepository {
         return String.format("%s_%s_%s", cacheName, userName.content(), searchTagKey);
     }
 
+    private String cacheKeyFor(UserName userName) {
+        return String.format("%s_%s", cacheName, userName.content());
+    }
+
     private SearchTag getFromCache(String searchTagKey, UserName userName) {
         String cacheKey = cacheKeyFor(userName, searchTagKey);
 
         return (SearchTag) redisTemplate.opsForHash().get(cacheKey, sha256For(cacheKey));
+    }
+
+    private List<SearchTag> getFromCache(UserName userName) {
+        String cacheKey = cacheKeyFor(userName);
+        return (List<SearchTag>) redisTemplate.opsForHash().get(cacheKey, sha256For(cacheKey));
     }
 
     private void storeInCache(UserName userName, SearchTag cachedSearchTag) {
@@ -81,4 +97,11 @@ public class CachedSearchTagRepository implements SearchTagRepository {
         redisTemplate.opsForHash().put(cacheKey, sha256For(cacheKey), cachedSearchTag);
         redisTemplate.opsForHash().getOperations().expire(cacheKey, Duration.ofMillis(cacheTtlMillis));
     }
+
+    private void storeInCache(UserName userName, List<SearchTag> cachedSearchTag) {
+        String cacheKey = cacheKeyFor(userName);
+        redisTemplate.opsForHash().put(cacheKey, sha256For(cacheKey), cachedSearchTag);
+        redisTemplate.opsForHash().getOperations().expire(cacheKey, Duration.ofMillis(cacheTtlMillis));
+    }
+
 }
