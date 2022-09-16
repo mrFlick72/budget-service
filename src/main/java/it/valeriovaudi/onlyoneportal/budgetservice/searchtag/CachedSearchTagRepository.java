@@ -68,13 +68,13 @@ public class CachedSearchTagRepository implements SearchTagRepository {
         evictCacheFor(userName);
     }
 
-    private void evictCacheFor(UserName userName) {
-        redisTemplate.opsForHash().delete(cacheKeyFor(userName), sha256For(cacheKeyFor(userName)));
-    }
-
     @Override
     public void delete(String key) {
+        UserName userName = userRepository.currentLoggedUserName();
 
+        repository.delete(key);
+        evictCacheFor(userName);
+        evictCacheFor(key, userName);
     }
 
 
@@ -97,10 +97,19 @@ public class CachedSearchTagRepository implements SearchTagRepository {
         return (List<SearchTag>) redisTemplate.opsForHash().get(cacheKey, sha256For(cacheKey));
     }
 
+
     private void storeInCache(UserName userName, SearchTag cachedSearchTag) {
         String cacheKey = cacheKeyFor(userName, cachedSearchTag.key());
         redisTemplate.opsForHash().put(cacheKey, sha256For(cacheKey), cachedSearchTag);
         redisTemplate.opsForHash().getOperations().expire(cacheKey, Duration.ofMillis(cacheTtlMillis));
+    }
+
+    private void evictCacheFor(UserName userName) {
+        redisTemplate.opsForHash().delete(cacheKeyFor(userName), sha256For(cacheKeyFor(userName)));
+    }
+
+    private void evictCacheFor(String searchTagKey, UserName userName) {
+        redisTemplate.opsForHash().delete(cacheKeyFor(userName, searchTagKey), sha256For(cacheKeyFor(userName, searchTagKey)));
     }
 
     private void storeInCache(UserName userName, List<SearchTag> cachedSearchTag) {

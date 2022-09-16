@@ -83,9 +83,9 @@ class CachedSearchTagRepositoryTest {
 
         SearchTag actual = underTest.findSearchTagBy("key");
 
-        SearchTag expectedFormTheCache = (SearchTag) redisTemplate.opsForHash().get(cacheKey, sha256For(cacheKey));
+        SearchTag expectedFromTheCache = (SearchTag) redisTemplate.opsForHash().get(cacheKey, sha256For(cacheKey));
 
-        assertEquals(expectedFormTheCache, actual);
+        assertEquals(expectedFromTheCache, actual);
         verifyNoMoreInteractions(repository);
     }
 
@@ -99,9 +99,9 @@ class CachedSearchTagRepositoryTest {
 
         SearchTag actual = underTest.findSearchTagBy(searchTagKey);
 
-        SearchTag expectedFormTheCache = (SearchTag) redisTemplate.opsForHash().get(cacheKey, sha256For(cacheKey));
+        SearchTag expectedFromTheCache = (SearchTag) redisTemplate.opsForHash().get(cacheKey, sha256For(cacheKey));
 
-        assertEquals(expectedFormTheCache, actual);
+        assertEquals(expectedFromTheCache, actual);
     }
 
     @Test
@@ -111,11 +111,11 @@ class CachedSearchTagRepositoryTest {
         redisTemplate.opsForHash().put(findAllCacheKey, sha256For(findAllCacheKey), asList(searchTag));
 
         List<SearchTag> actual = underTest.findAllSearchTag();
-        List<SearchTag> expectedFormTheCache = (List<SearchTag>) redisTemplate.opsForHash().get(findAllCacheKey, sha256For(findAllCacheKey));
+        List<SearchTag> expectedFromTheCache = (List<SearchTag>) redisTemplate.opsForHash().get(findAllCacheKey, sha256For(findAllCacheKey));
 
         assertNotNull(actual);
-        assertNotNull(expectedFormTheCache);
-        assertEquals(expectedFormTheCache, actual);
+        assertNotNull(expectedFromTheCache);
+        assertEquals(expectedFromTheCache, actual);
         verifyNoMoreInteractions(repository);
     }
 
@@ -128,11 +128,11 @@ class CachedSearchTagRepositoryTest {
 
         List<SearchTag> actual = underTest.findAllSearchTag();
 
-        List<SearchTag> expectedFormTheCache = (List<SearchTag>) redisTemplate.opsForHash().get(findAllCacheKey, sha256For(findAllCacheKey));
+        List<SearchTag> expectedFromTheCache = (List<SearchTag>) redisTemplate.opsForHash().get(findAllCacheKey, sha256For(findAllCacheKey));
 
         assertNotNull(actual);
-        assertNotNull(expectedFormTheCache);
-        assertEquals(expectedFormTheCache, actual);
+        assertNotNull(expectedFromTheCache);
+        assertEquals(expectedFromTheCache, actual);
     }
     @Test
     void whenASaveDoEvictFindAllCache() {
@@ -144,14 +144,26 @@ class CachedSearchTagRepositoryTest {
 
         List<SearchTag> actual = underTest.findAllSearchTag();
 
-        List<SearchTag> expectedFormTheCache = (List<SearchTag>) redisTemplate.opsForHash().get(findAllCacheKey, sha256For(findAllCacheKey));
+        List<SearchTag> expectedFromTheCache = (List<SearchTag>) redisTemplate.opsForHash().get(findAllCacheKey, sha256For(findAllCacheKey));
 
         assertNotNull(actual);
-        assertNotNull(expectedFormTheCache);
-        assertEquals(expectedFormTheCache, actual);
+        assertNotNull(expectedFromTheCache);
+        assertEquals(expectedFromTheCache, actual);
 
         underTest.save(searchTag);
-        expectedFormTheCache = (List<SearchTag>) redisTemplate.opsForHash().get(findAllCacheKey, sha256For(findAllCacheKey));
-        assertNull(expectedFormTheCache);
+        expectedFromTheCache = (List<SearchTag>) redisTemplate.opsForHash().get(findAllCacheKey, sha256For(findAllCacheKey));
+        assertNull(expectedFromTheCache);
+    } 
+    
+    @Test
+    void whenADeleteWillEvictCaches() {
+        underTest.delete("key");
+
+        List<SearchTag> expectedFromTheCacheFindAll = (List<SearchTag>) redisTemplate.opsForHash().get(findAllCacheKey, sha256For(findAllCacheKey));
+        SearchTag expectedFromTheCacheFindOne = (SearchTag) redisTemplate.opsForHash().get(cacheKey, sha256For(cacheKey));
+
+        assertNull(expectedFromTheCacheFindAll);
+        assertNull(expectedFromTheCacheFindOne);
+        verify(repository).delete("key");
     }
 }
