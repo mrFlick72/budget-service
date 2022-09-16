@@ -1,8 +1,9 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.searchtag;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public record SearchTag(String key, String value) {
+public record SearchTag(String key, String value) implements Serializable {
 
     public static final String DEFAULT_KEY = "unknown";
 
