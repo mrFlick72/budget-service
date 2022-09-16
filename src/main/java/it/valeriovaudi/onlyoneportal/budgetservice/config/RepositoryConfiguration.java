@@ -9,6 +9,7 @@ import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.Budge
 import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.BudgetRevenueDynamoDbIdFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.DynamoDbAttributeValueFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.UUIDSaltGenerator;
+import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.CachedSearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.DynamoDBSearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.searchtag.SearchTagRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.SpringSecurityUserRepository;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.client.RestTemplate;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
@@ -50,9 +52,13 @@ public class RepositoryConfiguration {
 
     @Bean
     public SearchTagRepository searchTagRepository(DynamoDbClient dynamoDbClient,
+                                                   RedisTemplate redisTemplate,
+                                                   @Value("${budget-service.dynamo-db.search-tags.cache-name}") String cacheName,
+                                                   @Value("${budget-service.dynamo-db.search-tags.cache-ttl}") Integer cacheTtl,
                                                    @Value("${budget-service.dynamo-db.search-tags.table-name}") String tableName,
                                                    UserRepository userRepository) {
-        return new DynamoDBSearchTagRepository(tableName, userRepository, dynamoDbClient, new DynamoDbAttributeValueFactory());
+        DynamoDBSearchTagRepository repository = new DynamoDBSearchTagRepository(tableName, userRepository, dynamoDbClient, new DynamoDbAttributeValueFactory());
+        return new CachedSearchTagRepository(cacheName, cacheTtl, redisTemplate, userRepository, repository);
     }
 
     @Bean
