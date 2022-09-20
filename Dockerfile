@@ -1,6 +1,6 @@
 FROM ghcr.io/graalvm/graalvm-ce:22.2.0
 
-ADD target/budget-service.jar /usr/local/budget-service/
+ADD target/budget-service /usr/local/budget-service/
 
 VOLUME /var/log/onlyone-portal
 
