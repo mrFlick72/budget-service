@@ -1,10 +1,6 @@
-package it.valeriovaudi.onlyoneportal.budgetservice.web.adapter;
+package it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue;
 
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
-import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenue;
-import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenueConverter;
-import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenueId;
-import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenueRepresentation;
 import it.valeriovaudi.onlyoneportal.budgetservice.time.Date;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
