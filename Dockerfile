@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM ghcr.io/graalvm/graalvm-ce:22.2.0
 
 ADD target/budget-service.jar /usr/local/budget-service/
 
