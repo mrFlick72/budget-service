@@ -36,7 +36,7 @@ jobs:
 
       - name: Build
         run: |
-          export JAVA_HOME=/usr/lib/jvm/graalvm-ce-java17-linux-amd64-22.2.0
+          export JAVA_HOME=/usr/lib/jvm/graalvm-ce-java17-22.2.0
           export PATH=$JAVA_HOME/bin:$PATH
           mvn clean install -q -Pnative
 
