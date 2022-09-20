@@ -1,16 +1,11 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.web.endpoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.IdProvider;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.Money;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.budget.BudgetRevenue;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Year;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.model.user.UserName;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.BudgetRevenueRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.repository.UserRepository;
-import it.valeriovaudi.onlyoneportal.budgetservice.domain.usecase.FindBudgetRevenue;
-import it.valeriovaudi.onlyoneportal.budgetservice.web.adapter.BudgetRevenueAdapter;
-import it.valeriovaudi.onlyoneportal.budgetservice.web.model.BudgetRevenueRepresentation;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.Money;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.*;
+import it.valeriovaudi.onlyoneportal.budgetservice.time.Year;
+import it.valeriovaudi.onlyoneportal.budgetservice.user.UserName;
+import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +22,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
-import static it.valeriovaudi.onlyoneportal.budgetservice.domain.model.time.Date.dateFor;
+import static it.valeriovaudi.onlyoneportal.budgetservice.time.Date.dateFor;
 import static java.util.Arrays.asList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -55,23 +50,16 @@ public class BudgetRevenueEndPointTest {
     private FindBudgetRevenue findBudgetRevenue;
 
     @MockBean
-    private IdProvider idProvider;
-
-    @MockBean
     private UserRepository userRepository;
 
     @MockBean
-    private BudgetRevenueAdapter budgetRevenueAdapter;
+    private BudgetRevenueConverter budgetRevenueConverter;
 
     @Test
     @WithMockUser("USER")
     public void addANewBudgetRevenue() throws Exception {
+        BudgetRevenue budgetRevenue = new BudgetRevenue(null, "USER", dateFor("10/10/2018"), Money.ONE, "A_NOTE");
 
-        String mockedId = UUID.randomUUID().toString();
-
-        BudgetRevenue budgetRevenue = new BudgetRevenue(mockedId, "USER", dateFor("10/10/2018"), Money.ONE, "A_NOTE");
-
-        given(idProvider.id()).willReturn(mockedId);
         given(userRepository.currentLoggedUserName()).willReturn(new UserName("USER"));
 
         BudgetRevenueRepresentation budgetRevenueRepresentation = new BudgetRevenueRepresentation(null, "10/10/2018", "1.00", "A_NOTE");
@@ -90,10 +78,10 @@ public class BudgetRevenueEndPointTest {
     public void updateABudgetRevenue() throws Exception {
         String mockedId = UUID.randomUUID().toString();
 
-        BudgetRevenue budgetRevenue = new BudgetRevenue(mockedId, "USER", dateFor("10/10/2018"), Money.ONE, "A_NOTE");
+        BudgetRevenue budgetRevenue = new BudgetRevenue(new BudgetRevenueId(mockedId), "USER", dateFor("10/10/2018"), Money.ONE, "A_NOTE");
         BudgetRevenueRepresentation budgetRevenueRepresentation = new BudgetRevenueRepresentation(mockedId, "10/10/2018", "1.00", "A_NOTE");
 
-        given(budgetRevenueAdapter.fromRepresentationToModel(budgetRevenueRepresentation))
+        given(budgetRevenueConverter.fromRepresentationToModel(budgetRevenueRepresentation))
                 .willReturn(budgetRevenue);
 
         mockMvc.perform(put("/budget/revenue/" + mockedId)
@@ -115,7 +103,7 @@ public class BudgetRevenueEndPointTest {
                 .with(csrf()))
                 .andExpect(status().isNoContent());
 
-        verify(budgetRevenueRepository).delete(mockedId);
+        verify(budgetRevenueRepository).delete(new BudgetRevenueId(mockedId));
     }
 
     @Test
@@ -123,18 +111,18 @@ public class BudgetRevenueEndPointTest {
     public void findAllBudgetRevenue() throws Exception {
         Year year = Year.of(2018);
 
-        BudgetRevenue aBudgetRevenue = new BudgetRevenue("AN_ID", "USER", dateFor("05/01/2018"), Money.ONE, "A_NOTE");
-        BudgetRevenue anotherBudgetRevenue = new BudgetRevenue("AN_OTHER_ID", "USER", dateFor("15/01/2018"), Money.ONE, "");
+        BudgetRevenue aBudgetRevenue = new BudgetRevenue(new BudgetRevenueId("AN_ID"), "USER", dateFor("05/01/2018"), Money.ONE, "A_NOTE");
+        BudgetRevenue anotherBudgetRevenue = new BudgetRevenue(new BudgetRevenueId("AN_OTHER_ID"), "USER", dateFor("15/01/2018"), Money.ONE, "");
 
 
         List<BudgetRevenue> budgetRevenueList = asList(aBudgetRevenue, anotherBudgetRevenue);
         given(findBudgetRevenue.findBy(year))
                 .willReturn(budgetRevenueList);
 
-        given(budgetRevenueAdapter.fromDomainToRepresentation(aBudgetRevenue))
+        given(budgetRevenueConverter.fromDomainToRepresentation(aBudgetRevenue))
                 .willReturn(new BudgetRevenueRepresentation("AN_ID", "05/01/2018", "1.00", "A_NOTE"));
 
-        given(budgetRevenueAdapter.fromDomainToRepresentation(anotherBudgetRevenue))
+        given(budgetRevenueConverter.fromDomainToRepresentation(anotherBudgetRevenue))
                 .willReturn(new BudgetRevenueRepresentation("AN_OTHER_ID", "15/01/2018", "1.00", ""));
 
 
@@ -145,8 +133,8 @@ public class BudgetRevenueEndPointTest {
                 .andExpect(content().json(loadJson("budget_revenue/findAll.json")));
 
         verify(findBudgetRevenue).findBy(year);
-        verify(budgetRevenueAdapter).fromDomainToRepresentation(aBudgetRevenue);
-        verify(budgetRevenueAdapter).fromDomainToRepresentation(anotherBudgetRevenue);
+        verify(budgetRevenueConverter).fromDomainToRepresentation(aBudgetRevenue);
+        verify(budgetRevenueConverter).fromDomainToRepresentation(anotherBudgetRevenue);
     }
 
     public String loadJson(String stub) throws IOException {
