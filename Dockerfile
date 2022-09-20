@@ -1,4 +1,4 @@
-FROM ghcr.io/graalvm/jdk:java17-22.2.0
+FROM mrflick72/graalvm-jdk:java17-22.2.0
 
 ADD target/budget-service /usr/local/budget-service/
 
