@@ -28,7 +28,7 @@ jobs:
           sudo apt-get install libstdc++6
 
       - name: build testing environment
-      - run: |
+        run: |
           cd src/test/resources
           docker-compose up &
           sleep 60s
