@@ -6,4 +6,4 @@ VOLUME /var/log/onlyone-portal
 
 WORKDIR /usr/local/budget-service/
 
-CMD ["java", "-jar", "budget-service.jar"]
+CMD ["java", "-jar", "./budget-service"]
