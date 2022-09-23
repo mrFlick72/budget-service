@@ -1,9 +1,3 @@
-FROM mrflick72/graalvm-jdk:java17-22.2.0
-
-ADD target/budget-service /usr/local/budget-service/
+FROM docker.io/library/budget-service:2.x
 
 VOLUME /var/log/onlyone-portal
-
-WORKDIR /usr/local/budget-service/
-
-CMD ["./budget-service"]

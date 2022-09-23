@@ -51,10 +51,10 @@
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
 
-        <dependency>
+<!--        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-sleuth</artifactId>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -187,6 +187,20 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <!-- ... -->
+                            <image>
+                                <buildpacks>
+                                    <buildpack>gcr.io/paketo-buildpacks/java-native-image:7.19.0</buildpack>
+                                </buildpacks>
+                                
+                            </image>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
