@@ -2,19 +2,19 @@ package it.valeriovaudi.onlyoneportal.budgetservice.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
+import org.springframework.security.web.SecurityFilterChain;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-@EnableWebSecurity
-public class SecurityOAuth2ResourceServerConfig extends WebSecurityConfigurerAdapter {
+@Configuration(proxyBeanMethods = false)
+public class SecurityOAuth2ResourceServerConfig {
 
     @Value("${granted-role.budget-service}")
     private String grantedRole;
@@ -30,14 +30,18 @@ public class SecurityOAuth2ResourceServerConfig extends WebSecurityConfigurerAda
         return jwtAuthenticationConverter;
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+
+    @Bean
+    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http,
+                                                          JwtAuthenticationConverter jwtAuthenticationConverter) throws Exception {
+        return http.csrf().disable()
                 .authorizeRequests().mvcMatchers("/actuator/**").permitAll().and()
                 .authorizeRequests().anyRequest().hasAnyRole(grantedRole).and()
-                .oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter())
-                .and().bearerTokenResolver(bearerTokenResolver());
+                .oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter)
+                .and().bearerTokenResolver(bearerTokenResolver())
+                .and().build();
     }
+
 
     private DefaultBearerTokenResolver bearerTokenResolver() {
         DefaultBearerTokenResolver bearerTokenResolver = new DefaultBearerTokenResolver();
