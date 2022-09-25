@@ -30,7 +30,7 @@ jobs:
         run: |
           export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
           export PATH=$JAVA_HOME/bin:$PATH
-          mvn clean install -q -Pnative  
+          mvn clean install -q  
 
       - name: docker push
         run: |
