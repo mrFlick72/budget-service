@@ -42,10 +42,12 @@
         </dependency>
 
         <!-- tracing dependencies -->
+<!--
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-sleuth</artifactId>
         </dependency>
+-->
 
 
         <dependency>
