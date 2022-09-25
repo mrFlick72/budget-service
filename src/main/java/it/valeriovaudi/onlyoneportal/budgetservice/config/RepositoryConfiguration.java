@@ -22,7 +22,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.client.RestTemplate;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class RepositoryConfiguration {
 
     @Bean

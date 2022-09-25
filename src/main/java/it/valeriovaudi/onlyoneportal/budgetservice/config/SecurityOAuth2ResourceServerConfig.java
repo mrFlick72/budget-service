@@ -33,11 +33,13 @@ public class SecurityOAuth2ResourceServerConfig {
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http,
+                                                          @Value("spring.security.oauth2.resourceserver.jwt.jwk-set-uri") String jwksUri,
                                                           JwtAuthenticationConverter jwtAuthenticationConverter) throws Exception {
         return http.csrf().disable()
                 .authorizeRequests().mvcMatchers("/actuator/**").permitAll().and()
                 .authorizeRequests().anyRequest().hasAnyRole(grantedRole).and()
                 .oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter)
+                .jwkSetUri(jwksUri)
                 .and().bearerTokenResolver(bearerTokenResolver())
                 .and().build();
     }
