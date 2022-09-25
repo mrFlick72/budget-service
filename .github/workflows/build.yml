@@ -11,20 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: install graalVM
+      - name: install openjdk
         run: |
-          wget https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/graalvm-ce-java17-linux-amd64-22.2.0.tar.gz
-          tar -xvzf graalvm-ce-java17-linux-amd64-22.2.0.tar.gz
-          mv graalvm-ce-java17-22.2.0/ /usr/lib/jvm/
-          cd /usr/lib/jvm
-          export JAVA_HOME=/usr/lib/jvm/graalvm-ce-java17-22.2.0
-          export PATH=$JAVA_HOME/bin:$PATH
-          gu install native-image
-          sudo apt-get install libz-dev
-          sudo apt-get update && sudo apt-get upgrade
-          sudo apt-get install build-essential
-          sudo apt-get install aptitude
-          sudo apt-get install libstdc++6
+          sudo apt-get update && sudo apt-get install openjdk-17-jdk
+          sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+          sudo update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
+          java -version
 
       - name: build testing environment
         run: |
@@ -36,15 +28,9 @@ jobs:
 
       - name: Build
         run: |
-          export JAVA_HOME=/usr/lib/jvm/graalvm-ce-java17-22.2.0
+          export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
           export PATH=$JAVA_HOME/bin:$PATH
-          mvn clean install -q -Pnative -DskipTests spring-boot:build-image
-
-      - name: Test
-        run: |
-          export JAVA_HOME=/usr/lib/jvm/graalvm-ce-java17-22.2.0
-          export PATH=$JAVA_HOME/bin:$PATH
-          mvn verify -q
+          mvn clean install -q -Pnative  
 
       - name: docker push
         run: |
