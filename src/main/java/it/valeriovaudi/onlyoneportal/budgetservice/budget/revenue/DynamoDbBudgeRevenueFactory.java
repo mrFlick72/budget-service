@@ -18,7 +18,7 @@ public class DynamoDbBudgeRevenueFactory {
     private final UserRepository userRepository;
     private final DynamoDbAttributeValueFactory attributeValueFactory;
 
-    public DynamoDbBudgeRevenueFactory(BudgetDynamoDbIdFactory<BudgetRevenueId, BudgetRevenue> idFactory,
+    public      DynamoDbBudgeRevenueFactory(BudgetDynamoDbIdFactory<BudgetRevenueId, BudgetRevenue> idFactory,
                                        UserRepository userRepository, DynamoDbAttributeValueFactory attributeValueFactory) {
         this.idFactory = idFactory;
         this.userRepository = userRepository;

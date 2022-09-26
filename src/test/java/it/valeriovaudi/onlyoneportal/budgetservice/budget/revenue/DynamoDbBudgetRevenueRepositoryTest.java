@@ -41,8 +41,7 @@ class DynamoDbBudgetRevenueRepositoryTest {
         budgetRevenueRepository = new DynamoDbBudgetRevenueRepository(BUDGET_REVENUE_TABLE_NAME,
                 DYNAMO_DB_CLIENT,
                 idFactory,
-                userRepository,
-                new DynamoDbAttributeValueFactory());
+                new DynamoDbBudgeRevenueFactory(idFactory,userRepository, new DynamoDbAttributeValueFactory()));
 
         given(userRepository.currentLoggedUserName())
                 .willReturn(A_USER_NAME);
