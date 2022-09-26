@@ -2,6 +2,7 @@ package it.valeriovaudi.onlyoneportal.budgetservice.config;
 
 
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.repository.BudgetExpenseRepository;
+import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.repository.DynamoDbBudgetExpenseFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.repository.DynamoDbBudgetExpenseRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.BudgetRevenueRepository;
 import it.valeriovaudi.onlyoneportal.budgetservice.budget.revenue.DynamoDbBudgetRevenueRepository;
@@ -45,9 +46,10 @@ public class RepositoryConfiguration {
                                                            @Value("${budget-service.dynamo-db.budget-expense.table-name}") String tableName,
                                                            UserRepository userRepository) {
 
+        BudgetExpenseDynamoDbIdFactory idFactory = new BudgetExpenseDynamoDbIdFactory(new UUIDSaltGenerator());
         return new DynamoDbBudgetExpenseRepository(tableName, dynamoDbClient,
-                new BudgetExpenseDynamoDbIdFactory(new UUIDSaltGenerator()),
-                userRepository, new DynamoDbAttributeValueFactory());
+                idFactory,
+                new DynamoDbBudgetExpenseFactory(idFactory, userRepository, new DynamoDbAttributeValueFactory()));
     }
 
     @Bean

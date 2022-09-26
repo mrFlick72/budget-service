@@ -75,7 +75,7 @@ public class DynamoDbBudgetExpenseFactory  {
         );
     }
 
-    private Map<String, AttributeValue> putItemPayloadFor(BudgetExpense budgetExpense) {
+    public Map<String, AttributeValue> putItemPayloadFor(BudgetExpense budgetExpense) {
         Map<String, AttributeValue> payload = new HashMap<>();
 
         payload.put("pk", attributeValueFactory.stringAttributeFor(idFactory.partitionKeyFrom(budgetExpense.id())));

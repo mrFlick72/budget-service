@@ -44,8 +44,7 @@ class DynamoDbBudgetExpenseRepositoryTest {
         budgetExpenseRepository = new DynamoDbBudgetExpenseRepository(BUDGET_EXPENSE_TABLE_NAME,
                 dynamoClient(),
                 idFactory,
-                userRepository,
-                new DynamoDbAttributeValueFactory()
+                new DynamoDbBudgetExpenseFactory(idFactory, userRepository,new DynamoDbAttributeValueFactory())
         );
         given(userRepository.currentLoggedUserName())
                 .willReturn(A_USER_NAME);
