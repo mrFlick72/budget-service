@@ -44,14 +44,6 @@ class DynamoDBSearchTagRepositoryTest {
     public void findSearchTagBy() {
         Assertions.assertEquals(searchTagRepository.findSearchTagBy("super-market"), new SearchTag("super-market", "Spesa"));
     }
-
-    @Test
-    public void delete() {
-        searchTagRepository.delete("loan");
-        SearchTag actual = searchTagRepository.findSearchTagBy("loan");
-        Assertions.assertNull(actual);
-    }
-
     @Test
     public void save() {
         searchTagRepository.save(new SearchTag("test", "Test"));

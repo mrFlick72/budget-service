@@ -13,7 +13,8 @@ import static java.util.Arrays.asList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -60,13 +61,4 @@ public class SearchTagEndPointTest {
         verify(searchTagRepository).save(searchTag);
     }
 
-//    @Test
-    @WithMockUser
-    public void deleteSearchTag() throws Exception {
-        mockMvc.perform(delete("/budget-expense/search-tag/key")
-                .with(csrf()))
-                .andExpect(status().isNoContent());
-
-        verify(searchTagRepository).delete("key");
-    }
 }

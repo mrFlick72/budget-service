@@ -3,7 +3,10 @@ package it.valeriovaudi.onlyoneportal.budgetservice.searchtag;
 import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.DynamoDbAttributeValueFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import software.amazon.awssdk.services.dynamodb.model.*;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
+import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
 
 import java.util.HashMap;
 import java.util.List;
@@ -68,31 +71,12 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
         );
     }
 
-    @Override
-    public void delete(String key) {
-        HashMap<String, AttributeValue> itemKeyCondition = itemKeysFor(key);
-        client.deleteItem(
-                DeleteItemRequest.builder()
-                        .tableName(tableName)
-                        .key(itemKeyCondition)
-                        .build()
-        );
-    }
-
     private HashMap<String, AttributeValue> itemKeyConditionFor(String key) {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
         itemKeyCondition.put(":user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().content()));
         itemKeyCondition.put(":search_tag_key", attributeValueFactory.stringAttributeFor(key));
         return itemKeyCondition;
     }
-
-    private HashMap<String, AttributeValue> itemKeysFor(String key) {
-        HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
-        itemKeyCondition.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().content()));
-        itemKeyCondition.put("search_tag_key", attributeValueFactory.stringAttributeFor(key));
-        return itemKeyCondition;
-    }
-
     private HashMap<String, AttributeValue> findAllItemKeyCondition() {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
         itemKeyCondition.put(":user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().content()));

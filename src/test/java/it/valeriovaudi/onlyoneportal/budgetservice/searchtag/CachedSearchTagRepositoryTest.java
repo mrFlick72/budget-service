@@ -154,16 +154,5 @@ class CachedSearchTagRepositoryTest {
         expectedFromTheCache = (List<SearchTag>) redisTemplate.opsForHash().get(findAllCacheKey, sha256For(findAllCacheKey));
         assertNull(expectedFromTheCache);
     } 
-    
-    @Test
-    void whenADeleteWillEvictCaches() {
-        underTest.delete("key");
 
-        List<SearchTag> expectedFromTheCacheFindAll = (List<SearchTag>) redisTemplate.opsForHash().get(findAllCacheKey, sha256For(findAllCacheKey));
-        SearchTag expectedFromTheCacheFindOne = (SearchTag) redisTemplate.opsForHash().get(cacheKey, sha256For(cacheKey));
-
-        assertNull(expectedFromTheCacheFindAll);
-        assertNull(expectedFromTheCacheFindOne);
-        verify(repository).delete("key");
-    }
 }

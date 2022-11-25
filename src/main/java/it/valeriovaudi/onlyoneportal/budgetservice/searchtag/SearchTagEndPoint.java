@@ -1,7 +1,10 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.searchtag;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SearchTagEndPoint {
@@ -23,9 +26,4 @@ public class SearchTagEndPoint {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/budget-expense/search-tag/{key}")
-    public ResponseEntity newSearchTag(@PathVariable String key) {
-        searchTagRepository.delete(key);
-        return ResponseEntity.noContent().build();
-    }
 }

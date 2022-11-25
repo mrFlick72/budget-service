@@ -10,7 +10,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
-import static it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.strings.Sha256Utils.*;
+import static it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.strings.Sha256Utils.sha256For;
 
 public class CachedSearchTagRepository implements SearchTagRepository {
     private final String cacheName;
@@ -68,15 +68,6 @@ public class CachedSearchTagRepository implements SearchTagRepository {
         evictCacheFor(userName);
     }
 
-    @Override
-    public void delete(String key) {
-        UserName userName = userRepository.currentLoggedUserName();
-
-        repository.delete(key);
-        evictCacheFor(userName);
-        evictCacheFor(key, userName);
-    }
-
 
     private String cacheKeyFor(UserName userName, String searchTagKey) {
         return String.format("%s_%s_%s", cacheName, userName.content(), searchTagKey);
@@ -106,10 +97,6 @@ public class CachedSearchTagRepository implements SearchTagRepository {
 
     private void evictCacheFor(UserName userName) {
         redisTemplate.opsForHash().delete(cacheKeyFor(userName), sha256For(cacheKeyFor(userName)));
-    }
-
-    private void evictCacheFor(String searchTagKey, UserName userName) {
-        redisTemplate.opsForHash().delete(cacheKeyFor(userName, searchTagKey), sha256For(cacheKeyFor(userName, searchTagKey)));
     }
 
     private void storeInCache(UserName userName, List<SearchTag> cachedSearchTag) {
