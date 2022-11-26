@@ -75,6 +75,7 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
         itemKeyCondition.put(":search_tag_key", attributeValueFactory.stringAttributeFor(key));
         return itemKeyCondition;
     }
+
     private HashMap<String, AttributeValue> findAllItemKeyCondition() {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
         itemKeyCondition.put(":user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().content()));
@@ -94,6 +95,8 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
     }
 
     private static String keyFrom(SearchTag searchTag) {
-        return Optional.ofNullable(searchTag.key()).orElse(UUID.randomUUID().toString());
+        return Optional.ofNullable(searchTag.key())
+                .map(id -> id.isEmpty() ? UUID.randomUUID().toString() : id)
+                .orElse(UUID.randomUUID().toString());
     }
 }
