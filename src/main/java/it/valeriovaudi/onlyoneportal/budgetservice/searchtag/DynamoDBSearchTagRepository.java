@@ -8,9 +8,7 @@ import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DynamoDBSearchTagRepository implements SearchTagRepository {
@@ -90,8 +88,12 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
     private HashMap<String, AttributeValue> putItemPayloadFor(SearchTag searchTag) {
         HashMap<String, AttributeValue> attributes = new HashMap<>();
         attributes.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().content()));
-        attributes.put("search_tag_key", attributeValueFactory.stringAttributeFor(searchTag.key()));
+        attributes.put("search_tag_key", attributeValueFactory.stringAttributeFor(keyFrom(searchTag)));
         attributes.put("search_tag_value", attributeValueFactory.stringAttributeFor(searchTag.value()));
         return attributes;
+    }
+
+    private static String keyFrom(SearchTag searchTag) {
+        return Optional.ofNullable(searchTag.key()).orElse(UUID.randomUUID().toString());
     }
 }

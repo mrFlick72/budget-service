@@ -29,12 +29,6 @@ public class SearchTagEndPoint {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/budget-expense/search-tag/v2")
-    public ResponseEntity newSearchTagV2(@RequestBody V2SearchTagRequest searchTag) {
-        searchTagRepository.save(new SearchTag(saltGenerator.newSalt(), searchTag.value()));
-        return ResponseEntity.noContent().build();
-    }
-
 }
 
 record V2SearchTagRequest(String value) {
