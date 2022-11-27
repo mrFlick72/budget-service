@@ -3,11 +3,12 @@ package it.valeriovaudi.onlyoneportal.budgetservice.searchtag;
 import it.valeriovaudi.onlyoneportal.budgetservice.infrastructure.dynamodb.DynamoDbAttributeValueFactory;
 import it.valeriovaudi.onlyoneportal.budgetservice.user.UserRepository;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import software.amazon.awssdk.services.dynamodb.model.*;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
+import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DynamoDBSearchTagRepository implements SearchTagRepository {
@@ -68,28 +69,10 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
         );
     }
 
-    @Override
-    public void delete(String key) {
-        HashMap<String, AttributeValue> itemKeyCondition = itemKeysFor(key);
-        client.deleteItem(
-                DeleteItemRequest.builder()
-                        .tableName(tableName)
-                        .key(itemKeyCondition)
-                        .build()
-        );
-    }
-
     private HashMap<String, AttributeValue> itemKeyConditionFor(String key) {
         HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
         itemKeyCondition.put(":user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().content()));
         itemKeyCondition.put(":search_tag_key", attributeValueFactory.stringAttributeFor(key));
-        return itemKeyCondition;
-    }
-
-    private HashMap<String, AttributeValue> itemKeysFor(String key) {
-        HashMap<String, AttributeValue> itemKeyCondition = new HashMap<>();
-        itemKeyCondition.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().content()));
-        itemKeyCondition.put("search_tag_key", attributeValueFactory.stringAttributeFor(key));
         return itemKeyCondition;
     }
 
@@ -106,8 +89,14 @@ public class DynamoDBSearchTagRepository implements SearchTagRepository {
     private HashMap<String, AttributeValue> putItemPayloadFor(SearchTag searchTag) {
         HashMap<String, AttributeValue> attributes = new HashMap<>();
         attributes.put("user_name", attributeValueFactory.stringAttributeFor(userRepository.currentLoggedUserName().content()));
-        attributes.put("search_tag_key", attributeValueFactory.stringAttributeFor(searchTag.key()));
+        attributes.put("search_tag_key", attributeValueFactory.stringAttributeFor(keyFrom(searchTag)));
         attributes.put("search_tag_value", attributeValueFactory.stringAttributeFor(searchTag.value()));
         return attributes;
+    }
+
+    private static String keyFrom(SearchTag searchTag) {
+        return Optional.ofNullable(searchTag.key())
+                .map(id -> id.isEmpty() ? UUID.randomUUID().toString() : id)
+                .orElse(UUID.randomUUID().toString());
     }
 }
