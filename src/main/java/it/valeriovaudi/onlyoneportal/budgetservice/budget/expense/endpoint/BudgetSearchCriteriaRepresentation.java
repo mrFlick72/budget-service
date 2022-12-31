@@ -1,11 +1,12 @@
 package it.valeriovaudi.onlyoneportal.budgetservice.budget.expense.endpoint;
 
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public record BudgetSearchCriteriaRepresentation(Integer month, Integer year, List<String> searchTagList) {
+public record BudgetSearchCriteriaRepresentation(Integer month, Integer year,
+                                                 List<String> searchTagList) implements Serializable {
 
     public static BudgetSearchCriteriaRepresentation empty() {
         return new BudgetSearchCriteriaRepresentation(null, null, new ArrayList<>());
