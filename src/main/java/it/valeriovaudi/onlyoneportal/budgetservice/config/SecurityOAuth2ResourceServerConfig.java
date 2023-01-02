@@ -36,8 +36,10 @@ public class SecurityOAuth2ResourceServerConfig {
                                                           @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}") String jwksUri,
                                                           JwtAuthenticationConverter jwtAuthenticationConverter) throws Exception {
         return http.csrf().disable()
-                .authorizeRequests().mvcMatchers("/actuator/**").permitAll().and()
-                .authorizeRequests().anyRequest().hasAnyRole(grantedRole).and()
+                .authorizeHttpRequests(authz ->
+                        authz.requestMatchers("/actuator/**").permitAll()
+                                .anyRequest().hasAnyRole(grantedRole)
+                )
                 .oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter)
                 .jwkSetUri(jwksUri)
                 .and().bearerTokenResolver(bearerTokenResolver())
